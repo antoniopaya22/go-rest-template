@@ -2,6 +2,7 @@ package crypto
 
 import (
 	"fmt"
+	"github.com/antonioalfa22/GoGin-API-REST-Template/pkg/config"
 	"github.com/dgrijalva/jwt-go"
 	"golang.org/x/crypto/bcrypt"
 	"log"
@@ -26,6 +27,8 @@ func ComparePasswords(hashedPwd string, plainPwd []byte) bool {
 }
 
 func CreateToken(username string) (string, error) {
+	config := config.GetConfig()
+
 	var err error
 	//Creating Access Token
 	atClaims := jwt.MapClaims{}
@@ -33,7 +36,7 @@ func CreateToken(username string) (string, error) {
 	atClaims["username"] = username
 	atClaims["exp"] = time.Now().Add(time.Hour * 24 * 365).Unix()
 	at := jwt.NewWithClaims(jwt.SigningMethodHS512, atClaims)
-	token, err := at.SignedString([]byte("jdnfksdmfksda")) // SECRET
+	token, err := at.SignedString([]byte(config.Server.Secret)) // SECRET
 	if err != nil {
 		return "token creation error", err
 	}
@@ -41,11 +44,12 @@ func CreateToken(username string) (string, error) {
 }
 
 func ValidateToken(tokenString string) bool {
+	config := config.GetConfig()
 	token, error := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("There was an error")
 		}
-		return []byte("jdnfksdmfksda"), nil
+		return []byte(config.Server.Secret), nil
 	})
 	if error != nil {
 		return false

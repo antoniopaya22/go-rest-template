@@ -24,6 +24,7 @@ type DatabaseConfiguration struct {
 
 type ServerConfiguration struct {
 	Port string
+	Secret string
 }
 
 // Setup initialize configuration

@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/antonioalfa22/GoGin-API-REST-Template/cmd/routes"
+	_ "github.com/antonioalfa22/GoGin-API-REST-Template/docs"
 	"github.com/antonioalfa22/GoGin-API-REST-Template/pkg/config"
 	"github.com/antonioalfa22/GoGin-API-REST-Template/pkg/database"
 )

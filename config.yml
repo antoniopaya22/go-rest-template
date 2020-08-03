@@ -8,3 +8,4 @@ database:
 
 server:
   port: "3000"
+  secret: "jdnfksdmfksda"

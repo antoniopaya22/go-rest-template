@@ -1,0 +1,27 @@
+paths:
+  /users:
+    get:
+      consumes:
+      - application/json
+      description: This will show all available users by default.
+      operationId: listUsers
+      produces:
+      - application/json
+      responses:
+        "200":
+          $ref: '#/responses/someResponse'
+        "422":
+          $ref: '#/responses/validationError'
+        default:
+          $ref: '#/responses/genericError'
+      schemes:
+      - http
+      security:
+      - api_key: []
+      - oauth:
+        - read
+        - write
+      summary: Lists users.
+      tags:
+      - users
+swagger: "2.0"
