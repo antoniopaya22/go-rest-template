@@ -24,14 +24,14 @@ type Database struct {
 func Setup() {
 	var db = DB
 
-	config := config.GetConfig()
+	configuration := config.GetConfig()
 
-	driver := config.Database.Driver
-	database := config.Database.Dbname
-	username := config.Database.Username
-	password := config.Database.Password
-	host := config.Database.Host
-	port := config.Database.Port
+	driver := configuration.Database.Driver
+	database := configuration.Database.Dbname
+	username := configuration.Database.Username
+	password := configuration.Database.Password
+	host := configuration.Database.Host
+	port := configuration.Database.Port
 
 	if driver == "sqlite" {
 

@@ -6,11 +6,13 @@ import (
 	_ "github.com/antonioalfa22/GoGin-API-REST-Template/docs"
 	"github.com/antonioalfa22/GoGin-API-REST-Template/pkg/config"
 	"github.com/antonioalfa22/GoGin-API-REST-Template/pkg/database"
+	"github.com/gin-gonic/gin"
 )
 
 func init()  {
 	config.Setup()
 	database.Setup()
+	gin.SetMode(config.GetConfig().Server.Mode)
 }
 
 func main()  {

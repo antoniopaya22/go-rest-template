@@ -8,7 +8,6 @@ import (
 
 func Setup() *gin.Engine {
 	r := gin.New()
-
 	// Middlewares
 	r.Use(gin.Logger())
 	r.Use(gin.Recovery())
