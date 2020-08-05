@@ -11,9 +11,14 @@ import (
 
 var userTest models.User
 
-func TestAddUser(t *testing.T)  {
+func Setup() {
 	config.Setup()
 	database.Setup()
+	database.GetDB().Exec("DELETE FROM users")
+}
+
+func TestAddUser(t *testing.T)  {
+	Setup()
 	user := models.User{
 		Firstname: "Antonio",
 		Lastname: "Paya",
