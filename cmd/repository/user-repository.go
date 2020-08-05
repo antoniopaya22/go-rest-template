@@ -23,7 +23,7 @@ func AllUsers(users *[]models.User) error {
 
 func FindUserById(user *models.User, id string) error {
 	db = database.GetDB()
-	return db.Find(&user, id).Error
+	return db.Where("id = ?", id).First(&user).Error
 }
 
 func FindUserByUsername(user *models.User, username string) error {

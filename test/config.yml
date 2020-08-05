@@ -1,0 +1,13 @@
+database:
+  driver: "sqlite"
+  dbname: "database"
+  username: "user"
+  password: "password"
+  host: "localhost"
+  port: "5432"
+
+server:
+  port: "3000"
+  secret: "jdnfksdmfksda"
+  #release | debug
+  mode: "release"
