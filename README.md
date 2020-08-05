@@ -2,6 +2,7 @@
 Go (Golang) API REST Template/Boilerplate with Gin Framework
 
 [![Open Source Love](https://badges.frapsoft.com/os/mit/mit.svg?v=102)](https://github.com/ellerbrock/open-source-badge/)
+[!Travis](https://travis-ci.com/antonioalfa22/GoGin-API-REST-Template.svg?branch=master)
 
 ## 1. Estructura y Flujo
 
