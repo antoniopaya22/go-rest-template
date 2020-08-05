@@ -1,0 +1,10 @@
+language: go
+
+go:
+  - 1.14.x
+
+before_install:
+  - go mod download
+
+script:
+  - go test ./test
