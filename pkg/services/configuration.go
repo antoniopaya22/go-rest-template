@@ -1,4 +1,4 @@
-package config
+package services
 
 import (
 	"log"
@@ -28,11 +28,11 @@ type ServerConfiguration struct {
 	Mode string
 }
 
-// Setup initialize configuration
+// SetupDB initialize configuration
 func Setup() {
 	var configuration *Configuration
 
-	viper.SetConfigName("config")
+	viper.SetConfigName("./configs/config")
 	viper.SetConfigType("yaml")
 	viper.AddConfigPath(".")
 

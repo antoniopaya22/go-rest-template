@@ -7,4 +7,4 @@ before_install:
   - go mod download
 
 script:
-  - go test ./test
+  - go test -v ./test/...

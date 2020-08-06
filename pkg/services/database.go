@@ -1,9 +1,8 @@
-package database
+package services
 
 import (
 	"fmt"
-	"github.com/antonioalfa22/GoGin-API-REST-Template/cmd/models"
-	"github.com/antonioalfa22/GoGin-API-REST-Template/pkg/config"
+	"github.com/antonioalfa22/GoGin-API-REST-Template/models"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
@@ -20,11 +19,11 @@ type Database struct {
 	*gorm.DB
 }
 
-// Setup opens a database and saves the reference to `Database` struct.
-func Setup() {
+// SetupDB opens a database and saves the reference to `Database` struct.
+func SetupDB() {
 	var db = DB
 
-	configuration := config.GetConfig()
+	configuration := GetConfig()
 
 	driver := configuration.Database.Driver
 	database := configuration.Database.Dbname

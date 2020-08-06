@@ -14,7 +14,7 @@ RUN go mod download
 COPY . .
 
 # Build the Go app
-RUN go build -o ./out/app ./cmd/main.go
+RUN go build -o ./out/app ./cmd/api/main.go
 
 
 # This container exposes port 8080 to the outside world
@@ -41,7 +41,7 @@ RUN go mod download
 COPY . .
 
 # Build the Go app
-RUN go build -o ./out/app ./cmd/main.go
+RUN go build -o ./out/app ./cmd/api/main.go
 
 # Start fresh from a smaller image
 FROM alpine:3.9

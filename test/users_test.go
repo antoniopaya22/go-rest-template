@@ -2,19 +2,18 @@ package test
 
 import (
 	"fmt"
-	"github.com/antonioalfa22/GoGin-API-REST-Template/cmd/models"
-	"github.com/antonioalfa22/GoGin-API-REST-Template/cmd/repository"
-	"github.com/antonioalfa22/GoGin-API-REST-Template/pkg/config"
-	"github.com/antonioalfa22/GoGin-API-REST-Template/pkg/database"
+	"github.com/antonioalfa22/GoGin-API-REST-Template/models"
+	"github.com/antonioalfa22/GoGin-API-REST-Template/pkg/repository"
+	"github.com/antonioalfa22/GoGin-API-REST-Template/pkg/services"
 	"testing"
 )
 
 var userTest models.User
 
 func Setup() {
-	config.Setup()
-	database.Setup()
-	database.GetDB().Exec("DELETE FROM users")
+	services.Setup()
+	services.SetupDB()
+	services.GetDB().Exec("DELETE FROM users")
 }
 
 func TestAddUser(t *testing.T)  {
@@ -42,8 +41,8 @@ func TestGetAllUsers(t *testing.T) {
 }
 
 func TestGetUserById(t *testing.T)  {
-	config.Setup()
-	database.Setup()
+	services.SetupDB()
+	services.SetupDB()
 	var user models.User
 	if err := repository.FindUserById(&user, fmt.Sprint(userTest.ID)); err != nil {
 		t.Fatalf("Expected no error, got %v", err)

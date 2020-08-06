@@ -1,8 +1,8 @@
 package repository
 
 import (
-	"github.com/antonioalfa22/GoGin-API-REST-Template/cmd/models"
-	"github.com/antonioalfa22/GoGin-API-REST-Template/pkg/database"
+	"github.com/antonioalfa22/GoGin-API-REST-Template/models"
+	"github.com/antonioalfa22/GoGin-API-REST-Template/pkg/services"
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
 )
@@ -17,37 +17,37 @@ type Data struct {
 
 
 func AllUsers(users *[]models.User) error {
-	db = database.GetDB()
+	db = services.GetDB()
 	return db.Find(&users).Error
 }
 
 func FindUserById(user *models.User, id string) error {
-	db = database.GetDB()
+	db = services.GetDB()
 	return db.Where("id = ?", id).First(&user).Error
 }
 
 func FindUserByUsername(user *models.User, username string) error {
-	db = database.GetDB()
+	db = services.GetDB()
 	return db.Where("username = ?", username).First(&user).Error
 }
 
 func AddUser(user *models.User) error {
-	db = database.GetDB()
+	db = services.GetDB()
 	return db.Create(&user).Error
 }
 
 func UpdateUser(user *models.User) error {
-	db = database.GetDB()
+	db = services.GetDB()
 	return db.Save(&user).Error
 }
 
 func DeleteUser(user *models.User) error {
-	db = database.GetDB()
+	db = services.GetDB()
 	return db.Delete(&user).Error
 }
 
 func AllPaginatedUsers(users *[]models.User, data *Data, c *gin.Context) error {
-	db = database.GetDB()
+	db = services.GetDB()
 
 	// Define and get sorting field
 	sort := c.DefaultQuery("Sort", "ID")
@@ -62,17 +62,17 @@ func AllPaginatedUsers(users *[]models.User, data *Data, c *gin.Context) error {
 
 	table := "users"
 	query := db.Select(table + ".*")
-	query = query.Offset(database.Offset(offset))
-	query = query.Limit(database.Limit(limit))
-	query = query.Order(database.SortOrder(table, sort, order))
-	query = query.Scopes(database.Search(search))
+	query = query.Offset(services.Offset(offset))
+	query = query.Limit(services.Limit(limit))
+	query = query.Order(services.SortOrder(table, sort, order))
+	query = query.Scopes(services.Search(search))
 
-	error := db.Find(&users).Error
+	err := db.Find(&users).Error
 
 	query = query.Offset(0)
 	query.Table(table).Count(&data.FilteredData)
 
 	// Count total table
 	db.Table(table).Count(&data.TotalData)
-	return error
+	return err
 }

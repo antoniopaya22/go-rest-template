@@ -1,9 +1,9 @@
 package controllers
 
 import (
-	"github.com/antonioalfa22/GoGin-API-REST-Template/cmd/models"
-	"github.com/antonioalfa22/GoGin-API-REST-Template/cmd/repository"
-	"github.com/antonioalfa22/GoGin-API-REST-Template/pkg/crypto"
+	"github.com/antonioalfa22/GoGin-API-REST-Template/models"
+	"github.com/antonioalfa22/GoGin-API-REST-Template/pkg/repository"
+	"github.com/antonioalfa22/GoGin-API-REST-Template/pkg/services"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
@@ -48,12 +48,12 @@ func GetUsers(c *gin.Context)  {
 
 func CreateUser(c *gin.Context) {
 	var userInput UserInput
-	c.BindJSON(&userInput)
+	_ = c.BindJSON(&userInput)
 	user := models.User{
 		Username:  userInput.Username,
 		Firstname: userInput.Firstname,
 		Lastname:  userInput.Lastname,
-		Hash:      crypto.HashAndSalt([]byte(userInput.Password)),
+		Hash:      services.HashAndSalt([]byte(userInput.Password)),
 	}
 	if err := repository.AddUser(&user); err != nil {
 		c.JSON(http.StatusInternalServerError, err.Error())
@@ -65,7 +65,7 @@ func CreateUser(c *gin.Context) {
 func UpdateUser(c *gin.Context) {
 	id := c.Params.ByName("id")
 	var userInput UserInput
-	c.BindJSON(&userInput)
+	_ = c.BindJSON(&userInput)
 	var user models.User
 	if err := repository.FindUserById(&user, id); err != nil {
 		c.JSON(http.StatusNotFound, "User not found")
@@ -74,7 +74,7 @@ func UpdateUser(c *gin.Context) {
 	user.Username = userInput.Username
 	user.Lastname = userInput.Lastname
 	user.Firstname = userInput.Firstname
-	user.Hash = crypto.HashAndSalt([]byte(userInput.Password))
+	user.Hash = services.HashAndSalt([]byte(userInput.Password))
 	if err := repository.UpdateUser(&user); err != nil {
 		c.JSON(http.StatusInternalServerError, err.Error())
 		return

@@ -1,8 +1,8 @@
 package routes
 
 import (
-	"github.com/antonioalfa22/GoGin-API-REST-Template/cmd/controllers"
-	"github.com/antonioalfa22/GoGin-API-REST-Template/cmd/middlewares"
+	"github.com/antonioalfa22/GoGin-API-REST-Template/pkg/controllers"
+	"github.com/antonioalfa22/GoGin-API-REST-Template/pkg/middlewares"
 	"github.com/gin-gonic/gin"
 )
 
