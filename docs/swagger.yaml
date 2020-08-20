@@ -1,0 +1,49 @@
+basePath: /api
+definitions:
+  models.User:
+    properties:
+      firstname:
+        type: string
+      hash:
+        type: string
+      lastname:
+        type: string
+      username:
+        type: string
+    type: object
+info:
+  contact:
+    email: antonioalfa22@gmail.com
+    name: Antonio Paya Gonzalez
+  description: API REST in Golang with Gin Framework
+  license:
+    name: MIT
+    url: https://github.com/antonioalfa22/GoGin-API-REST-Template/blob/master/LICENSE
+  termsOfService: http://swagger.io/terms/
+  title: Go Gin Rest API
+  version: "1.0"
+paths:
+  /api/users/{id}:
+    get:
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.User'
+      security:
+      - Authorization Token: []
+      summary: Retrieves user based on given ID
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

@@ -1,0 +1,76 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "API REST in Golang with Gin Framework",
+        "title": "Go Gin Rest API",
+        "termsOfService": "http://swagger.io/terms/",
+        "contact": {
+            "name": "Antonio Paya Gonzalez",
+            "email": "antonioalfa22@gmail.com"
+        },
+        "license": {
+            "name": "MIT",
+            "url": "https://github.com/antonioalfa22/GoGin-API-REST-Template/blob/master/LICENSE"
+        },
+        "version": "1.0"
+    },
+    "basePath": "/api",
+    "paths": {
+        "/api/users/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "Authorization Token": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Retrieves user based on given ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "User ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.User"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "models.User": {
+            "type": "object",
+            "properties": {
+                "firstname": {
+                    "type": "string"
+                },
+                "hash": {
+                    "type": "string"
+                },
+                "lastname": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        }
+    },
+    "securityDefinitions": {
+        "ApiKeyAuth": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
+        }
+    }
+}

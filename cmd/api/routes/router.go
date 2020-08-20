@@ -1,9 +1,11 @@
 package routes
 
 import (
-	"github.com/antonioalfa22/GoGin-API-REST-Template/pkg/controllers"
-	"github.com/antonioalfa22/GoGin-API-REST-Template/pkg/middlewares"
+	"github.com/antonioalfa22/GoGin-API-REST-Template/cmd/api/controllers"
+	"github.com/antonioalfa22/GoGin-API-REST-Template/cmd/api/middlewares"
 	"github.com/gin-gonic/gin"
+	swaggerFiles "github.com/swaggo/files"
+	"github.com/swaggo/gin-swagger"
 )
 
 func Setup() *gin.Engine {
@@ -29,6 +31,9 @@ func Setup() *gin.Engine {
 	{
 		login.POST("/", controllers.Login)
 	}
+
+	// Docs Routes
+	r.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	return r
 }

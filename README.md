@@ -25,12 +25,11 @@ _______
 ## 2. Generate Docs
 
 ```shell script
-# Get swagger
-go get -u github.com/go-swagger/go-swagger/cmd/swagger
+# Get swag
+go get -u github.com/swaggo/swag/cmd/swag
 
-# Generate swagger.yml
-swagger generate spec -o ./api/swagger.yaml --scan-models
-
-# Serve docs
-swagger serve -F=swagger ./api/swagger.yaml
+# Generate docs
+swag init --dir cmd/api --output docs
 ```
+
+Go to **http://localhost:3000/docs/index.html**

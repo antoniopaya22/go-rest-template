@@ -37,12 +37,6 @@ func GetUserById(c *gin.Context) {
 	}
 }
 
-// GetUserById godoc
-// @Summary Retrieves all users
-// @Produce json
-// @Success 200 {object} [] models.User
-// @Router /api/users [get]
-// @Security Authorization Token
 func GetUsersPaginated(c *gin.Context) {
 	s := services.NewUserService(daos.NewUserDAO())
 	if users, err := s.AllPaginated(c); err != nil {
