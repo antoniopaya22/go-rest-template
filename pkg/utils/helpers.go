@@ -1,7 +1,6 @@
-package services
+package utils
 
 import (
-	"github.com/jinzhu/gorm"
 	"regexp"
 	"strconv"
 	"strings"
@@ -28,17 +27,6 @@ func Limit(limit string) int {
 // SortOrder returns the string for sorting and orderin data
 func SortOrder(table, sort, order string) string {
 	return table + "." + ToSnakeCase(sort) + " " + ToSnakeCase(order)
-}
-
-// Search adds where to search keywords
-func Search(search string) func(db *gorm.DB) *gorm.DB {
-	return func(db *gorm.DB) *gorm.DB {
-		if search != "" {
-			db = db.Where("name LIKE ?", "%"+search+"%")
-			db = db.Or("description LIKE ?", "%"+search+"%")
-		}
-		return db
-	}
 }
 
 // ToSnakeCase changes string to database table

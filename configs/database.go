@@ -1,8 +1,8 @@
-package services
+package configs
 
 import (
 	"fmt"
-	"github.com/antonioalfa22/GoGin-API-REST-Template/models"
+	"github.com/antonioalfa22/GoGin-API-REST-Template/pkg/models"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 	_ "github.com/jinzhu/gorm/dialects/postgres"

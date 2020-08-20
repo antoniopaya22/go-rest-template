@@ -11,3 +11,9 @@ type User struct {
 	Firstname string `gorm:"type:varchar(100);not null" json:"firstname"`
 	Hash      string `gorm:"type:varchar(255);not null" json:"hash"`
 }
+
+type UserData struct {
+	TotalData    int64
+	FilteredData int64
+	Data         []User
+}

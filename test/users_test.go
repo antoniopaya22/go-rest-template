@@ -2,8 +2,9 @@ package test
 
 import (
 	"fmt"
-	"github.com/antonioalfa22/GoGin-API-REST-Template/models"
-	"github.com/antonioalfa22/GoGin-API-REST-Template/pkg/repository"
+	"github.com/antonioalfa22/GoGin-API-REST-Template/configs"
+	"github.com/antonioalfa22/GoGin-API-REST-Template/pkg/daos"
+	"github.com/antonioalfa22/GoGin-API-REST-Template/pkg/models"
 	"github.com/antonioalfa22/GoGin-API-REST-Template/pkg/services"
 	"testing"
 )
@@ -11,9 +12,9 @@ import (
 var userTest models.User
 
 func Setup() {
-	services.Setup()
-	services.SetupDB()
-	services.GetDB().Exec("DELETE FROM users")
+	configs.Setup()
+	configs.SetupDB()
+	configs.GetDB().Exec("DELETE FROM users")
 }
 
 func TestAddUser(t *testing.T)  {
@@ -24,27 +25,25 @@ func TestAddUser(t *testing.T)  {
 		Username: "antonio",
 		Hash: "hash",
 	}
-	if err := repository.AddUser(&user); err != nil {
+	s := services.NewUserService(daos.NewUserDAO())
+	if err := s.Add(&user); err != nil {
 		t.Fatalf("Expected no error, got %v", err)
 	}
 	userTest = user
 }
 
 func TestGetAllUsers(t *testing.T) {
-	var users []models.User
-	if err := repository.AllUsers(&users); err != nil {
+	s := services.NewUserService(daos.NewUserDAO())
+	if _, err := s.All(); err != nil {
 		t.Fatalf("Expected no error, got %v", err)
-	}
-	if len(users) != 1 {
-		t.Fatalf("Users len expected == 1")
 	}
 }
 
 func TestGetUserById(t *testing.T)  {
-	services.SetupDB()
-	services.SetupDB()
-	var user models.User
-	if err := repository.FindUserById(&user, fmt.Sprint(userTest.ID)); err != nil {
+	configs.SetupDB()
+	configs.SetupDB()
+	s := services.NewUserService(daos.NewUserDAO())
+	if _, err := s.Get(fmt.Sprint(userTest.ID)); err != nil {
 		t.Fatalf("Expected no error, got %v", err)
 	}
 }
