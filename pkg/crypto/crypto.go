@@ -1,8 +1,8 @@
-package utils
+package crypto
 
 import (
 	"fmt"
-	"github.com/antonioalfa22/GoGin-API-REST-Template/configs"
+	config2 "github.com/antonioalfa22/GoGin-API-REST-Template/internal/pkg/config"
 	"github.com/dgrijalva/jwt-go"
 	"golang.org/x/crypto/bcrypt"
 	"log"
@@ -27,7 +27,7 @@ func ComparePasswords(hashedPwd string, plainPwd []byte) bool {
 }
 
 func CreateToken(username string) (string, error) {
-	config := configs.GetConfig()
+	config := config2.GetConfig()
 
 	var err error
 	//Creating Access Token
@@ -44,7 +44,7 @@ func CreateToken(username string) (string, error) {
 }
 
 func ValidateToken(tokenString string) bool {
-	config := configs.GetConfig()
+	config := config2.GetConfig()
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("there was an error")

@@ -20,6 +20,12 @@ docker build . -t api-rest
 docker run -p 3000:3000 api-rest
 ```
 
+3. **Test**
+
+```shell script
+go test -v ./test/...
+```
+
 _______
 
 ## 2. Generate Docs

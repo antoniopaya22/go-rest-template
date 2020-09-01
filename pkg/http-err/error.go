@@ -1,4 +1,4 @@
-package utils
+package http_err
 
 import "github.com/gin-gonic/gin"
 

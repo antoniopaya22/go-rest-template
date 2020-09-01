@@ -1,4 +1,4 @@
-package configs
+package config
 
 import (
 	"log"
@@ -29,12 +29,11 @@ type ServerConfiguration struct {
 }
 
 // SetupDB initialize configuration
-func Setup() {
+func Setup(configPath string) {
 	var configuration *Configuration
 
-	viper.SetConfigName("./configs/config")
+	viper.SetConfigFile(configPath)
 	viper.SetConfigType("yaml")
-	viper.AddConfigPath(".")
 
 	if err := viper.ReadInConfig(); err != nil {
 		log.Fatalf("Error reading config file, %s", err)

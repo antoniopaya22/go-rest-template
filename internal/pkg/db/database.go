@@ -1,8 +1,9 @@
-package configs
+package db
 
 import (
 	"fmt"
-	"github.com/antonioalfa22/GoGin-API-REST-Template/pkg/models"
+	"github.com/antonioalfa22/GoGin-API-REST-Template/internal/pkg/config"
+	"github.com/antonioalfa22/GoGin-API-REST-Template/internal/pkg/models/users"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
@@ -12,7 +13,6 @@ import (
 var (
 	DB    *gorm.DB
 	err   error
-	DBErr error
 )
 
 type Database struct {
@@ -23,7 +23,7 @@ type Database struct {
 func SetupDB() {
 	var db = DB
 
-	configuration := GetConfig()
+	configuration := config.GetConfig()
 
 	driver := configuration.Database.Driver
 	database := configuration.Database.Dbname
@@ -32,47 +32,35 @@ func SetupDB() {
 	host := configuration.Database.Host
 	port := configuration.Database.Port
 
-	if driver == "sqlite" {
-
+	if driver == "sqlite" { 	// SQLITE
 		db, err = gorm.Open("sqlite3", "./"+database+".db")
-
 		if err != nil {
-			DBErr = err
 			fmt.Println("db err: ", err)
 		}
-
-	} else if driver == "postgres" {
-
+	} else if driver == "postgres" { 	// POSTGRES
 		db, err = gorm.Open("postgres", "host="+host+" port="+port+" user="+username+" dbname="+database+"  sslmode=disable password="+password)
 		if err != nil {
-			DBErr = err
 			fmt.Println("db err: ", err)
 		}
-
-	} else if driver == "mysql" {
-
+	} else if driver == "mysql" { 	// MYSQL
 		db, err = gorm.Open("mysql", username+":"+password+"@tcp("+host+":"+port+")/"+database+"?charset=utf8&parseTime=True&loc=Local")
 		if err != nil {
-			DBErr = err
 			fmt.Println("db err: ", err)
 		}
-
 	}
 
 	// Change this to true if you want to see SQL queries
 	db.LogMode(false)
-
-	// Auto migrate project models
-	db.AutoMigrate(&models.User{})
 	DB = db
+	migration()
 }
 
-// GetDB helps you to get a connection
+// Auto migrate project models
+func migration()  {
+	DB.AutoMigrate(&users.User{})
+	DB.AutoMigrate(&users.UserRole{})
+}
+
 func GetDB() *gorm.DB {
 	return DB
-}
-
-// GetDBErr helps you to get a connection
-func GetDBErr() error {
-	return DBErr
 }
