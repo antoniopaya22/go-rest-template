@@ -1,11 +1,8 @@
-check-swagger:
-	which swagger || (go get -u github.com/go-swagger/go-swagger/cmd/swagger)
+get-docs:
+	go get -u github.com/swaggo/swag/cmd/swag
 
-swagger: check-swagger
-	go mod vendor && swagger generate spec -o ./api/swagger.yaml --scan-models
-
-serve-swagger: check-swagger
-	swagger serve -F=swagger ./api/swagger.yaml
+docs: get-docs
+	swag init --dir cmd/api --output docs
 
 build:
 	go build -o bin/restapi cmd/api/main.go
@@ -15,3 +12,9 @@ run:
 
 test:
 	go test -v ./test/...
+
+build-docker: build
+	docker build . -t api-rest
+
+run-docker: build-docker
+	docker run -p 3000:3000 api-rest

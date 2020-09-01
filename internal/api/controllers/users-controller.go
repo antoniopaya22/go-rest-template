@@ -43,6 +43,13 @@ func GetUserById(c *gin.Context) {
 	}
 }
 
+// GetUsers godoc
+// @Summary Retrieves users based on query
+// @Produce json
+// @Param id path integer true "User ID"
+// @Success 200 {object} models.User
+// @Router /api/users/{id} [get]
+// @Security Authorization Token
 func GetUsers(c *gin.Context) {
 	s := services.GetUserService()
 	var userQuery QueryUserParams

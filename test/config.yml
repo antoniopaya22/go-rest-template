@@ -5,6 +5,9 @@ database:
   password: "password"
   host: "localhost"
   port: "5432"
+  max_lifetime: 7200
+  max_open_conns: 150
+  max_idle_conns: 50
 
 server:
   port: "3000"
