@@ -19,22 +19,17 @@ type UserInput struct {
 	Role      string `json:"role" binding:"required"`
 }
 
-type QueryUserParams struct {
-	Username  string `form:"username"`
-	Lastname  string `form:"lastname"`
-	Firstname string `form:"firstname"`
-}
-
 // GetUserById godoc
 // @Summary Retrieves user based on given ID
+// @Description get User by ID
 // @Produce json
 // @Param id path integer true "User ID"
-// @Success 200 {object} models.User
+// @Success 200 {object} users.User
 // @Router /api/users/{id} [get]
 // @Security Authorization Token
 func GetUserById(c *gin.Context) {
 	s := services.GetUserService()
-	id := c.Params.ByName("id")
+	id := c.Param("id")
 	if user, err := s.Get(id); err != nil {
 		http_err.NewError(c, http.StatusNotFound, errors.New("user not found"))
 		log.Println(err)
@@ -45,16 +40,19 @@ func GetUserById(c *gin.Context) {
 
 // GetUsers godoc
 // @Summary Retrieves users based on query
+// @Description Get Users
 // @Produce json
-// @Param id path integer true "User ID"
-// @Success 200 {object} models.User
-// @Router /api/users/{id} [get]
+// @Param username query string false "Username"
+// @Param firstname query string false "Firstname"
+// @Param lastname query string false "Lastname"
+// @Success 200 {array} []users.User
+// @Router /api/users [get]
 // @Security Authorization Token
 func GetUsers(c *gin.Context) {
 	s := services.GetUserService()
-	var userQuery QueryUserParams
-	_ = c.Bind(&userQuery)
-	if users, err := s.Query(userQuery.Username, userQuery.Firstname, userQuery.Lastname); err != nil {
+	var q models.User
+	_ = c.Bind(&q)
+	if users, err := s.Query(&q); err != nil {
 		http_err.NewError(c, http.StatusNotFound, errors.New("users not found"))
 		log.Println(err)
 	} else {

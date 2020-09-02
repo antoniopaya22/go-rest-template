@@ -1,30 +1,82 @@
-basePath: /api
+basePath: /
 definitions:
-  models.User:
+  users.User:
     properties:
+      created_at:
+        type: string
       firstname:
         type: string
       hash:
         type: string
+      id:
+        type: integer
       lastname:
+        type: string
+      role:
+        $ref: '#/definitions/users.UserRole'
+        type: object
+      updated_at:
         type: string
       username:
         type: string
+    type: object
+  users.UserRole:
+    properties:
+      created_at:
+        type: string
+      id:
+        type: integer
+      role_name:
+        type: string
+      updated_at:
+        type: string
+      user_id:
+        type: integer
     type: object
 info:
   contact:
     email: antonioalfa22@gmail.com
     name: Antonio Paya Gonzalez
+    url: http://antoniopg.tk
   description: API REST in Golang with Gin Framework
   license:
     name: MIT
     url: https://github.com/antonioalfa22/GoGin-API-REST-Template/blob/master/LICENSE
-  termsOfService: http://swagger.io/terms/
-  title: Go Gin Rest API
   version: "1.0"
 paths:
+  /api/users:
+    get:
+      description: Get Users
+      parameters:
+      - description: Username
+        in: query
+        name: username
+        type: string
+      - description: Firstname
+        in: query
+        name: firstname
+        type: string
+      - description: Lastname
+        in: query
+        name: lastname
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              items:
+                $ref: '#/definitions/users.User'
+              type: array
+            type: array
+      security:
+      - Authorization Token: []
+      summary: Retrieves users based on query
   /api/users/{id}:
     get:
+      description: get User by ID
       parameters:
       - description: User ID
         in: path
@@ -37,7 +89,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/models.User'
+            $ref: '#/definitions/users.User'
       security:
       - Authorization Token: []
       summary: Retrieves user based on given ID

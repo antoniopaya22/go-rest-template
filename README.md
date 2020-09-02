@@ -1,6 +1,7 @@
 # GoGin-API-REST-Template
 Go (Golang) API REST Template/Boilerplate with Gin Framework
 
+[![Go Report Card](https://goreportcard.com/badge/github.com/antonioalfa22/GoGin-API-REST-Template)](https://goreportcard.com/report/github.com/antonioalfa22/GoGin-API-REST-Template)
 [![Open Source Love](https://badges.frapsoft.com/os/mit/mit.svg?v=102)](https://github.com/ellerbrock/open-source-badge/)
 ![Build Status](https://travis-ci.com/antonioalfa22/GoGin-API-REST-Template.svg?branch=master)
 
@@ -35,7 +36,7 @@ _______
 go get -u github.com/swaggo/swag/cmd/swag
 
 # Generate docs
-swag init --dir cmd/api --output docs
+swag init --dir cmd/api --parseDependency --output docs
 ```
 
-Go to **http://localhost:3000/docs/index.html**
+Run and go to **http://localhost:3000/docs/index.html**

@@ -53,13 +53,9 @@ func (dao *UserDAO) All() (*[]models.User, error) {
 	return &users, err
 }
 
-func (dao *UserDAO) Query(username string, firstname string, lastname string) (*[]models.User, error) {
+func (dao *UserDAO) Query(q *models.User) (*[]models.User, error) {
 	var users []models.User
-	err := Find(&models.User{
-		Username:  username,
-		Lastname:  lastname,
-		Firstname: firstname,
-	}, &users, "id asc")
+	err := Find(&q, &users, "id asc")
 	for i := range users {
 		var userRole models.UserRole
 		err = db.GetDB().Model(&users[i]).Association("Role").Find(&userRole).Error

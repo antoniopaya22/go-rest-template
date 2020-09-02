@@ -18,9 +18,9 @@ var doc = `{
     "info": {
         "description": "{{.Description}}",
         "title": "{{.Title}}",
-        "termsOfService": "http://swagger.io/terms/",
         "contact": {
             "name": "Antonio Paya Gonzalez",
+            "url": "http://antoniopg.tk",
             "email": "antonioalfa22@gmail.com"
         },
         "license": {
@@ -32,6 +32,54 @@ var doc = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/api/users": {
+            "get": {
+                "security": [
+                    {
+                        "Authorization Token": []
+                    }
+                ],
+                "description": "Get Users",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Retrieves users based on query",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Username",
+                        "name": "username",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Firstname",
+                        "name": "firstname",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Lastname",
+                        "name": "lastname",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/definitions/users.User"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/api/users/{id}": {
             "get": {
                 "security": [
@@ -39,6 +87,7 @@ var doc = `{
                         "Authorization Token": []
                     }
                 ],
+                "description": "get User by ID",
                 "produces": [
                     "application/json"
                 ],
@@ -56,7 +105,7 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.User"
+                            "$ref": "#/definitions/users.User"
                         }
                     }
                 }
@@ -64,20 +113,53 @@ var doc = `{
         }
     },
     "definitions": {
-        "models.User": {
+        "users.User": {
             "type": "object",
             "properties": {
+                "created_at": {
+                    "type": "string"
+                },
                 "firstname": {
                     "type": "string"
                 },
                 "hash": {
                     "type": "string"
                 },
+                "id": {
+                    "type": "integer"
+                },
                 "lastname": {
+                    "type": "string"
+                },
+                "role": {
+                    "type": "object",
+                    "$ref": "#/definitions/users.UserRole"
+                },
+                "updated_at": {
                     "type": "string"
                 },
                 "username": {
                     "type": "string"
+                }
+            }
+        },
+        "users.UserRole": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "role_name": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                },
+                "user_id": {
+                    "type": "integer"
                 }
             }
         }
@@ -104,9 +186,9 @@ type swaggerInfo struct {
 var SwaggerInfo = swaggerInfo{
 	Version:     "1.0",
 	Host:        "",
-	BasePath:    "/api",
+	BasePath:    "/",
 	Schemes:     []string{},
-	Title:       "Go Gin Rest API",
+	Title:       "",
 	Description: "API REST in Golang with Gin Framework",
 }
 

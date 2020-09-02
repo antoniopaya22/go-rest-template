@@ -12,7 +12,7 @@ type userDAO interface {
 	Add(user *models.User) error
 	Update(user *models.User) error
 	Delete(user *models.User) error
-	Query(username string, firstname string, lastname string) (*[]models.User, error)
+	Query(q *models.User) (*[]models.User, error)
 }
 
 type UserService struct {
@@ -36,6 +36,6 @@ func (s *UserService) All() (*[]models.User, error)   { return s.dao.All() }
 func (s *UserService) Add(user *models.User) error    { return s.dao.Add(user) }
 func (s *UserService) Update(user *models.User) error { return s.dao.Update(user) }
 func (s *UserService) Delete(user *models.User) error { return s.dao.Delete(user) }
-func (s *UserService) Query(username string, firstname string, lastname string) (*[]models.User, error) {
-	return s.dao.Query(username, firstname, lastname)
+func (s *UserService) Query(q *models.User) (*[]models.User, error) {
+	return s.dao.Query(q)
 }
