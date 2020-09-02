@@ -8,7 +8,7 @@ import (
 	"github.com/swaggo/gin-swagger"
 )
 
-func RegisterUserRoutes(r *gin.Engine)  {
+func RegisterUserRoutes(r *gin.Engine) {
 	// Users Routes
 	users := r.Group("/api/users")
 	users.Use(middlewares.AuthRequired())
@@ -21,7 +21,7 @@ func RegisterUserRoutes(r *gin.Engine)  {
 	}
 }
 
-func RegisterAuthRoutes(r *gin.Engine)  {
+func RegisterAuthRoutes(r *gin.Engine) {
 	// Login Routes
 	login := r.Group("/api/login")
 	{
@@ -29,7 +29,7 @@ func RegisterAuthRoutes(r *gin.Engine)  {
 	}
 }
 
-func RegisterDocsRoutes(r *gin.Engine)  {
+func RegisterDocsRoutes(r *gin.Engine) {
 	// Docs Routes
 	r.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 }

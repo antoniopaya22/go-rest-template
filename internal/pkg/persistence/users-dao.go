@@ -9,7 +9,6 @@ import (
 // UserDAO persists user data in database
 type UserDAO struct{}
 
-
 // NewUserDAO creates a new UserDAO
 func NewUserDAO() *UserDAO {
 	return &UserDAO{}
@@ -21,7 +20,9 @@ func (dao *UserDAO) Get(id string) (*models.User, error) {
 	where := models.User{}
 	where.ID, _ = strconv.ParseUint(id, 10, 64)
 	_, err := First(&where, &user)
-	if err != nil { return nil, err }
+	if err != nil {
+		return nil, err
+	}
 	err = db.GetDB().Model(&user).Association("Role").Find(&userRole).Error
 	user.Role = userRole
 	return &user, err
@@ -33,13 +34,15 @@ func (dao *UserDAO) GetByUsername(username string) (*models.User, error) {
 	where := models.User{}
 	where.Username = username
 	_, err := First(&where, &user)
-	if err != nil { return nil, err }
+	if err != nil {
+		return nil, err
+	}
 	err = db.GetDB().Model(&user).Association("Role").Find(&userRole).Error
 	user.Role = userRole
 	return &user, err
 }
 
-func (dao *UserDAO) All() (*[]models.User, error){
+func (dao *UserDAO) All() (*[]models.User, error) {
 	var users []models.User
 	err := Find(&models.User{}, &users, "id asc")
 	for i := range users {
@@ -50,11 +53,11 @@ func (dao *UserDAO) All() (*[]models.User, error){
 	return &users, err
 }
 
-func (dao *UserDAO) Query( username string, firstname string, lastname string) (*[]models.User, error){
+func (dao *UserDAO) Query(username string, firstname string, lastname string) (*[]models.User, error) {
 	var users []models.User
 	err := Find(&models.User{
-		Username: username,
-		Lastname: lastname,
+		Username:  username,
+		Lastname:  lastname,
 		Firstname: firstname,
 	}, &users, "id asc")
 	for i := range users {

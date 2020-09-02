@@ -10,10 +10,9 @@ import (
 	"net/http"
 )
 
-
 type LoginInput struct {
-	Username  string `json:"username" binding:"required"`
-	Password  string `json:"password" binding:"required"`
+	Username string `json:"username" binding:"required"`
+	Password string `json:"password" binding:"required"`
 }
 
 func Login(c *gin.Context) {
@@ -24,7 +23,7 @@ func Login(c *gin.Context) {
 		http_err.NewError(c, http.StatusNotFound, errors.New("user not found"))
 		log.Println(err)
 	} else {
-		if ! crypto.ComparePasswords(user.Hash, []byte(loginInput.Password)){
+		if !crypto.ComparePasswords(user.Hash, []byte(loginInput.Password)) {
 			http_err.NewError(c, http.StatusForbidden, errors.New("user and password not match"))
 			return
 		}

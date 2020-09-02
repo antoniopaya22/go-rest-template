@@ -9,13 +9,13 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func setConfiguration(configPath string)  {
+func setConfiguration(configPath string) {
 	config.Setup(configPath)
 	db.SetupDB()
 	gin.SetMode(config.GetConfig().Server.Mode)
 }
 
-func initWeb() *gin.Engine{
+func initWeb() *gin.Engine {
 	app := gin.New()
 
 	// Middlewares
@@ -33,13 +33,13 @@ func initWeb() *gin.Engine{
 }
 
 func Run(configPath string) {
-	if configPath==""{
-		configPath="./cmd/api/config.yml"
+	if configPath == "" {
+		configPath = "./cmd/api/config.yml"
 	}
 	setConfiguration(configPath)
 	conf := config.GetConfig()
 	web := initWeb()
-	fmt.Println("Go API REST Running on port "+conf.Server.Port)
+	fmt.Println("Go API REST Running on port " + conf.Server.Port)
 	fmt.Println("==================>")
 	_ = web.Run("127.0.0.1:" + conf.Server.Port)
 }
