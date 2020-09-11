@@ -1,7 +1,7 @@
 package users
 
 import (
-	"github.com/antonioalfa22/GoGin-API-REST-Template/internal/pkg/models"
+	"github.com/antonioalfa22/go-rest-template/internal/pkg/models"
 	"time"
 )
 

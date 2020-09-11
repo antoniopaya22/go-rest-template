@@ -1,4 +1,4 @@
-module github.com/antonioalfa22/GoGin-API-REST-Template
+module github.com/antonioalfa22/go-rest-template
 
 go 1.14
 

@@ -1,9 +1,9 @@
-# GoGin-API-REST-Template
+# go-rest-template
 Go (Golang) API REST Template/Boilerplate with Gin Framework
 
-[![Go Report Card](https://goreportcard.com/badge/github.com/antonioalfa22/GoGin-API-REST-Template)](https://goreportcard.com/report/github.com/antonioalfa22/GoGin-API-REST-Template)
+[![Go Report Card](https://goreportcard.com/badge/github.com/antonioalfa22/go-rest-template)](https://goreportcard.com/report/github.com/antonioalfa22/go-rest-template)
 [![Open Source Love](https://badges.frapsoft.com/os/mit/mit.svg?v=102)](https://github.com/ellerbrock/open-source-badge/)
-![Build Status](https://travis-ci.com/antonioalfa22/GoGin-API-REST-Template.svg?branch=master)
+![Build Status](https://travis-ci.com/antonioalfa22/go-rest-template.svg?branch=master)
 
 
 ## 1. Run with Docker

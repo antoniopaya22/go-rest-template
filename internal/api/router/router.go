@@ -2,8 +2,8 @@ package router
 
 import (
 	"fmt"
-	"github.com/antonioalfa22/GoGin-API-REST-Template/internal/api/controllers"
-	"github.com/antonioalfa22/GoGin-API-REST-Template/internal/api/middlewares"
+	"github.com/antonioalfa22/go-rest-template/internal/api/controllers"
+	"github.com/antonioalfa22/go-rest-template/internal/api/middlewares"
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
 	"github.com/swaggo/gin-swagger"

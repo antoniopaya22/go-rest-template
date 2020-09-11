@@ -1,7 +1,7 @@
 package middlewares
 
 import (
-	"github.com/antonioalfa22/GoGin-API-REST-Template/pkg/crypto"
+	"github.com/antonioalfa22/go-rest-template/pkg/crypto"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )

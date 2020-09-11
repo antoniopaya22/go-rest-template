@@ -1,8 +1,8 @@
 package services
 
 import (
-	models "github.com/antonioalfa22/GoGin-API-REST-Template/internal/pkg/models/users"
-	"github.com/antonioalfa22/GoGin-API-REST-Template/internal/pkg/persistence"
+	models "github.com/antonioalfa22/go-rest-template/internal/pkg/models/users"
+	"github.com/antonioalfa22/go-rest-template/internal/pkg/persistence"
 )
 
 type userDAO interface {

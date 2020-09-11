@@ -2,10 +2,10 @@ package test
 
 import (
 	"fmt"
-	"github.com/antonioalfa22/GoGin-API-REST-Template/internal/pkg/config"
-	"github.com/antonioalfa22/GoGin-API-REST-Template/internal/pkg/db"
-	models "github.com/antonioalfa22/GoGin-API-REST-Template/internal/pkg/models/users"
-	"github.com/antonioalfa22/GoGin-API-REST-Template/internal/pkg/services"
+	"github.com/antonioalfa22/go-rest-template/internal/pkg/config"
+	"github.com/antonioalfa22/go-rest-template/internal/pkg/db"
+	models "github.com/antonioalfa22/go-rest-template/internal/pkg/models/users"
+	"github.com/antonioalfa22/go-rest-template/internal/pkg/services"
 	"testing"
 )
 

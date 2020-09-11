@@ -1,8 +1,8 @@
 package persistence
 
 import (
-	"github.com/antonioalfa22/GoGin-API-REST-Template/internal/pkg/db"
-	models "github.com/antonioalfa22/GoGin-API-REST-Template/internal/pkg/models/tasks"
+	"github.com/antonioalfa22/go-rest-template/internal/pkg/db"
+	models "github.com/antonioalfa22/go-rest-template/internal/pkg/models/tasks"
 	"strconv"
 )
 

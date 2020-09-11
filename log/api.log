@@ -1,1 +1,1 @@
-::1 - - [11/Sep/2020:11:29:12 +0200] "GET /api/tasks HTTP/1.1 200 5.0007ms " " PostmanRuntime/7.26.3" " "
+::1 - - [11/Sep/2020:11:32:45 +0200] "GET /api/tasks HTTP/1.1 200 5ms " " PostmanRuntime/7.26.3" " "

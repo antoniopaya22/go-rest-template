@@ -2,9 +2,9 @@ package api
 
 import (
 	"fmt"
-	"github.com/antonioalfa22/GoGin-API-REST-Template/internal/api/router"
-	"github.com/antonioalfa22/GoGin-API-REST-Template/internal/pkg/config"
-	"github.com/antonioalfa22/GoGin-API-REST-Template/internal/pkg/db"
+	"github.com/antonioalfa22/go-rest-template/internal/api/router"
+	"github.com/antonioalfa22/go-rest-template/internal/pkg/config"
+	"github.com/antonioalfa22/go-rest-template/internal/pkg/db"
 	"github.com/gin-gonic/gin"
 )
 

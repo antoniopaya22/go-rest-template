@@ -1,8 +1,8 @@
 package tasks
 
 import (
-	"github.com/antonioalfa22/GoGin-API-REST-Template/internal/pkg/models"
-	"github.com/antonioalfa22/GoGin-API-REST-Template/internal/pkg/models/users"
+	"github.com/antonioalfa22/go-rest-template/internal/pkg/models"
+	"github.com/antonioalfa22/go-rest-template/internal/pkg/models/users"
 	"time"
 )
 

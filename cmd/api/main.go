@@ -1,8 +1,8 @@
 package main
 
 import (
-	_ "github.com/antonioalfa22/GoGin-API-REST-Template/docs"
-	"github.com/antonioalfa22/GoGin-API-REST-Template/internal/api"
+	_ "github.com/antonioalfa22/go-rest-template/docs"
+	"github.com/antonioalfa22/go-rest-template/internal/api"
 )
 
 // @Golang API REST
@@ -14,7 +14,7 @@ import (
 // @contact.email antonioalfa22@gmail.com
 
 // @license.name MIT
-// @license.url https://github.com/antonioalfa22/GoGin-API-REST-Template/blob/master/LICENSE
+// @license.url https://github.com/antonioalfa22/go-rest-template/blob/master/LICENSE
 
 // @BasePath /
 

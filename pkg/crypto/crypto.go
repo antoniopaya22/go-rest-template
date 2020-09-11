@@ -2,7 +2,7 @@ package crypto
 
 import (
 	"fmt"
-	config2 "github.com/antonioalfa22/GoGin-API-REST-Template/internal/pkg/config"
+	config2 "github.com/antonioalfa22/go-rest-template/internal/pkg/config"
 	"github.com/dgrijalva/jwt-go"
 	"golang.org/x/crypto/bcrypt"
 	"log"

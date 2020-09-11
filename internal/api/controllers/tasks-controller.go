@@ -3,9 +3,9 @@ package controllers
 import (
 	"errors"
 	"fmt"
-	models "github.com/antonioalfa22/GoGin-API-REST-Template/internal/pkg/models/tasks"
-	"github.com/antonioalfa22/GoGin-API-REST-Template/internal/pkg/services"
-	"github.com/antonioalfa22/GoGin-API-REST-Template/pkg/http-err"
+	models "github.com/antonioalfa22/go-rest-template/internal/pkg/models/tasks"
+	"github.com/antonioalfa22/go-rest-template/internal/pkg/services"
+	"github.com/antonioalfa22/go-rest-template/pkg/http-err"
 	"github.com/gin-gonic/gin"
 	"log"
 	"net/http"
