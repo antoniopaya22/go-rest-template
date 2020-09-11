@@ -16,51 +16,35 @@ func NewUserDAO() *UserDAO {
 
 func (dao *UserDAO) Get(id string) (*models.User, error) {
 	var user models.User
-	var userRole models.UserRole
 	where := models.User{}
 	where.ID, _ = strconv.ParseUint(id, 10, 64)
-	_, err := First(&where, &user)
+	_, err := First(&where, &user, []string{"Role"})
 	if err != nil {
 		return nil, err
 	}
-	err = db.GetDB().Model(&user).Association("Role").Find(&userRole).Error
-	user.Role = userRole
 	return &user, err
 }
 
 func (dao *UserDAO) GetByUsername(username string) (*models.User, error) {
 	var user models.User
-	var userRole models.UserRole
 	where := models.User{}
 	where.Username = username
-	_, err := First(&where, &user)
+	_, err := First(&where, &user, []string{"Role"})
 	if err != nil {
 		return nil, err
 	}
-	err = db.GetDB().Model(&user).Association("Role").Find(&userRole).Error
-	user.Role = userRole
 	return &user, err
 }
 
 func (dao *UserDAO) All() (*[]models.User, error) {
 	var users []models.User
-	err := Find(&models.User{}, &users, "id asc")
-	for i := range users {
-		var userRole models.UserRole
-		err = db.GetDB().Model(&users[i]).Association("Role").Find(&userRole).Error
-		users[i].Role = userRole
-	}
+	err := Find(&models.User{}, &users, []string{"Role"}, "id asc")
 	return &users, err
 }
 
 func (dao *UserDAO) Query(q *models.User) (*[]models.User, error) {
 	var users []models.User
-	err := Find(&q, &users, "id asc")
-	for i := range users {
-		var userRole models.UserRole
-		err = db.GetDB().Model(&users[i]).Association("Role").Find(&userRole).Error
-		users[i].Role = userRole
-	}
+	err := Find(&q, &users, []string{"Role"},  "id asc")
 	return &users, err
 }
 
@@ -72,7 +56,7 @@ func (dao *UserDAO) Add(user *models.User) error {
 
 func (dao *UserDAO) Update(user *models.User) error {
 	var userRole models.UserRole
-	_, err := First(models.UserRole{UserID: user.ID}, &userRole)
+	_, err := First(models.UserRole{UserID: user.ID}, &userRole, []string{})
 	userRole.RoleName = user.Role.RoleName
 	err = Save(&userRole)
 	err = db.GetDB().Omit("Role").Save(&user).Error

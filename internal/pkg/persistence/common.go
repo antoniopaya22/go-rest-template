@@ -74,8 +74,12 @@ func FirstByID(out interface{}, id string) (notFound bool, err error) {
 }
 
 // First
-func First(where interface{}, out interface{}) (notFound bool, err error) {
-	err = db.GetDB().Where(where).First(out).Error
+func First(where interface{}, out interface{}, associations []string) (notFound bool, err error) {
+	db := db.GetDB()
+	for _, a := range associations{
+		db = db.Preload(a)
+	}
+	err = db.Where(where).First(out).Error
 	if err != nil {
 		notFound = gorm.IsRecordNotFoundError(err)
 	}
@@ -83,8 +87,12 @@ func First(where interface{}, out interface{}) (notFound bool, err error) {
 }
 
 // Find
-func Find(where interface{}, out interface{}, orders ...string) error {
-	db := db.GetDB().Where(where)
+func Find(where interface{}, out interface{}, associations []string, orders ...string) error {
+	db := db.GetDB()
+	for _, a := range associations{
+		db = db.Preload(a)
+	}
+	db = db.Where(where)
 	if len(orders) > 0 {
 		for _, order := range orders {
 			db = db.Order(order)

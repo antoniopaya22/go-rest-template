@@ -3,6 +3,7 @@ package db
 import (
 	"fmt"
 	"github.com/antonioalfa22/GoGin-API-REST-Template/internal/pkg/config"
+	"github.com/antonioalfa22/GoGin-API-REST-Template/internal/pkg/models/tasks"
 	"github.com/antonioalfa22/GoGin-API-REST-Template/internal/pkg/models/users"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
@@ -63,6 +64,7 @@ func SetupDB() {
 func migration() {
 	DB.AutoMigrate(&users.User{})
 	DB.AutoMigrate(&users.UserRole{})
+	DB.AutoMigrate(&tasks.Task{})
 }
 
 func GetDB() *gorm.DB {
