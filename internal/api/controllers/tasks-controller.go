@@ -11,7 +11,6 @@ import (
 	"net/http"
 )
 
-
 // GetTaskById godoc
 // @Summary Retrieves task based on given ID
 // @Description get Task by ID

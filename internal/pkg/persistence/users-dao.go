@@ -44,7 +44,7 @@ func (dao *UserDAO) All() (*[]models.User, error) {
 
 func (dao *UserDAO) Query(q *models.User) (*[]models.User, error) {
 	var users []models.User
-	err := Find(&q, &users, []string{"Role"},  "id asc")
+	err := Find(&q, &users, []string{"Role"}, "id asc")
 	return &users, err
 }
 

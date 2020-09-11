@@ -76,7 +76,7 @@ func FirstByID(out interface{}, id string) (notFound bool, err error) {
 // First
 func First(where interface{}, out interface{}, associations []string) (notFound bool, err error) {
 	db := db.GetDB()
-	for _, a := range associations{
+	for _, a := range associations {
 		db = db.Preload(a)
 	}
 	err = db.Where(where).First(out).Error
@@ -89,7 +89,7 @@ func First(where interface{}, out interface{}, associations []string) (notFound 
 // Find
 func Find(where interface{}, out interface{}, associations []string, orders ...string) error {
 	db := db.GetDB()
-	for _, a := range associations{
+	for _, a := range associations {
 		db = db.Preload(a)
 	}
 	db = db.Where(where)

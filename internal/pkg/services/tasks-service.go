@@ -27,9 +27,9 @@ func GetTaskService() *TaskService {
 	return taskService
 }
 
-func (s *TaskService) Get(id string) (*models.Task, error) { return s.dao.Get(id) }
-func (s *TaskService) All() (*[]models.Task, error)   { return s.dao.All() }
-func (s *TaskService) Add(t *models.Task) error    { return s.dao.Add(t) }
-func (s *TaskService) Update(t *models.Task) error { return s.dao.Update(t) }
-func (s *TaskService) Delete(t *models.Task) error { return s.dao.Delete(t) }
+func (s *TaskService) Get(id string) (*models.Task, error)          { return s.dao.Get(id) }
+func (s *TaskService) All() (*[]models.Task, error)                 { return s.dao.All() }
+func (s *TaskService) Add(t *models.Task) error                     { return s.dao.Add(t) }
+func (s *TaskService) Update(t *models.Task) error                  { return s.dao.Update(t) }
+func (s *TaskService) Delete(t *models.Task) error                  { return s.dao.Delete(t) }
 func (s *TaskService) Query(q *models.Task) (*[]models.Task, error) { return s.dao.Query(q) }

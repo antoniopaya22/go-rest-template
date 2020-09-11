@@ -22,7 +22,6 @@ import (
 // @in header
 // @name Authorization
 
-
 func main() {
 	api.Run("")
 }

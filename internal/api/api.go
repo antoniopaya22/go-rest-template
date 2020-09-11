@@ -14,7 +14,6 @@ func setConfiguration(configPath string) {
 	gin.SetMode(config.GetConfig().Server.Mode)
 }
 
-
 func Run(configPath string) {
 	if configPath == "" {
 		configPath = "./cmd/api/config.yml"
