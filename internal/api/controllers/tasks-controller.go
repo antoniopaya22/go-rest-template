@@ -4,7 +4,7 @@ import (
 	"errors"
 	"fmt"
 	models "github.com/antonioalfa22/go-rest-template/internal/pkg/models/tasks"
-	"github.com/antonioalfa22/go-rest-template/internal/pkg/services"
+	"github.com/antonioalfa22/go-rest-template/internal/pkg/persistence"
 	"github.com/antonioalfa22/go-rest-template/pkg/http-err"
 	"github.com/gin-gonic/gin"
 	"log"
@@ -20,7 +20,7 @@ import (
 // @Router /api/tasks/{id} [get]
 // @Security Authorization Token
 func GetTaskById(c *gin.Context) {
-	s := services.GetTaskService()
+	s := persistence.GetTaskRepository()
 	id := c.Param("id")
 	if task, err := s.Get(id); err != nil {
 		http_err.NewError(c, http.StatusNotFound, errors.New("task not found"))
@@ -41,7 +41,7 @@ func GetTaskById(c *gin.Context) {
 // @Router /api/tasks [get]
 // @Security Authorization Token
 func GetTasks(c *gin.Context) {
-	s := services.GetTaskService()
+	s := persistence.GetTaskRepository()
 	var q models.Task
 	_ = c.Bind(&q)
 	if tasks, err := s.Query(&q); err != nil {
@@ -53,7 +53,7 @@ func GetTasks(c *gin.Context) {
 }
 
 func CreateTask(c *gin.Context) {
-	s := services.GetTaskService()
+	s := persistence.GetTaskRepository()
 	var taskInput models.Task
 	_ = c.BindJSON(&taskInput)
 	fmt.Println(taskInput.UserID)
@@ -66,7 +66,7 @@ func CreateTask(c *gin.Context) {
 }
 
 func UpdateTask(c *gin.Context) {
-	s := services.GetTaskService()
+	s := persistence.GetTaskRepository()
 	id := c.Params.ByName("id")
 	var taskInput models.Task
 	_ = c.BindJSON(&taskInput)
@@ -84,7 +84,7 @@ func UpdateTask(c *gin.Context) {
 }
 
 func DeleteTask(c *gin.Context) {
-	s := services.GetTaskService()
+	s := persistence.GetTaskRepository()
 	id := c.Params.ByName("id")
 	var taskInput models.Task
 	_ = c.BindJSON(&taskInput)

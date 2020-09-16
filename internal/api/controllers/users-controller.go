@@ -3,7 +3,7 @@ package controllers
 import (
 	"errors"
 	models "github.com/antonioalfa22/go-rest-template/internal/pkg/models/users"
-	"github.com/antonioalfa22/go-rest-template/internal/pkg/services"
+	"github.com/antonioalfa22/go-rest-template/internal/pkg/persistence"
 	"github.com/antonioalfa22/go-rest-template/pkg/crypto"
 	"github.com/antonioalfa22/go-rest-template/pkg/http-err"
 	"github.com/gin-gonic/gin"
@@ -28,7 +28,7 @@ type UserInput struct {
 // @Router /api/users/{id} [get]
 // @Security Authorization Token
 func GetUserById(c *gin.Context) {
-	s := services.GetUserService()
+	s := persistence.GetUserRepository()
 	id := c.Param("id")
 	if user, err := s.Get(id); err != nil {
 		http_err.NewError(c, http.StatusNotFound, errors.New("user not found"))
@@ -49,7 +49,7 @@ func GetUserById(c *gin.Context) {
 // @Router /api/users [get]
 // @Security Authorization Token
 func GetUsers(c *gin.Context) {
-	s := services.GetUserService()
+	s := persistence.GetUserRepository()
 	var q models.User
 	_ = c.Bind(&q)
 	if users, err := s.Query(&q); err != nil {
@@ -61,7 +61,7 @@ func GetUsers(c *gin.Context) {
 }
 
 func CreateUser(c *gin.Context) {
-	s := services.GetUserService()
+	s := persistence.GetUserRepository()
 	var userInput UserInput
 	_ = c.BindJSON(&userInput)
 	user := models.User{
@@ -80,7 +80,7 @@ func CreateUser(c *gin.Context) {
 }
 
 func UpdateUser(c *gin.Context) {
-	s := services.GetUserService()
+	s := persistence.GetUserRepository()
 	id := c.Params.ByName("id")
 	var userInput UserInput
 	_ = c.BindJSON(&userInput)
@@ -103,7 +103,7 @@ func UpdateUser(c *gin.Context) {
 }
 
 func DeleteUser(c *gin.Context) {
-	s := services.GetUserService()
+	s := persistence.GetUserRepository()
 	id := c.Params.ByName("id")
 	var userInput UserInput
 	_ = c.BindJSON(&userInput)
