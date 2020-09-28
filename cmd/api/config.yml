@@ -10,7 +10,7 @@ database:
   max_idle_conns: 50
 
 server:
-  port: "3000"
+  port: "5000"
   secret: "jdnfksdmfksda"
   #release | debug
   mode: "release"

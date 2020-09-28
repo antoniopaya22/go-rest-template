@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"errors"
-	"fmt"
 	models "github.com/antonioalfa22/go-rest-template/internal/pkg/models/tasks"
 	"github.com/antonioalfa22/go-rest-template/internal/pkg/persistence"
 	"github.com/antonioalfa22/go-rest-template/pkg/http-err"
@@ -56,7 +55,6 @@ func CreateTask(c *gin.Context) {
 	s := persistence.GetTaskRepository()
 	var taskInput models.Task
 	_ = c.BindJSON(&taskInput)
-	fmt.Println(taskInput.UserID)
 	if err := s.Add(&taskInput); err != nil {
 		http_err.NewError(c, http.StatusBadRequest, err)
 		log.Println(err)

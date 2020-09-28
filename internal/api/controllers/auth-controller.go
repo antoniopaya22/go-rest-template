@@ -2,7 +2,7 @@ package controllers
 
 import (
 	"errors"
-	"github.com/antonioalfa22/go-rest-template/internal/pkg/services"
+	"github.com/antonioalfa22/go-rest-template/internal/pkg/persistence"
 	"github.com/antonioalfa22/go-rest-template/pkg/crypto"
 	"github.com/antonioalfa22/go-rest-template/pkg/http-err"
 	"github.com/gin-gonic/gin"
@@ -18,7 +18,7 @@ type LoginInput struct {
 func Login(c *gin.Context) {
 	var loginInput LoginInput
 	_ = c.BindJSON(&loginInput)
-	s := services.GetUserService()
+	s := persistence.GetUserRepository()
 	if user, err := s.GetByUsername(loginInput.Username); err != nil {
 		http_err.NewError(c, http.StatusNotFound, errors.New("user not found"))
 		log.Println(err)
