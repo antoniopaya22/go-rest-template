@@ -2,6 +2,7 @@ package api
 
 import (
 	"fmt"
+
 	"github.com/antonioalfa22/go-rest-template/internal/api/router"
 	"github.com/antonioalfa22/go-rest-template/internal/pkg/config"
 	"github.com/antonioalfa22/go-rest-template/internal/pkg/db"
@@ -16,7 +17,7 @@ func setConfiguration(configPath string) {
 
 func Run(configPath string) {
 	if configPath == "" {
-		configPath = "./cmd/api/config.yml"
+		configPath = "data/config.yml"
 	}
 	setConfiguration(configPath)
 	conf := config.GetConfig()

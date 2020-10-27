@@ -1,2 +1,0 @@
-::1 - - [28/Sep/2020:13:51:21 +0200] "POST /api/users HTTP/1.1 201 273.9952ms " " PostmanRuntime/7.26.5" " "
-::1 - - [28/Sep/2020:13:51:23 +0200] "POST /api/users HTTP/1.1 400 18.9987ms " " PostmanRuntime/7.26.5" " "
