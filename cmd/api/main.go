@@ -1,27 +1,32 @@
+// Command api starts the HTTP API server.
 package main
 
 import (
-	_ "github.com/antonioalfa22/go-rest-template/docs"
-	"github.com/antonioalfa22/go-rest-template/internal/api"
+	"context"
+	"log"
+	"os"
+	"os/signal"
+	"syscall"
+
+	"github.com/antonioalfa22/go-rest-template/internal/app"
+	"github.com/antonioalfa22/go-rest-template/internal/pkg/config"
 )
 
-// @Golang API REST
-// @version 1.0
-// @description API REST in Golang with Gin Framework
-
-// @contact.name Antonio Paya Gonzalez
-// @contact.url http://antoniopg.tk
-// @contact.email antonioalfa22@gmail.com
-
-// @license.name MIT
-// @license.url https://github.com/antonioalfa22/go-rest-template/blob/master/LICENSE
-
-// @BasePath /
-
-// @securityDefinitions.apikey ApiKeyAuth
-// @in header
-// @name Authorization
-
 func main() {
-	api.Run("")
+	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
+	defer stop()
+
+	cfg, err := config.Load()
+	if err != nil {
+		log.Fatalf("load configuration: %v", err)
+	}
+
+	application, err := app.New(ctx, cfg)
+	if err != nil {
+		log.Fatalf("create application: %v", err)
+	}
+
+	if err := application.Run(ctx); err != nil {
+		log.Fatalf("run application: %v", err)
+	}
 }

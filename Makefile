@@ -1,20 +1,39 @@
-get-docs:
-	go get -u github.com/swaggo/swag/cmd/swag
+GO ?= go
+BINARY ?= ./bin/api
+GOLANGCI_LINT ?= $(GO) run github.com/golangci/golangci-lint/v2/cmd/golangci-lint@latest
 
-docs: get-docs
-	swag init --dir cmd/api --parseDependency --output docs
+.PHONY: tidy fmt vet lint test integration test-race cover build run migrate
 
-build:
-	go build -o bin/restapi cmd/api/main.go
+tidy:
+	$(GO) mod tidy
 
-run:
-	go run cmd/api/main.go
+fmt:
+	$(GO) fmt ./...
+
+vet:
+	$(GO) vet ./...
+
+lint:
+	$(GOLANGCI_LINT) run
 
 test:
-	go test -v ./test/...
+	$(GO) test ./...
 
-build-docker: build
-	docker build . -t api-rest
+integration:
+	$(GO) test ./test -run TestAPIIntegration -count=1
 
-run-docker: build-docker
-	docker run -p 3000:3000 api-rest
+test-race:
+	$(GO) test -race ./...
+
+cover:
+	$(GO) test -coverprofile=coverage.out ./...
+	$(GO) tool cover -func=coverage.out
+
+build:
+	$(GO) build -trimpath -ldflags="-s -w" -o $(BINARY) ./cmd/api
+
+run:
+	$(GO) run ./cmd/api
+
+migrate:
+	$(GO) run ./cmd/migrate
