@@ -1,39 +1,51 @@
 GO ?= go
 BINARY ?= ./bin/api
-GOLANGCI_LINT ?= $(GO) run github.com/golangci/golangci-lint/v2/cmd/golangci-lint@latest
+GOLANGCI_LINT ?=
+COMPOSE_FILE ?= deployments/docker-compose.yml
 
-.PHONY: tidy fmt vet lint test integration test-race cover build run migrate
+ifeq ($(OS),Windows_NT)
+SCRIPT_RUNNER := powershell -NoProfile -ExecutionPolicy Bypass -File scripts/tasks.ps1
+else
+SCRIPT_RUNNER := sh scripts/tasks.sh
+endif
+
+.PHONY: tidy fmt vet lint test integration test-race cover build run migrate compose-up compose-down
 
 tidy:
-	$(GO) mod tidy
+	$(SCRIPT_RUNNER) tidy "$(GO)" "$(BINARY)" "$(COMPOSE_FILE)" "$(GOLANGCI_LINT)"
 
 fmt:
-	$(GO) fmt ./...
+	$(SCRIPT_RUNNER) fmt "$(GO)" "$(BINARY)" "$(COMPOSE_FILE)" "$(GOLANGCI_LINT)"
 
 vet:
-	$(GO) vet ./...
+	$(SCRIPT_RUNNER) vet "$(GO)" "$(BINARY)" "$(COMPOSE_FILE)" "$(GOLANGCI_LINT)"
 
 lint:
-	$(GOLANGCI_LINT) run
+	$(SCRIPT_RUNNER) lint "$(GO)" "$(BINARY)" "$(COMPOSE_FILE)" "$(GOLANGCI_LINT)"
 
 test:
-	$(GO) test ./...
+	$(SCRIPT_RUNNER) test "$(GO)" "$(BINARY)" "$(COMPOSE_FILE)" "$(GOLANGCI_LINT)"
 
 integration:
-	$(GO) test ./test -run TestAPIIntegration -count=1
+	$(SCRIPT_RUNNER) integration "$(GO)" "$(BINARY)" "$(COMPOSE_FILE)" "$(GOLANGCI_LINT)"
 
 test-race:
-	$(GO) test -race ./...
+	$(SCRIPT_RUNNER) test-race "$(GO)" "$(BINARY)" "$(COMPOSE_FILE)" "$(GOLANGCI_LINT)"
 
 cover:
-	$(GO) test -coverprofile=coverage.out ./...
-	$(GO) tool cover -func=coverage.out
+	$(SCRIPT_RUNNER) cover "$(GO)" "$(BINARY)" "$(COMPOSE_FILE)" "$(GOLANGCI_LINT)"
 
 build:
-	$(GO) build -trimpath -ldflags="-s -w" -o $(BINARY) ./cmd/api
+	$(SCRIPT_RUNNER) build "$(GO)" "$(BINARY)" "$(COMPOSE_FILE)" "$(GOLANGCI_LINT)"
 
 run:
-	$(GO) run ./cmd/api
+	$(SCRIPT_RUNNER) run "$(GO)" "$(BINARY)" "$(COMPOSE_FILE)" "$(GOLANGCI_LINT)"
 
 migrate:
-	$(GO) run ./cmd/migrate
+	$(SCRIPT_RUNNER) migrate "$(GO)" "$(BINARY)" "$(COMPOSE_FILE)" "$(GOLANGCI_LINT)"
+
+compose-up:
+	$(SCRIPT_RUNNER) compose-up "$(GO)" "$(BINARY)" "$(COMPOSE_FILE)" "$(GOLANGCI_LINT)"
+
+compose-down:
+	$(SCRIPT_RUNNER) compose-down "$(GO)" "$(BINARY)" "$(COMPOSE_FILE)" "$(GOLANGCI_LINT)"

@@ -10,6 +10,8 @@ This template follows the common Go application layout patterns that are useful 
 - `internal/pkg/`: shared internal support code such as configuration loading and the application error model.
 - `api/`: OpenAPI contract and API surface definition.
 - `configs/`: environment template and future default configuration assets.
+- `scripts/`: operational helper scripts for build, test, lint and compose workflows.
+- `deployments/`: local and future deployment manifests such as Docker Compose.
 - `build/package/`: container packaging assets.
 - `docs/`: design and repository documentation beyond package docs.
 - `test/`: external integration tests.
@@ -18,7 +20,7 @@ This template follows the common Go application layout patterns that are useful 
 ## Intentional Exceptions
 
 - `.github/workflows/ci.yml` stays where GitHub expects it; `build/ci/` is used for supporting CI assets and documentation.
-- `Makefile` remains at the repository root because it is still the conventional entrypoint for developer tasks.
+- `Makefile` remains at the repository root because it is still the conventional entrypoint for developer tasks, but its commands delegate to `scripts/`.
 - `migrations/` stays top-level because both runtime code and operators interact with it directly as a deployment artifact.
 
 ## What This Avoids

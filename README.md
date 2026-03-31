@@ -59,16 +59,19 @@ configs/
 cmd/
 	api/         # HTTP server entrypoint
 	migrate/     # migration command
+deployments/
+	docker-compose.yml # Local PostgreSQL + API stack
 internal/
 	app/         # application runtime wiring
 		api/       # API-specific auth, contract, transport, domain and storage packages
 	pkg/         # shared internal support packages such as config and error model
 migrations/    # backend-specific versioned SQL migrations
 old/           # legacy project preserved for reference
+scripts/       # Operational helper scripts used by Makefile and local workflows
 test/          # external integration tests and fixtures
 ```
 
-This repo intentionally uses the community Go layout patterns that make sense for an application template: `cmd`, `internal`, `api`, `configs`, `build/package`, `docs` and `test`. Some ecosystem tools still require fixed locations, so GitHub Actions remains in `.github/workflows` even though CI assets conceptually belong under `build/ci`.
+This repo intentionally uses the community Go layout patterns that make sense for an application template: `cmd`, `internal`, `api`, `configs`, `scripts`, `deployments`, `build/package`, `docs` and `test`. Some ecosystem tools still require fixed locations, so GitHub Actions remains in `.github/workflows` even though CI assets conceptually belong under `build/ci`.
 
 ## Configuration
 
@@ -113,7 +116,11 @@ make lint
 make integration
 make test-race
 make build
+make compose-up
+make compose-down
 ```
+
+The Makefile now delegates to the scripts in [scripts](scripts), so the root Makefile stays small while the operational commands live in their own layout-appropriate directory.
 
 ## Docker
 
@@ -121,6 +128,22 @@ make build
 docker build -f build/package/Dockerfile -t go-rest-template .
 docker run -p 8080:8080 -e AUTH_SECRET=super-secret -e DATABASE_URL=postgres://postgres:postgres@host.docker.internal:5432/go_rest_template?sslmode=disable go-rest-template
 ```
+
+## Local stack
+
+For a local PostgreSQL-backed stack with the API and database together:
+
+```powershell
+make compose-up
+```
+
+To stop and remove that stack:
+
+```powershell
+make compose-down
+```
+
+The compose definition lives in [deployments/docker-compose.yml](deployments/docker-compose.yml) and uses [build/package/Dockerfile](build/package/Dockerfile) for the API container.
 
 ## Migration strategy
 

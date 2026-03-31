@@ -1,0 +1,55 @@
+services:
+  postgres:
+    image: postgres:17
+    container_name: go-rest-template-postgres
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-go_rest_template}
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres} -d ${POSTGRES_DB:-go_rest_template}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  api:
+    build:
+      context: ..
+      dockerfile: build/package/Dockerfile
+    container_name: go-rest-template-api
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      APP_ENV: ${APP_ENV:-development}
+      HTTP_HOST: 0.0.0.0
+      HTTP_PORT: 8080
+      AUTH_SECRET: ${AUTH_SECRET:-local-dev-secret-change-me}
+      AUTH_ISSUER: ${AUTH_ISSUER:-go-rest-template}
+      AUTH_TOKEN_TTL: ${AUTH_TOKEN_TTL:-24h}
+      AUTH_BCRYPT_COST: ${AUTH_BCRYPT_COST:-12}
+      DATABASE_DRIVER: postgres
+      DATABASE_URL: postgres://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@postgres:5432/${POSTGRES_DB:-go_rest_template}?sslmode=disable
+      AUTO_MIGRATE: ${AUTO_MIGRATE:-true}
+      BOOTSTRAP_ADMIN_ENABLED: ${BOOTSTRAP_ADMIN_ENABLED:-true}
+      BOOTSTRAP_ADMIN_USERNAME: ${BOOTSTRAP_ADMIN_USERNAME:-admin}
+      BOOTSTRAP_ADMIN_FIRST_NAME: ${BOOTSTRAP_ADMIN_FIRST_NAME:-System}
+      BOOTSTRAP_ADMIN_LAST_NAME: ${BOOTSTRAP_ADMIN_LAST_NAME:-Administrator}
+      BOOTSTRAP_ADMIN_PASSWORD: ${BOOTSTRAP_ADMIN_PASSWORD:-change-me-now-123}
+      OPENAPI_SPEC_PATH: /app/api/openapi.yaml
+      OPENAPI_VALIDATE_REQUESTS: ${OPENAPI_VALIDATE_REQUESTS:-true}
+      OPENAPI_VALIDATE_RESPONSES: ${OPENAPI_VALIDATE_RESPONSES:-true}
+      OPENAPI_SERVE_DOCUMENTATION: ${OPENAPI_SERVE_DOCUMENTATION:-true}
+      LOG_LEVEL: ${LOG_LEVEL:-INFO}
+      ENABLE_PPROF: ${ENABLE_PPROF:-false}
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
