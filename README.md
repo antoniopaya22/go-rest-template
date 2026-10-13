@@ -2,6 +2,8 @@
 
 [![CI](https://github.com/antoniopaya22/go-rest-template/actions/workflows/ci.yml/badge.svg)](https://github.com/antoniopaya22/go-rest-template/actions/workflows/ci.yml)
 [![Go](https://img.shields.io/github/go-mod/go-version/antoniopaya22/go-rest-template?logo=go&logoColor=white&color=00ADD8)](go.mod)
+[![CodeQL](https://github.com/antoniopaya22/go-rest-template/actions/workflows/codeql.yml/badge.svg)](https://github.com/antoniopaya22/go-rest-template/actions/workflows/codeql.yml)
+[![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/antoniopaya22/go-rest-template/badge)](https://scorecard.dev/viewer/?uri=github.com/antoniopaya22/go-rest-template)
 [![License: MIT](https://img.shields.io/github/license/antoniopaya22/go-rest-template)](LICENSE)
 [![Stars](https://img.shields.io/github/stars/antoniopaya22/go-rest-template?style=flat&logo=github)](https://github.com/antoniopaya22/go-rest-template/stargazers)
 
