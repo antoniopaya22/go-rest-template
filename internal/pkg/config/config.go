@@ -40,6 +40,9 @@ type HTTPConfig struct {
 	WriteTimeout   time.Duration
 	IdleTimeout    time.Duration
 	RequestTimeout time.Duration
+	// TrustedProxies is the number of reverse proxies in front of the API
+	// whose X-Forwarded-For entries can be trusted. 0 uses the TCP peer address.
+	TrustedProxies int
 }
 
 // Address returns the listen address for the HTTP server.
@@ -134,6 +137,7 @@ func Load() (Config, error) {
 		WriteTimeout:   mustDuration("HTTP_WRITE_TIMEOUT", "10s"),
 		IdleTimeout:    mustDuration("HTTP_IDLE_TIMEOUT", "60s"),
 		RequestTimeout: mustDuration("HTTP_REQUEST_TIMEOUT", "30s"),
+		TrustedProxies: mustInt("HTTP_TRUSTED_PROXIES", 0),
 	}
 
 	cfg.Auth = AuthConfig{
