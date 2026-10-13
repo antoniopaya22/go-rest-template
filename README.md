@@ -1,5 +1,9 @@
 # go-rest-template
 
+[![CI](https://github.com/antoniopaya22/go-rest-template/actions/workflows/ci.yml/badge.svg)](https://github.com/antoniopaya22/go-rest-template/actions/workflows/ci.yml)
+[![Go](https://img.shields.io/github/go-mod/go-version/antoniopaya22/go-rest-template?logo=go&logoColor=white&color=00ADD8)](go.mod)
+[![Stars](https://img.shields.io/github/stars/antoniopaya22/go-rest-template?style=flat&logo=github)](https://github.com/antoniopaya22/go-rest-template/stargazers)
+
 Modern Go 1.26 REST API template with a small but production-oriented foundation:
 
 - Standard-library-first bootstrap with graceful shutdown.
