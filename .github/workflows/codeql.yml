@@ -24,7 +24,9 @@ jobs:
       - name: Setup Go
         uses: actions/setup-go@v5
         with:
-          go-version-file: go.mod
+          # latest 1.26 patch release, so the standard library has every security fix
+          go-version: '1.26.x'
+          check-latest: true
 
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v4
