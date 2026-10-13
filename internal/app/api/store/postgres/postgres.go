@@ -10,7 +10,7 @@ import (
 	"sort"
 	"time"
 
-	"github.com/antonioalfa22/go-rest-template/internal/pkg/config"
+	"github.com/antoniopaya22/go-rest-template/internal/pkg/config"
 	_ "github.com/jackc/pgx/v5/stdlib" // Register the pgx database/sql driver.
 )
 

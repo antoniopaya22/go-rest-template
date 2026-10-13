@@ -10,14 +10,14 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/antonioalfa22/go-rest-template/internal/app/api/apicontract"
-	"github.com/antonioalfa22/go-rest-template/internal/app/api/auth"
-	"github.com/antonioalfa22/go-rest-template/internal/app/api/domain/tasks"
-	"github.com/antonioalfa22/go-rest-template/internal/app/api/domain/users"
-	"github.com/antonioalfa22/go-rest-template/internal/app/api/httpapi"
-	"github.com/antonioalfa22/go-rest-template/internal/app/api/store/postgres"
-	"github.com/antonioalfa22/go-rest-template/internal/app/api/store/sqlite"
-	"github.com/antonioalfa22/go-rest-template/internal/pkg/config"
+	"github.com/antoniopaya22/go-rest-template/internal/app/api/apicontract"
+	"github.com/antoniopaya22/go-rest-template/internal/app/api/auth"
+	"github.com/antoniopaya22/go-rest-template/internal/app/api/domain/tasks"
+	"github.com/antoniopaya22/go-rest-template/internal/app/api/domain/users"
+	"github.com/antoniopaya22/go-rest-template/internal/app/api/httpapi"
+	"github.com/antoniopaya22/go-rest-template/internal/app/api/store/postgres"
+	"github.com/antoniopaya22/go-rest-template/internal/app/api/store/sqlite"
+	"github.com/antoniopaya22/go-rest-template/internal/pkg/config"
 )
 
 // App represents the running API application.

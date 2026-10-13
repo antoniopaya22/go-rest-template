@@ -8,8 +8,8 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/antonioalfa22/go-rest-template/internal/app"
-	"github.com/antonioalfa22/go-rest-template/internal/pkg/config"
+	"github.com/antoniopaya22/go-rest-template/internal/app"
+	"github.com/antoniopaya22/go-rest-template/internal/pkg/config"
 )
 
 func main() {

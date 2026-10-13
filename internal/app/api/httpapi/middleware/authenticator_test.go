@@ -6,9 +6,9 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/antonioalfa22/go-rest-template/internal/app/api/auth"
-	"github.com/antonioalfa22/go-rest-template/internal/app/api/domain/users"
-	"github.com/antonioalfa22/go-rest-template/internal/app/api/httpapi/middleware"
+	"github.com/antoniopaya22/go-rest-template/internal/app/api/auth"
+	"github.com/antoniopaya22/go-rest-template/internal/app/api/domain/users"
+	"github.com/antoniopaya22/go-rest-template/internal/app/api/httpapi/middleware"
 )
 
 func TestAuthenticatorRequire(t *testing.T) {

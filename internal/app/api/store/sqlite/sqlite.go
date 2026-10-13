@@ -10,7 +10,7 @@ import (
 	"sort"
 	"time"
 
-	"github.com/antonioalfa22/go-rest-template/internal/pkg/config"
+	"github.com/antoniopaya22/go-rest-template/internal/pkg/config"
 	_ "modernc.org/sqlite" // Register the SQLite driver for database/sql.
 )
 
