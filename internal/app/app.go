@@ -95,6 +95,7 @@ func New(ctx context.Context, cfg config.Config) (*App, error) {
 		PprofEnabled:   cfg.Observability.PprofEnabled,
 		DocsEnabled:    cfg.OpenAPI.ServeDocumentation,
 		RequestTimeout: cfg.HTTP.RequestTimeout,
+		TrustedProxies: cfg.HTTP.TrustedProxies,
 	})
 
 	server := &http.Server{

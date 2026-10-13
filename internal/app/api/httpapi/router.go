@@ -29,6 +29,9 @@ type Dependencies struct {
 	PprofEnabled   bool
 	DocsEnabled    bool
 	RequestTimeout time.Duration
+	// TrustedProxies is the number of trusted reverse proxies used to derive
+	// the client IP from X-Forwarded-For. 0 uses the TCP peer address.
+	TrustedProxies int
 }
 
 // NewRouter builds the API router and middleware stack.
@@ -54,7 +57,7 @@ func NewRouter(deps Dependencies) http.Handler {
 
 	router := chi.NewRouter()
 	router.Use(chimiddleware.RequestID)
-	router.Use(chimiddleware.RealIP)
+	router.Use(clientIP(deps.TrustedProxies))
 	router.Use(chimiddleware.Recoverer)
 	router.Use(chimiddleware.Timeout(deps.RequestTimeout))
 	router.Use(cors.Handler(cors.Options{
@@ -108,6 +111,16 @@ func NewRouter(deps Dependencies) http.Handler {
 	return router
 }
 
+// clientIP resolves the client address without trusting spoofable headers:
+// with no trusted proxies it uses the TCP peer, otherwise it reads the
+// X-Forwarded-For entry added by the outermost trusted proxy.
+func clientIP(trustedProxies int) func(http.Handler) http.Handler {
+	if trustedProxies > 0 {
+		return chimiddleware.ClientIPFromXFFTrustedProxies(trustedProxies)
+	}
+	return chimiddleware.ClientIPFromRemoteAddr
+}
+
 func requestLogger(logger *slog.Logger) func(http.Handler) http.Handler {
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -121,7 +134,7 @@ func requestLogger(logger *slog.Logger) func(http.Handler) http.Handler {
 				"method", r.Method,
 				"path", r.URL.Path,
 				"status", recorder.status,
-				"remote_addr", r.RemoteAddr,
+				"client_ip", chimiddleware.GetClientIP(r.Context()),
 				"request_id", chimiddleware.GetReqID(r.Context()),
 				"duration", time.Since(startedAt),
 			)

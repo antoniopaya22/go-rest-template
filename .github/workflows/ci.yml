@@ -34,7 +34,9 @@ jobs:
       - name: Setup Go
         uses: actions/setup-go@v5
         with:
-          go-version-file: go.mod
+          # latest 1.26 patch release, so the standard library has every security fix
+          go-version: '1.26.x'
+          check-latest: true
 
       - name: Sync modules
         run: go mod tidy
@@ -49,6 +51,9 @@ jobs:
         uses: golangci/golangci-lint-action@v7
         with:
           version: v2.11.4
+
+      - name: Vulnerability check
+        run: go run golang.org/x/vuln/cmd/govulncheck@latest ./...
 
       - name: Test with race detector
         run: go test -race ./...
