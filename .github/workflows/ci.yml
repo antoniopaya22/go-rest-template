@@ -50,5 +50,8 @@ jobs:
         with:
           version: v2.11.4
 
+      - name: Vulnerability check
+        run: go run golang.org/x/vuln/cmd/govulncheck@latest ./...
+
       - name: Test with race detector
         run: go test -race ./...
