@@ -6,9 +6,9 @@ import (
 	"database/sql"
 	"log"
 
-	"github.com/antonioalfa22/go-rest-template/internal/app/api/store/postgres"
-	"github.com/antonioalfa22/go-rest-template/internal/app/api/store/sqlite"
-	"github.com/antonioalfa22/go-rest-template/internal/pkg/config"
+	"github.com/antoniopaya22/go-rest-template/internal/app/api/store/postgres"
+	"github.com/antoniopaya22/go-rest-template/internal/app/api/store/sqlite"
+	"github.com/antoniopaya22/go-rest-template/internal/pkg/config"
 )
 
 func main() {

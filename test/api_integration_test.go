@@ -15,11 +15,11 @@ import (
 	"testing"
 	"time"
 
-	"github.com/antonioalfa22/go-rest-template/internal/app"
-	"github.com/antonioalfa22/go-rest-template/internal/app/api/auth"
-	"github.com/antonioalfa22/go-rest-template/internal/app/api/domain/tasks"
-	"github.com/antonioalfa22/go-rest-template/internal/app/api/domain/users"
-	"github.com/antonioalfa22/go-rest-template/internal/pkg/config"
+	"github.com/antoniopaya22/go-rest-template/internal/app"
+	"github.com/antoniopaya22/go-rest-template/internal/app/api/auth"
+	"github.com/antoniopaya22/go-rest-template/internal/app/api/domain/tasks"
+	"github.com/antoniopaya22/go-rest-template/internal/app/api/domain/users"
+	"github.com/antoniopaya22/go-rest-template/internal/pkg/config"
 	_ "github.com/jackc/pgx/v5/stdlib" // Register the pgx driver for PostgreSQL integration tests.
 )
 

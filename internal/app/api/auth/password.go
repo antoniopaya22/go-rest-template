@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/antonioalfa22/go-rest-template/internal/pkg/errs"
+	"github.com/antoniopaya22/go-rest-template/internal/pkg/errs"
 	"golang.org/x/crypto/bcrypt"
 )
 

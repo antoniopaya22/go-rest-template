@@ -1,4 +1,4 @@
-module github.com/antonioalfa22/go-rest-template
+module github.com/antoniopaya22/go-rest-template
 
 go 1.26
 

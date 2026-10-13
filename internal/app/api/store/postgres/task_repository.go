@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/antonioalfa22/go-rest-template/internal/app/api/domain/tasks"
+	"github.com/antoniopaya22/go-rest-template/internal/app/api/domain/tasks"
 )
 
 // TaskRepository stores tasks in PostgreSQL.

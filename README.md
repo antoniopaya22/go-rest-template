@@ -2,6 +2,7 @@
 
 [![CI](https://github.com/antoniopaya22/go-rest-template/actions/workflows/ci.yml/badge.svg)](https://github.com/antoniopaya22/go-rest-template/actions/workflows/ci.yml)
 [![Go](https://img.shields.io/github/go-mod/go-version/antoniopaya22/go-rest-template?logo=go&logoColor=white&color=00ADD8)](go.mod)
+[![License: MIT](https://img.shields.io/github/license/antoniopaya22/go-rest-template)](LICENSE)
 [![Stars](https://img.shields.io/github/stars/antoniopaya22/go-rest-template?style=flat&logo=github)](https://github.com/antoniopaya22/go-rest-template/stargazers)
 
 Modern Go 1.26 REST API template with a small but production-oriented foundation:
@@ -17,7 +18,7 @@ Modern Go 1.26 REST API template with a small but production-oriented foundation
 - Health endpoints, Prometheus metrics and optional pprof.
 - Table-driven tests, `go vet`, `golangci-lint` and GitHub Actions CI.
 
-The legacy implementation has been preserved in [old](old).
+The legacy Gin-based implementation (v1) is available in the [`1.0.0` tag](https://github.com/antoniopaya22/go-rest-template/tree/1.0.0).
 
 ## Quick start
 
@@ -70,7 +71,6 @@ internal/
 		api/       # API-specific auth, contract, transport, domain and storage packages
 	pkg/         # shared internal support packages such as config and error model
 migrations/    # backend-specific versioned SQL migrations
-old/           # legacy project preserved for reference
 scripts/       # Operational helper scripts used by Makefile and local workflows
 test/          # external integration tests and fixtures
 ```
@@ -167,3 +167,6 @@ go run ./cmd/migrate
 - Add domain events and an outbox if asynchronous workflows appear.
 - Add stricter authorization policies if the permission model becomes more complex.
 
+## License
+
+[MIT](LICENSE) © Antonio Payá González

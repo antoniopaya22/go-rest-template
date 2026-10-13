@@ -4,8 +4,8 @@ import (
 	"context"
 	"strings"
 
-	"github.com/antonioalfa22/go-rest-template/internal/app/api/domain/users"
-	"github.com/antonioalfa22/go-rest-template/internal/pkg/errs"
+	"github.com/antoniopaya22/go-rest-template/internal/app/api/domain/users"
+	"github.com/antoniopaya22/go-rest-template/internal/pkg/errs"
 )
 
 type userFinder interface {

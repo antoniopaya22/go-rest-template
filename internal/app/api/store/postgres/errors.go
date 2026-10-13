@@ -4,7 +4,7 @@ import (
 	"database/sql"
 	"errors"
 
-	"github.com/antonioalfa22/go-rest-template/internal/pkg/errs"
+	"github.com/antoniopaya22/go-rest-template/internal/pkg/errs"
 	"github.com/jackc/pgx/v5/pgconn"
 )
 

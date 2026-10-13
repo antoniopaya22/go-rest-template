@@ -7,7 +7,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/antonioalfa22/go-rest-template/internal/app/api/domain/users"
+	"github.com/antoniopaya22/go-rest-template/internal/app/api/domain/users"
 )
 
 // UserRepository stores users in PostgreSQL.
