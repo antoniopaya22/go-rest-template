@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Documentation
+    url: https://antoniopaya22.github.io/go-rest-template/
+    about: Guides, architecture and reference.
+  - name: Security vulnerability
+    url: https://github.com/antoniopaya22/go-rest-template/security/advisories/new
+    about: Report vulnerabilities privately, not as a public issue.

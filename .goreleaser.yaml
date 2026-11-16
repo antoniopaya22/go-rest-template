@@ -1,0 +1,65 @@
+# yaml-language-server: $schema=https://goreleaser.com/static/schema.json
+version: 2
+
+project_name: go-rest-template
+
+before:
+  hooks:
+    - go mod download
+
+builds:
+  - id: api
+    main: ./cmd/api
+    binary: api
+    env: &env
+      - CGO_ENABLED=0
+    flags: &flags
+      - -trimpath
+    ldflags: &ldflags
+      - -s -w
+      - -X github.com/antoniopaya22/go-rest-template/internal/platform/version.Version={{ .Version }}
+      - -X github.com/antoniopaya22/go-rest-template/internal/platform/version.Commit={{ .Commit }}
+      - -X github.com/antoniopaya22/go-rest-template/internal/platform/version.Date={{ .Date }}
+    goos: &goos
+      - linux
+      - darwin
+      - windows
+    goarch: &goarch
+      - amd64
+      - arm64
+
+  - id: migrate
+    main: ./cmd/migrate
+    binary: migrate
+    env: *env
+    flags: *flags
+    ldflags: *ldflags
+    goos: *goos
+    goarch: *goarch
+
+archives:
+  - id: default
+    ids: [api, migrate]
+    name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+    formats: [tar.gz]
+    format_overrides:
+      - goos: windows
+        formats: [zip]
+    files:
+      - LICENSE
+      - README.md
+      - configs/env.example
+
+checksum:
+  name_template: checksums.txt
+
+sboms:
+  - artifacts: archive
+
+# release-please writes the changelog and creates the GitHub release;
+# GoReleaser only attaches the artifacts to it.
+changelog:
+  disable: true
+
+release:
+  mode: keep-existing

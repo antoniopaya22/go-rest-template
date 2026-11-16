@@ -1,0 +1,10 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+scrape_configs:
+  # The API serves /metrics on its admin listener, not on the public port.
+  - job_name: api
+    metrics_path: /metrics
+    static_configs:
+      - targets: ["api:9090"]

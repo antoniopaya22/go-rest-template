@@ -1,0 +1,165 @@
+# Number of replicas. Ignored when autoscaling is enabled.
+replicaCount: 2
+
+image:
+  repository: ghcr.io/antoniopaya22/go-rest-template
+  # Defaults to the chart appVersion.
+  tag: ""
+  pullPolicy: IfNotPresent
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+# Non-secret configuration, passed to the container as environment variables.
+# Any variable from the configuration reference can be added here.
+config:
+  APP_ENV: production
+  LOG_LEVEL: INFO
+  LOG_FORMAT: json
+  DATABASE_DRIVER: postgres
+  # The image ships only the API server, so there is no separate migration job:
+  # the server applies pending migrations at startup. Migrations take a database
+  # lock, so several replicas starting at once is safe. Set this to "false" to
+  # run `migrate up` yourself as part of your delivery pipeline instead.
+  DATABASE_AUTO_MIGRATE: "true"
+  METRICS_ENABLED: "true"
+  OTEL_ENABLED: "false"
+
+# Secret configuration, passed to the container as environment variables.
+secrets:
+  # Create a Secret from the values below. Set to false and fill existingSecret
+  # to use a Secret managed elsewhere (External Secrets, Sealed Secrets, ...).
+  create: true
+  # Name of an existing Secret whose keys are environment variable names.
+  existingSecret: ""
+  values:
+    # Required. JWT signing secret; the server refuses to start in production
+    # without one.
+    AUTH_SECRET: ""
+    # Required with the postgres driver, for example
+    # postgres://user:password@host:5432/database?sslmode=require
+    DATABASE_URL: ""
+
+serviceAccount:
+  create: true
+  annotations: {}
+  # Defaults to the release full name.
+  name: ""
+  automount: false
+
+podAnnotations: {}
+podLabels: {}
+
+podSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 65532
+  runAsGroup: 65532
+  fsGroup: 65532
+  seccompProfile:
+    type: RuntimeDefault
+
+securityContext:
+  allowPrivilegeEscalation: false
+  readOnlyRootFilesystem: true
+  capabilities:
+    drop: [ALL]
+
+service:
+  type: ClusterIP
+  # Public API port.
+  port: 80
+  # Admin port (metrics, pprof). Exposed by the Service for in-cluster scraping
+  # only; never route it through the Ingress.
+  adminPort: 9090
+  annotations: {}
+
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+  hosts:
+    - host: api.example.com
+      paths:
+        - path: /
+          pathType: Prefix
+  tls: []
+  #  - secretName: api-example-com-tls
+  #    hosts:
+  #      - api.example.com
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 64Mi
+  limits:
+    memory: 256Mi
+
+livenessProbe:
+  httpGet:
+    path: /health/live
+    port: http
+  periodSeconds: 10
+  timeoutSeconds: 2
+  failureThreshold: 3
+
+readinessProbe:
+  httpGet:
+    path: /health/ready
+    port: http
+  periodSeconds: 5
+  timeoutSeconds: 3
+  failureThreshold: 3
+
+# Gives the server time to run migrations before the liveness probe applies.
+startupProbe:
+  httpGet:
+    path: /health/live
+    port: http
+  periodSeconds: 2
+  failureThreshold: 30
+
+# Must be longer than APP_SHUTDOWN_TIMEOUT so in-flight requests can finish.
+terminationGracePeriodSeconds: 30
+
+autoscaling:
+  enabled: false
+  minReplicas: 2
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 75
+  # targetMemoryUtilizationPercentage: 80
+
+podDisruptionBudget:
+  enabled: false
+  minAvailable: 1
+  # maxUnavailable: 1
+
+networkPolicy:
+  enabled: false
+  # Sources allowed to reach the public API port. Empty allows any source.
+  apiFrom: []
+  #  - namespaceSelector:
+  #      matchLabels:
+  #        kubernetes.io/metadata.name: ingress-nginx
+  # Sources allowed to reach the admin port. Empty allows no one.
+  adminFrom: []
+  #  - namespaceSelector:
+  #      matchLabels:
+  #        kubernetes.io/metadata.name: monitoring
+
+# Requires the Prometheus Operator CRDs.
+serviceMonitor:
+  enabled: false
+  interval: 30s
+  scrapeTimeout: 10s
+  labels: {}
+
+# Extra volumes and mounts, for example a private key for AUTH_PRIVATE_KEY_FILE.
+extraVolumes: []
+extraVolumeMounts: []
+extraEnv: []
+
+nodeSelector: {}
+tolerations: []
+affinity: {}
+topologySpreadConstraints: []

@@ -1,0 +1,117 @@
+# Local stack: the API and PostgreSQL.
+#
+#   make compose-up      API + PostgreSQL
+#   make obs-up          the same plus Prometheus, Grafana and Tempo
+#   make compose-down    stop and remove everything
+#
+# The observability services live behind the "observability" profile. To send
+# traces to Tempo, start the stack with tracing switched on:
+#
+#   OTEL_ENABLED=true docker compose -f deployments/compose.yaml --profile observability up --build -d
+#
+# Every value below can be overridden from the shell or from a .env file placed
+# next to this file. The defaults are for local use only.
+name: go-rest-template
+
+services:
+  postgres:
+    image: postgres:17
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-go_rest_template}
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres} -d ${POSTGRES_DB:-go_rest_template}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 5s
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  api:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      APP_ENV: ${APP_ENV:-development}
+      HTTP_PORT: 8080
+      ADMIN_PORT: 9090
+      ADMIN_PPROF_ENABLED: ${ADMIN_PPROF_ENABLED:-false}
+      AUTH_SECRET: ${AUTH_SECRET:-local-dev-secret-change-me}
+      DATABASE_DRIVER: postgres
+      DATABASE_URL: postgres://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@postgres:5432/${POSTGRES_DB:-go_rest_template}?sslmode=disable
+      DATABASE_AUTO_MIGRATE: ${DATABASE_AUTO_MIGRATE:-true}
+      BOOTSTRAP_ADMIN_ENABLED: ${BOOTSTRAP_ADMIN_ENABLED:-true}
+      BOOTSTRAP_ADMIN_USERNAME: ${BOOTSTRAP_ADMIN_USERNAME:-admin}
+      BOOTSTRAP_ADMIN_FIRST_NAME: ${BOOTSTRAP_ADMIN_FIRST_NAME:-System}
+      BOOTSTRAP_ADMIN_LAST_NAME: ${BOOTSTRAP_ADMIN_LAST_NAME:-Administrator}
+      BOOTSTRAP_ADMIN_PASSWORD: ${BOOTSTRAP_ADMIN_PASSWORD:-change-me-now-123}
+      LOG_LEVEL: ${LOG_LEVEL:-INFO}
+      LOG_FORMAT: ${LOG_FORMAT:-json}
+      METRICS_ENABLED: ${METRICS_ENABLED:-true}
+      # Tracing is off unless OTEL_ENABLED=true is set when starting the stack.
+      OTEL_ENABLED: ${OTEL_ENABLED:-false}
+      OTEL_EXPORTER_OTLP_ENDPOINT: ${OTEL_EXPORTER_OTLP_ENDPOINT:-http://tempo:4318}
+      OTEL_SERVICE_NAME: ${OTEL_SERVICE_NAME:-go-rest-template}
+    ports:
+      - "${API_PORT:-8080}:8080"
+      - "${ADMIN_PORT:-9090}:9090"
+    healthcheck:
+      test: ["CMD", "/app/server", "-healthcheck"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+      start_period: 5s
+    restart: unless-stopped
+
+  prometheus:
+    profiles: [observability]
+    image: prom/prometheus:v3.16.0
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+      - --storage.tsdb.retention.time=7d
+    volumes:
+      - ./observability/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data:/prometheus
+    ports:
+      - "${PROMETHEUS_PORT:-9091}:9090"
+    depends_on:
+      - api
+
+  tempo:
+    profiles: [observability]
+    image: grafana/tempo:2.9.0
+    command: ["-config.file=/etc/tempo.yaml"]
+    volumes:
+      - ./observability/tempo.yaml:/etc/tempo.yaml:ro
+      - tempo_data:/var/tempo
+    ports:
+      - "${TEMPO_OTLP_PORT:-4318}:4318"
+
+  grafana:
+    profiles: [observability]
+    image: grafana/grafana:13.3.1
+    environment:
+      GF_AUTH_ANONYMOUS_ENABLED: "true"
+      GF_AUTH_ANONYMOUS_ORG_ROLE: Viewer
+      GF_AUTH_DISABLE_LOGIN_FORM: "true"
+      GF_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH: /var/lib/grafana/dashboards/api.json
+    volumes:
+      - ./observability/grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./observability/grafana/dashboards:/var/lib/grafana/dashboards:ro
+    ports:
+      - "${GRAFANA_PORT:-3000}:3000"
+    depends_on:
+      - prometheus
+      - tempo
+
+volumes:
+  postgres_data:
+  prometheus_data:
+  tempo_data:

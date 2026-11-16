@@ -1,0 +1,28 @@
+{{ .Chart.Name }} {{ .Chart.AppVersion }} was installed as release "{{ .Release.Name }}".
+
+{{- if and .Values.secrets.create (not .Values.secrets.existingSecret) }}
+{{- if not .Values.secrets.values.AUTH_SECRET }}
+
+WARNING: secrets.values.AUTH_SECRET is empty. The server refuses to start in
+production without a signing secret. Set it, or point secrets.existingSecret at
+a Secret that contains AUTH_SECRET.
+{{- end }}
+{{- if and (eq (toString .Values.config.DATABASE_DRIVER) "postgres") (not .Values.secrets.values.DATABASE_URL) }}
+
+WARNING: secrets.values.DATABASE_URL is empty and DATABASE_DRIVER is postgres.
+{{- end }}
+{{- end }}
+
+Reach the API:
+{{- if .Values.ingress.enabled }}
+{{- range .Values.ingress.hosts }}
+  http{{ if $.Values.ingress.tls }}s{{ end }}://{{ .host }}
+{{- end }}
+{{- else }}
+  kubectl -n {{ .Release.Namespace }} port-forward svc/{{ include "go-rest-template.fullname" . }} 8080:{{ .Values.service.port }}
+  curl http://localhost:8080/health/ready
+{{- end }}
+
+Metrics are served on the admin port, which is not routed through the Ingress:
+  kubectl -n {{ .Release.Namespace }} port-forward svc/{{ include "go-rest-template.fullname" . }} 9090:{{ .Values.service.adminPort }}
+  curl http://localhost:9090/metrics
