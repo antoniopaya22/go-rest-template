@@ -1,10 +1,13 @@
-bin/*
-!bin/.gitkeep
-
-data/*
-!data/.gitkeep
-
-.env
-coverage.out
+# Build output
+bin/
 dist/
-old/
+coverage.out
+
+# Local state
+data/
+.env
+tmp/
+
+# Documentation site
+site/
+.cache/
