@@ -13,8 +13,44 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  lint:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Setup Go
+        uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
+        with:
+          go-version: stable
+          check-latest: true
+
+      - name: Module files are tidy
+        run: |
+          go mod tidy
+          git diff --exit-code -- go.mod go.sum
+
+      - name: Generated files are up to date
+        run: |
+          make generate
+          git diff --exit-code
+
+      - name: Vet
+        run: make vet
+
+      - name: Lint
+        uses: golangci/golangci-lint-action@ba0d7d2ec06a0ea1cb5fa41b2e4a3ab91d21278a # v9.3.0
+        with:
+          version: v2.15.0
+
   test:
     runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        go: [stable, oldstable]
     services:
       postgres:
         image: postgres:17
@@ -31,7 +67,6 @@ jobs:
           --health-retries=5
     env:
       TEST_POSTGRES_DSN: postgres://postgres:postgres@localhost:5432/go_rest_template_test?sslmode=disable
-
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -41,29 +76,53 @@ jobs:
       - name: Setup Go
         uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
         with:
-          # latest 1.26 patch release, so the standard library has every security fix
-          go-version: '1.26.x'
+          go-version: ${{ matrix.go }}
           check-latest: true
 
-      - name: Sync modules
-        run: go mod tidy
+      - name: Test with race detector and coverage
+        run: make cover
 
-      - name: Verify module files are clean
-        run: git diff --exit-code -- go.mod go.sum
-
-      - name: Vet
-        run: go vet ./...
-
-      - name: Lint
-        uses: golangci/golangci-lint-action@ba0d7d2ec06a0ea1cb5fa41b2e4a3ab91d21278a # v9.3.0
+      - name: Upload coverage
+        if: matrix.go == 'stable'
+        uses: codecov/codecov-action@303a32d7a59b442fa8d48b6a1cc6825c09c847a5 # v7.1.1
         with:
-          version: v2.15.0
+          files: coverage.out
+          token: ${{ secrets.CODECOV_TOKEN }}
+          fail_ci_if_error: false
+
+  vuln:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Setup Go
+        uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
+        with:
+          go-version: stable
+          check-latest: true
 
       - name: Vulnerability check
-        run: go run golang.org/x/vuln/cmd/govulncheck@v1.9.0 ./...
+        run: make vuln
 
-      - name: Test with race detector
-        run: go test -race ./...
+  init:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Setup Go
+        uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
+        with:
+          go-version: stable
+          check-latest: true
+
+      - name: Generate and test projects from the template
+        run: make test-init
 
   image:
     runs-on: ubuntu-24.04
@@ -74,16 +133,43 @@ jobs:
           persist-credentials: false
 
       - name: Build image
-        run: docker build -f build/package/Dockerfile -t go-rest-template:ci .
+        run: docker build -t go-rest-template:ci .
 
       - name: Smoke test
         run: |
           docker run -d --name api -p 8080:8080 \
             -e APP_ENV=development -e DATABASE_DRIVER=sqlite -e SQLITE_PATH=/tmp/app.db \
             go-rest-template:ci
-          for attempt in $(seq 1 20); do
-            if curl -fsS http://localhost:8080/health/ready; then exit 0; fi
+          for attempt in $(seq 1 30); do
+            if curl -fsS http://localhost:8080/health/ready; then
+              echo
+              echo "ready after ${attempt} attempt(s)"
+              exit 0
+            fi
             sleep 1
           done
           docker logs api
           exit 1
+
+  meta:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Lint workflows
+        run: docker run --rm -v "$PWD:/repo" -w /repo rhysd/actionlint:1.7.12 -color
+
+      - name: Lint Dockerfile
+        run: docker run --rm -i hadolint/hadolint:v2.15.1 < Dockerfile
+
+      - name: Lint Helm chart
+        run: |
+          helm lint deployments/helm/go-rest-template
+          helm template release deployments/helm/go-rest-template > /dev/null
+          helm template release deployments/helm/go-rest-template \
+            --set ingress.enabled=true --set autoscaling.enabled=true \
+            --set podDisruptionBudget.enabled=true --set networkPolicy.enabled=true \
+            --set serviceMonitor.enabled=true > /dev/null

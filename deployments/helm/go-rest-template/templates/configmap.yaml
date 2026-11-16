@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "go-rest-template.fullname" . }}
+  labels:
+    {{- include "go-rest-template.labels" . | nindent 4 }}
+data:
+  HTTP_HOST: "0.0.0.0"
+  HTTP_PORT: "8080"
+  ADMIN_HOST: "0.0.0.0"
+  ADMIN_PORT: "9090"
+  {{- range $key, $value := .Values.config }}
+  {{ $key }}: {{ $value | quote }}
+  {{- end }}

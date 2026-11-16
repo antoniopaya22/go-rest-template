@@ -1,0 +1,31 @@
+name: Bug report
+description: Something does not work as documented
+labels: [bug]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: What you ran, what you expected and what you got (with the full error or log output).
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Steps to reproduce
+      description: The smallest sequence of commands or requests that shows the problem. Remove secrets.
+      render: shell
+  - type: input
+    id: version
+    attributes:
+      label: Template version
+      description: Release tag or commit your project was created from, or the output of `./bin/api -version`.
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Environment
+      description: Output of `go version`, operating system, and database backend (SQLite or PostgreSQL version).
+    validations:
+      required: true

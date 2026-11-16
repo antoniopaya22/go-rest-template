@@ -1,0 +1,22 @@
+{
+  "name": "go-rest-template",
+  "image": "mcr.microsoft.com/devcontainers/go:1.27",
+  "features": {
+    "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {}
+  },
+  "forwardPorts": [8080, 9090],
+  "portsAttributes": {
+    "8080": { "label": "API" },
+    "9090": { "label": "Admin (metrics, pprof)" }
+  },
+  "postCreateCommand": "go mod download",
+  "customizations": {
+    "vscode": {
+      "extensions": ["golang.go", "redhat.vscode-yaml", "42Crunch.vscode-openapi"],
+      "settings": {
+        "go.lintTool": "golangci-lint-v2",
+        "editor.formatOnSave": true
+      }
+    }
+  }
+}

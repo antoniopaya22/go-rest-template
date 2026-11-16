@@ -4,12 +4,80 @@ run:
   timeout: 5m
 
 linters:
+  default: none
   enable:
+    - bodyclose
     - errcheck
+    - errorlint
+    - gocritic
+    - gosec
     - govet
     - ineffassign
     - misspell
+    - nilerr
+    - noctx
     - revive
+    - rowserrcheck
+    - sqlclosecheck
     - staticcheck
+    - unconvert
+    - unparam
     - unused
+  settings:
+    errcheck:
+      check-type-assertions: true
+    govet:
+      enable:
+        - nilness
+        - unusedwrite
+    gocritic:
+      enabled-tags:
+        - diagnostic
+        - performance
+      disabled-checks:
+        - hugeParam
+        # The `init:` and `scaffold:` marker comments look like code to this check.
+        - commentedOutCode
+    revive:
+      rules:
+        - name: blank-imports
+        - name: context-as-argument
+        - name: context-keys-type
+        - name: error-return
+        - name: error-strings
+        - name: error-naming
+        - name: exported
+        - name: increment-decrement
+        - name: var-naming
+        - name: package-comments
+        - name: range
+        - name: receiver-naming
+        - name: indent-error-flow
+        - name: superfluous-else
+        - name: unused-parameter
+        - name: unreachable-code
+        - name: redefines-builtin-id
+  exclusions:
+    generated: lax
+    rules:
+      - path: _test\.go
+        linters:
+          - bodyclose
+          - gosec
+          - noctx
+          - unparam
 
+formatters:
+  enable:
+    - gofmt
+    - goimports
+  settings:
+    goimports:
+      local-prefixes:
+        - github.com/antoniopaya22/go-rest-template
+  exclusions:
+    generated: lax
+
+issues:
+  max-issues-per-linter: 0
+  max-same-issues: 0
