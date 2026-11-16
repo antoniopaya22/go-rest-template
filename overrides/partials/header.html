@@ -1,0 +1,55 @@
+{#- Product-style header of the documentation pages (design system shared with my other project sites).
+    Configure in mkdocs.yml:
+      extra:
+        header_nav: [{title, url}]   # primary links (relative to the site or absolute)
+        header_cta: {title, url}     # call-to-action button
+    The title does not swap to the page title on scroll. -#}
+<header class="md-header md-header--shadow sdp-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="{{ lang.t('header') }}">
+    <a href="{{ config.extra.homepage | d(nav.homepage.url, true) | url }}" title="{{ config.site_name | e }}" class="md-header__button md-logo sdp-brand" aria-label="{{ config.site_name }} home" data-md-component="logo">
+      {% include "partials/logo.html" %}
+      <span class="sdp-brand__name">{{ config.site_name }}</span>
+    </a>
+    <label class="md-header__button md-icon" for="__drawer" aria-label="Open navigation">
+      {% include ".icons/material/menu.svg" %}
+    </label>
+
+    <ul class="sdp-nav" role="list">
+      {% for item in config.extra.header_nav | d([]) %}
+        {% set href = item.url if item.url.startswith("http") else (item.url | url) %}
+        {% set active = (not item.url.startswith("http")) and page.url and page.url.startswith(item.url) %}
+        <li><a href="{{ href }}" class="sdp-nav__link{% if active %} is-active{% endif %}"{% if active %} aria-current="page"{% endif %}>{{ item.title }}</a></li>
+      {% endfor %}
+    </ul>
+
+    <div class="sdp-header__spacer"></div>
+
+    {% if "material/search" in config.plugins %}
+      {% set search = config.plugins["material/search"] | attr("config") %}
+      {% if search.enabled %}
+        <label class="md-header__button md-icon" for="__search" aria-label="Search">
+          {% include ".icons/material/magnify.svg" %}
+        </label>
+        {% include "partials/search.html" %}
+      {% endif %}
+    {% endif %}
+
+    {% if config.theme.palette and not config.theme.palette is mapping %}
+      {% include "partials/palette.html" %}
+    {% endif %}
+    {% if not config.theme.palette is mapping %}
+      {% include "partials/javascripts/palette.html" %}
+    {% endif %}
+
+    {% if config.repo_url %}
+      <a href="{{ config.repo_url }}" class="md-header__button md-icon sdp-header__repo" title="Source code on GitHub" aria-label="Source code on GitHub">
+        {% include ".icons/fontawesome/brands/github.svg" %}
+      </a>
+    {% endif %}
+
+    {% if config.extra.header_cta %}
+      {% set cta = config.extra.header_cta %}
+      <a href="{{ cta.url if cta.url.startswith('http') else (cta.url | url) }}" class="sdp-header__cta">{{ cta.title }}</a>
+    {% endif %}
+  </nav>
+</header>

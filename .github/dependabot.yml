@@ -29,3 +29,16 @@ updates:
     groups:
       docker:
         patterns: ["*"]
+
+  # init:template:begin
+  # MkDocs and its theme, used to build the documentation site
+  - package-ecosystem: pip
+    directory: /
+    schedule:
+      interval: weekly
+    commit-message:
+      prefix: "chore(deps)"
+    groups:
+      docs:
+        patterns: ["*"]
+  # init:template:end

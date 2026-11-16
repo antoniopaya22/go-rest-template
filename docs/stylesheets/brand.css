@@ -1,0 +1,167 @@
+/* go-rest-template brand: "a request through the layers".
+   Dark ink like a terminal at night, Go's cyan as the single accent and a
+   green for whatever was allowed through. The hero background is a set of
+   lanes, the layers a request crosses. Used by the landing page (landing.css)
+   and by the documentation pages (extra.css). */
+
+.lp, .lp-nav, .lp-foot {
+  /* landing surfaces */
+  --lp-dark: #0a1218;
+  --lp-dark-2: #101b23;
+  --lp-light: #eef2f4;
+  --lp-light-2: #e2e8ec;
+  --lp-ink: #0c1820;
+
+  /* Go cyan */
+  --lp-accent: #29c5ea;
+  --lp-accent-hover: #5dd4f0;
+  --lp-accent-soft: #8fe1f5;
+  --lp-accent-ink: #00728e;
+  --lp-on-accent: #06222b;
+  --lp-mark: #29c5ea;
+  --lp-ok: #3ddc97;
+  --lp-ok-soft: rgba(61, 220, 151, .12);
+  --lp-ok-ink: #0f7a4d;
+  --lp-red: #ff5d73;
+  --lp-amber: #ffb020;
+
+  /* text and code on dark */
+  --lp-text-d: #e8eef2;
+  --lp-text-d2: #c6d1d9;
+  --lp-muted-d: #9dacb7;
+  --lp-dim-d: #74858f;
+  --lp-node: #12202a;
+  --lp-code-bg: #0c151c;
+  --lp-code-bar: #13212b;
+  --lp-code-fg: #dae3ea;
+  --lp-nav-bg: rgba(10, 18, 24, .86);
+
+  /* hero: the lanes a request crosses */
+  --lp-glow-1: rgba(41, 197, 234, .15);
+  --lp-glow-2: rgba(61, 220, 151, .07);
+  --lp-hero-pattern:
+    repeating-linear-gradient(0deg, rgba(255, 255, 255, .075) 0 1px, transparent 1px 44px),
+    repeating-linear-gradient(90deg, rgba(255, 255, 255, .05) 0 10px, transparent 10px 26px);
+  --lp-hero-pattern-size: auto;
+
+  /* call to action: cyan band, ink type */
+  --lp-cta-bg: #29c5ea;
+  --lp-cta-fg: #06222b;
+  --lp-cta-mark: #06222b;
+  --lp-cta-line: rgba(6, 34, 43, .35);
+  --lp-cta-install-bg: rgba(6, 34, 43, .1);
+  --lp-cta-install-btn: #06222b;
+  --lp-cta-install-btn-fg: #8fe1f5;
+  --lp-cta-btn-bg: #06222b;
+  --lp-cta-btn-fg: #ffffff;
+  --lp-cta-watermark: rgba(6, 34, 43, .26);
+}
+
+/* product header of the docs pages */
+:root {
+  --brand-header-bg: #0a1218;
+  --brand-header-accent: #29c5ea;
+  --brand-header-on-accent: #06222b;
+}
+
+/* documentation pages */
+[data-md-color-scheme="default"] {
+  --md-mermaid-sequence-actor-line-color: #c2cdd5;
+  --md-mermaid-sequence-actor-border-color: #00728e;
+  --md-mermaid-sequence-message-line-color: #00728e;
+  --md-mermaid-sequence-number-bg-color: #00728e;
+  --md-mermaid-node-bg-color: #e6f7fb;
+  --md-mermaid-node-fg-color: #0c1820;
+  --md-mermaid-edge-color: #00728e;
+  --md-mermaid-label-bg-color: #eef2f4;
+  --md-mermaid-label-fg-color: #0c1820;
+  --lp-accent: #00728e;
+  --lp-accent-hover: #005a70;
+  --lp-accent-soft: #e6f7fb;
+  --lp-on-accent: #ffffff;
+}
+
+[data-md-color-scheme="slate"] {
+  --md-mermaid-sequence-actor-line-color: #2a3c48;
+  --md-mermaid-sequence-actor-border-color: #5dd4f0;
+  --md-mermaid-sequence-message-line-color: #5dd4f0;
+  --md-mermaid-sequence-number-bg-color: #5dd4f0;
+  --md-mermaid-node-bg-color: #0e2a33;
+  --md-mermaid-node-fg-color: #e8eef2;
+  --md-mermaid-edge-color: #5dd4f0;
+  --md-mermaid-label-bg-color: #101b23;
+  --md-mermaid-label-fg-color: #e8eef2;
+  --lp-bg: #0a1218;
+  --lp-bg-soft: #0e1820;
+  --lp-surface: #101b23;
+  --lp-line: #1c2a35;
+  --lp-line-strong: #2a3c48;
+  --lp-accent: #5dd4f0;
+  --lp-accent-hover: #8fe1f5;
+  --lp-accent-soft: #0e2a33;
+  --lp-on-accent: #06222b;
+  --md-default-bg-color: #0a1218;
+  --md-code-bg-color: #0e1820;
+}
+
+/* landing signature: the eyebrow rule is a request arrow */
+.lp .lp-eyebrow::before {
+  width: 22px; height: 8px; background: none;
+  border-bottom: 2px solid currentColor; border-right: 2px solid currentColor;
+  transform: skewX(-38deg);
+}
+.lp .lp-dark .lp-eyebrow { color: var(--lp-accent-soft); }
+.lp .lp-display { letter-spacing: -0.045em; }
+
+/* ---- hero diagram: the request pipeline --------------------------------- */
+.lp-d-stage rect { fill: var(--lp-node); stroke: rgba(255, 255, 255, .2); stroke-width: 1.3; transition: stroke .25s, fill .25s; }
+.lp-d-stage text { fill: #fff; font: 600 11.5px var(--md-text-font-family); pointer-events: none; }
+.lp-d-stage--opt rect { stroke-dasharray: 4 4; }
+.lp-d-stage--opt text { fill: var(--lp-text-d2); }
+.lp-d-stage.is-seen rect { stroke: var(--lp-accent-soft); }
+.lp-d-stage.is-focus rect { stroke: var(--lp-accent); fill: rgba(41, 197, 234, .16); }
+.lp-d-stage.is-ok rect { stroke: var(--lp-ok); fill: var(--lp-ok-soft); }
+.lp-d-path { fill: none; stroke: rgba(255, 255, 255, .13); stroke-width: 2; }
+.lp-d-pkt--req { fill: var(--lp-accent); }
+.lp-d-legend { fill: var(--lp-dim-d); font: 500 10.5px var(--md-text-font-family); }
+.lp-d-legend-box { fill: none; stroke: rgba(255, 255, 255, .35); stroke-width: 1.2; stroke-dasharray: 4 4; }
+
+/* ---- landing extras ----------------------------------------------------- */
+.lp-table--opts .lp-table__row { grid-template-columns: .9fr .8fr 2.2fr; }
+.lp-table__row code { font: 600 .84rem var(--md-code-font-family); color: var(--lp-accent-soft); background: none; padding: 0; }
+.lp-light .lp-table { border-color: var(--lp-line-l); }
+.lp-light .lp-table__row { border-color: var(--lp-line-l); color: #4b5a66; }
+.lp-light .lp-table__row b { color: var(--lp-ink); }
+.lp-light .lp-table__head { color: var(--lp-accent-ink); }
+.lp-light .lp-table__row code { color: var(--lp-accent-ink); }
+
+.lp-tabs { margin-bottom: clamp(2.5rem, 5vw, 3.5rem); }
+.lp-tabs__bar { display: flex; flex-wrap: wrap; gap: .4rem; margin-bottom: .9rem; }
+.lp-tabs__bar button { cursor: pointer; padding: .45rem .95rem; border-radius: 999px; border: 1px solid var(--lp-line-l);
+  background: transparent; color: var(--lp-ink); font: 600 .82rem var(--md-text-font-family); }
+.lp-tabs__bar button[aria-selected="true"] { background: var(--lp-ink); border-color: var(--lp-ink); color: #fff; }
+.lp-tabs__panel { display: grid; gap: 1.2rem; }
+.lp-tabs.is-ready .lp-tabs__panel[hidden] { display: none; }
+.lp-tabs__panel > p { margin: 0; font-size: .9rem; color: #4b5a66; }
+.lp pre.lp-win__body.lp-win__body--auto { min-height: 0; }
+.lp pre.lp-win__body { overflow-x: auto; }
+
+.lp-box { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--lp-line-d); border: 1px solid var(--lp-line-d);
+  border-radius: 18px; overflow: hidden; margin-bottom: clamp(2rem, 4vw, 3rem); }
+.lp-box > a { display: block; padding: 1.4rem 1.3rem; background: var(--lp-dark); color: var(--lp-muted-d) !important; transition: background .2s; }
+.lp-box > a:hover { background: var(--lp-dark-2); }
+.lp-box h3 { margin: 0 0 .4rem; font: 700 1rem var(--lp-head); color: #fff; }
+.lp-box p { margin: 0; font-size: .87rem; line-height: 1.6; }
+@media (max-width: 960px) { .lp-box { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 680px) {
+  .lp-box { grid-template-columns: 1fr; }
+  .lp-table--opts .lp-table__row { grid-template-columns: 1fr; }
+}
+
+/* ---- API reference page ------------------------------------------------- */
+.api-frame { width: 100%; height: calc(100vh - 11rem); min-height: 34rem; border: 1px solid var(--lp-line, #e3e8ef); border-radius: 12px; background: var(--md-default-bg-color); }
+
+/* Outlined buttons follow the accent in both schemes. */
+.md-typeset .md-button:not(.md-button--primary) { color: var(--lp-accent); border-color: var(--lp-accent); }
+.md-typeset .md-button:not(.md-button--primary):hover,
+.md-typeset .md-button:not(.md-button--primary):focus { background: var(--lp-accent); border-color: var(--lp-accent); color: var(--lp-on-accent); }

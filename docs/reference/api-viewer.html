@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>go-rest-template HTTP API</title>
+  <style>html, body { margin: 0; height: 100%; }</style>
+</head>
+<body>
+  <!-- Rendered by Scalar, at the same pinned version and Subresource Integrity
+       hash as the /docs page of the server (internal/platform/contract/contract.go). -->
+  <script>
+    (function () {
+      var dark = /[?&]dark=1/.test(location.search) ||
+        (!/[?&]dark=0/.test(location.search) && window.matchMedia("(prefers-color-scheme: dark)").matches);
+
+      var reference = document.createElement("script");
+      reference.id = "api-reference";
+      reference.setAttribute("data-url", "../openapi.yaml");
+      reference.setAttribute("data-configuration", JSON.stringify({ darkMode: dark, hideDarkModeToggle: true }));
+      document.body.appendChild(reference);
+
+      var bundle = document.createElement("script");
+      bundle.src = "https://cdn.jsdelivr.net/npm/@scalar/api-reference@1.79.0/dist/browser/standalone.js";
+      bundle.integrity = "sha384-L1JnNDE1YhW1+DtFBec/sNUonpzUXyLvYkF21NCjmni3yu/untPXTfk5aDHn3a+h";
+      bundle.crossOrigin = "anonymous";
+      document.body.appendChild(bundle);
+    })();
+  </script>
+  <noscript>The API reference needs JavaScript. The OpenAPI document is at <a href="../openapi.yaml">openapi.yaml</a>.</noscript>
+</body>
+</html>
