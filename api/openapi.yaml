@@ -1,50 +1,74 @@
 openapi: 3.1.0
 info:
   title: Go REST Template API
-  version: 1.0.0
-  description: Modern Go REST API template with JWT authentication, users, and tasks.
+  version: 3.0.0
+  description: |
+    Reference API of go-rest-template.
+
+    **Errors** use `application/problem+json` (RFC 9457) with a stable `code`.
+    **Lists** are paginated with an opaque `cursor`. **Updates** support
+    optimistic concurrency through `ETag` and `If-Match`.
+  license:
+    name: MIT
+    identifier: MIT
 servers:
   - url: /
 tags:
   - name: Auth
+    description: Obtain, rotate and revoke tokens.
   - name: Users
+    description: User accounts.
+  # scaffold:tasks:tag:begin
   - name: Tasks
-  - name: Health
+    description: Example resource owned by a user.
+  # scaffold:tasks:tag:end
+  # scaffold:tags
+  - name: Operations
+    description: Health and build information.
 paths:
   /health/live:
     get:
-      tags: [Health]
+      tags: [Operations]
       summary: Liveness probe
-      operationId: getLiveHealth
+      operationId: getLiveness
       responses:
         '200':
-          description: Service is alive
+          description: The process is running.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/StatusResponse'
+                $ref: '#/components/schemas/Status'
   /health/ready:
     get:
-      tags: [Health]
+      tags: [Operations]
       summary: Readiness probe
-      operationId: getReadyHealth
+      operationId: getReadiness
       responses:
         '200':
-          description: Service is ready
+          description: The service can take traffic.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/StatusResponse'
-        '503':
-          description: Dependencies are not ready
+                $ref: '#/components/schemas/Status'
+        default:
+          $ref: '#/components/responses/Problem'
+  /version:
+    get:
+      tags: [Operations]
+      summary: Build information
+      operationId: getVersion
+      responses:
+        '200':
+          description: Build metadata of the running binary.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/Version'
+
   /api/v1/auth/login:
     post:
       tags: [Auth]
-      summary: Authenticate a user
+      summary: Exchange credentials for tokens
       operationId: login
       requestBody:
         required: true
@@ -54,294 +78,198 @@ paths:
               $ref: '#/components/schemas/LoginRequest'
       responses:
         '200':
-          description: Authenticated user and JWT token
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/LoginResponse'
-        '400':
-          description: Invalid request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '401':
-          description: Invalid credentials
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-  /api/v1/users:
+          $ref: '#/components/responses/TokenPair'
+        default:
+          $ref: '#/components/responses/Problem'
+  /api/v1/auth/refresh:
     post:
-      tags: [Users]
-      summary: Register a regular user
-      operationId: createUser
+      tags: [Auth]
+      summary: Rotate a refresh token
+      description: |
+        Returns a new token pair and invalidates the presented refresh token.
+        Presenting a refresh token twice revokes every token issued from the
+        same login.
+      operationId: refreshToken
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UserRegistrationInput'
+              $ref: '#/components/schemas/RefreshRequest'
       responses:
-        '201':
-          description: User created
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/User'
-        '400':
-          description: Invalid request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '403':
-          description: Forbidden request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '409':
-          description: User already exists
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
+        '200':
+          $ref: '#/components/responses/TokenPair'
+        default:
+          $ref: '#/components/responses/Problem'
+  /api/v1/auth/logout:
+    post:
+      tags: [Auth]
+      summary: Revoke a refresh token and its family
+      operationId: logout
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RefreshRequest'
+      responses:
+        '204':
+          description: The tokens are revoked.
+        default:
+          $ref: '#/components/responses/Problem'
+
+  /api/v1/users:
     get:
       tags: [Users]
       summary: List users
+      description: Administrators only.
       operationId: listUsers
       security:
         - bearerAuth: []
       parameters:
-        - in: query
-          name: username
+        - $ref: '#/components/parameters/Limit'
+        - $ref: '#/components/parameters/Cursor'
+        - name: username
+          in: query
+          description: Match usernames containing this text.
           schema:
             type: string
-        - in: query
-          name: role
+        - name: role
+          in: query
           schema:
             $ref: '#/components/schemas/Role'
       responses:
         '200':
-          description: Users list
+          description: One page of users.
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/User'
-        '400':
-          description: Invalid request
+                $ref: '#/components/schemas/UserPage'
+        default:
+          $ref: '#/components/responses/Problem'
+    post:
+      tags: [Users]
+      summary: Create a user
+      description: |
+        With `AUTH_REGISTRATION_ENABLED=true` this endpoint is public and
+        creates regular accounts. Otherwise it requires an administrator, who
+        may assign any role.
+      operationId: createUser
+      security:
+        - {}
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserCreate'
+      responses:
+        '201':
+          description: The created user.
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '401':
-          description: Authentication required
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '403':
-          description: Admin role required
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/User'
+        default:
+          $ref: '#/components/responses/Problem'
   /api/v1/users/me:
     get:
       tags: [Users]
-      summary: Get current user
+      summary: Get the authenticated user
       operationId: getCurrentUser
       security:
         - bearerAuth: []
       responses:
         '200':
-          description: Authenticated user
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/User'
-        '401':
-          description: Authentication required
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '404':
-          description: User not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
+          $ref: '#/components/responses/User'
+        default:
+          $ref: '#/components/responses/Problem'
   /api/v1/users/{userID}:
     parameters:
-      - in: path
-        name: userID
+      - name: userID
+        in: path
         required: true
         schema:
-          type: integer
-          format: int64
-          minimum: 1
+          $ref: '#/components/schemas/ID'
     get:
       tags: [Users]
-      summary: Get a user by id
+      summary: Get a user
       operationId: getUser
       security:
         - bearerAuth: []
       responses:
         '200':
-          description: User details
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/User'
-        '400':
-          description: Invalid request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '401':
-          description: Authentication required
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '403':
-          description: Insufficient permissions
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '404':
-          description: User not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
+          $ref: '#/components/responses/User'
+        default:
+          $ref: '#/components/responses/Problem'
     patch:
       tags: [Users]
       summary: Update a user
+      description: Only administrators can change `role`.
       operationId: updateUser
       security:
         - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/IfMatch'
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UserUpdateInput'
+              $ref: '#/components/schemas/UserUpdate'
       responses:
         '200':
-          description: Updated user
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/User'
-        '400':
-          description: Invalid request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '401':
-          description: Authentication required
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '403':
-          description: Insufficient permissions
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '404':
-          description: User not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '409':
-          description: Username conflict
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
+          $ref: '#/components/responses/User'
+        default:
+          $ref: '#/components/responses/Problem'
     delete:
       tags: [Users]
       summary: Delete a user
       operationId: deleteUser
       security:
         - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/IfMatch'
       responses:
         '204':
-          description: User deleted
-        '400':
-          description: Invalid request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '401':
-          description: Authentication required
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '403':
-          description: Insufficient permissions
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '404':
-          description: User not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
+          description: The user is deleted.
+        default:
+          $ref: '#/components/responses/Problem'
+
+  # scaffold:tasks:paths:begin
   /api/v1/tasks:
     get:
       tags: [Tasks]
       summary: List tasks
+      description: Regular users see their own tasks; administrators see all of them.
       operationId: listTasks
       security:
         - bearerAuth: []
       parameters:
-        - in: query
-          name: user_id
+        - $ref: '#/components/parameters/Limit'
+        - $ref: '#/components/parameters/Cursor'
+        - name: user_id
+          in: query
+          description: Filter by owner. Ignored for regular users.
           schema:
-            type: integer
-            format: int64
-            minimum: 1
-        - in: query
-          name: status
+            $ref: '#/components/schemas/ID'
+        - name: status
+          in: query
           schema:
             $ref: '#/components/schemas/TaskStatus'
       responses:
         '200':
-          description: Tasks list
+          description: One page of tasks.
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Task'
-        '400':
-          description: Invalid request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '401':
-          description: Authentication required
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/TaskPage'
+        default:
+          $ref: '#/components/responses/Problem'
     post:
       tags: [Tasks]
       summary: Create a task
@@ -353,216 +281,207 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/TaskCreateInput'
+              $ref: '#/components/schemas/TaskCreate'
       responses:
         '201':
-          description: Task created
+          description: The created task.
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Task'
-        '400':
-          description: Invalid request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '401':
-          description: Authentication required
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '404':
-          description: Owner not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
+        default:
+          $ref: '#/components/responses/Problem'
   /api/v1/tasks/{taskID}:
     parameters:
-      - in: path
-        name: taskID
+      - name: taskID
+        in: path
         required: true
         schema:
-          type: integer
-          format: int64
-          minimum: 1
+          $ref: '#/components/schemas/ID'
     get:
       tags: [Tasks]
-      summary: Get a task by id
+      summary: Get a task
       operationId: getTask
       security:
         - bearerAuth: []
       responses:
         '200':
-          description: Task details
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Task'
-        '400':
-          description: Invalid request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '401':
-          description: Authentication required
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '403':
-          description: Insufficient permissions
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '404':
-          description: Task not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
+          $ref: '#/components/responses/Task'
+        default:
+          $ref: '#/components/responses/Problem'
     patch:
       tags: [Tasks]
       summary: Update a task
       operationId: updateTask
       security:
         - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/IfMatch'
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/TaskUpdateInput'
+              $ref: '#/components/schemas/TaskUpdate'
       responses:
         '200':
-          description: Updated task
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Task'
-        '400':
-          description: Invalid request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '401':
-          description: Authentication required
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '403':
-          description: Insufficient permissions
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '404':
-          description: Task not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
+          $ref: '#/components/responses/Task'
+        default:
+          $ref: '#/components/responses/Problem'
     delete:
       tags: [Tasks]
       summary: Delete a task
       operationId: deleteTask
       security:
         - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/IfMatch'
       responses:
         '204':
-          description: Task deleted
-        '400':
-          description: Invalid request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '401':
-          description: Authentication required
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '403':
-          description: Insufficient permissions
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '404':
-          description: Task not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
+          description: The task is deleted.
+        default:
+          $ref: '#/components/responses/Problem'
+  # scaffold:tasks:paths:end
+  # scaffold:paths
+
 components:
   securitySchemes:
     bearerAuth:
       type: http
       scheme: bearer
       bearerFormat: JWT
+  parameters:
+    Limit:
+      name: limit
+      in: query
+      description: Maximum number of items to return.
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 100
+        default: 20
+    Cursor:
+      name: cursor
+      in: query
+      description: The `next_cursor` of the previous page.
+      schema:
+        type: string
+    IfMatch:
+      name: If-Match
+      in: header
+      description: |
+        `ETag` of the version the change is based on. When it no longer
+        matches, the request fails with `412 Precondition Failed`.
+      schema:
+        type: string
+  headers:
+    ETag:
+      description: Version of the returned resource, to send back in `If-Match`.
+      schema:
+        type: string
+  responses:
+    Problem:
+      description: The request failed. `code` identifies the kind of error.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+    TokenPair:
+      description: A new access and refresh token.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/TokenPair'
+    User:
+      description: A user.
+      headers:
+        ETag:
+          $ref: '#/components/headers/ETag'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/User'
+    # scaffold:tasks:response:begin
+    Task:
+      description: A task.
+      headers:
+        ETag:
+          $ref: '#/components/headers/ETag'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Task'
+    # scaffold:tasks:response:end
+    # scaffold:responses
   schemas:
-    StatusResponse:
+    ID:
+      type: integer
+      format: int64
+      minimum: 1
+    Status:
       type: object
       required: [status]
       properties:
         status:
           type: string
           enum: [ok, ready]
-    ErrorResponse:
+    Version:
       type: object
-      required: [error]
+      required: [version, commit, date, go_version]
       properties:
+        version:
+          type: string
+        commit:
+          type: string
+        date:
+          type: string
+        go_version:
+          type: string
+    Problem:
+      type: object
+      required: [type, title, status, code]
+      properties:
+        type:
+          type: string
+          description: Always `about:blank`; `code` carries the error category.
+        title:
+          type: string
+        status:
+          type: integer
+        detail:
+          type: string
         code:
           type: string
-          enum: [invalid_argument, unauthorized, forbidden, not_found, conflict, internal, unavailable]
-        error:
+          enum:
+            - invalid_argument
+            - unauthorized
+            - forbidden
+            - not_found
+            - conflict
+            - precondition_failed
+            - rate_limited
+            - unavailable
+            - internal
+        request_id:
           type: string
+          description: Quote this when reporting a problem; it appears in the server logs.
+        errors:
+          type: array
+          description: Per-field details of a validation failure.
+          items:
+            type: object
+            required: [field, message]
+            properties:
+              field:
+                type: string
+              message:
+                type: string
     Role:
       type: string
       enum: [admin, user]
-    TaskStatus:
-      type: string
-      enum: [pending, in_progress, done]
-    Token:
-      type: object
-      required: [access_token, token_type, expires_at]
-      properties:
-        access_token:
-          type: string
-        token_type:
-          type: string
-          enum: [Bearer]
-        expires_at:
-          type: string
-          format: date-time
-    User:
-      type: object
-      required: [id, username, first_name, last_name, role, created_at, updated_at]
-      properties:
-        id:
-          type: integer
-          format: int64
-        username:
-          type: string
-        first_name:
-          type: string
-        last_name:
-          type: string
-        role:
-          $ref: '#/components/schemas/Role'
-        created_at:
-          type: string
-          format: date-time
-        updated_at:
-          type: string
-          format: date-time
     LoginRequest:
       type: object
       required: [username, password]
@@ -574,15 +493,62 @@ components:
         password:
           type: string
           minLength: 1
-    LoginResponse:
+    RefreshRequest:
       type: object
-      required: [token, user]
+      required: [refresh_token]
+      additionalProperties: false
       properties:
-        token:
-          $ref: '#/components/schemas/Token'
-        user:
-          $ref: '#/components/schemas/User'
-    UserRegistrationInput:
+        refresh_token:
+          type: string
+          minLength: 1
+    TokenPair:
+      type: object
+      required: [access_token, refresh_token, token_type, expires_in]
+      properties:
+        access_token:
+          type: string
+          description: "Short-lived JWT, sent as `Authorization: Bearer <token>`."
+        refresh_token:
+          type: string
+          description: Single-use token to obtain the next pair.
+        token_type:
+          type: string
+          enum: [Bearer]
+        expires_in:
+          type: integer
+          description: Lifetime of the access token in seconds.
+    User:
+      type: object
+      required: [id, username, first_name, last_name, role, created_at, updated_at]
+      properties:
+        id:
+          $ref: '#/components/schemas/ID'
+        username:
+          type: string
+        first_name:
+          type: string
+        last_name:
+          type: string
+        role:
+          $ref: '#/components/schemas/Role'
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+    UserPage:
+      type: object
+      required: [data]
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/User'
+        next_cursor:
+          type: string
+          description: Present when another page exists.
+    UserCreate:
       type: object
       required: [username, first_name, last_name, password]
       additionalProperties: false
@@ -590,6 +556,7 @@ components:
         username:
           type: string
           minLength: 3
+          maxLength: 64
         first_name:
           type: string
           minLength: 1
@@ -599,12 +566,13 @@ components:
         password:
           type: string
           minLength: 8
+          maxLength: 72
         role:
-          type: string
-          enum: [user]
-    UserUpdateInput:
+          $ref: '#/components/schemas/Role'
+    UserUpdate:
       type: object
       additionalProperties: false
+      minProperties: 1
       properties:
         first_name:
           type: string
@@ -615,15 +583,19 @@ components:
         password:
           type: string
           minLength: 8
+          maxLength: 72
         role:
           $ref: '#/components/schemas/Role'
+    # scaffold:tasks:schemas:begin
+    TaskStatus:
+      type: string
+      enum: [pending, in_progress, done]
     Task:
       type: object
       required: [id, title, description, status, user_id, created_at, updated_at]
       properties:
         id:
-          type: integer
-          format: int64
+          $ref: '#/components/schemas/ID'
         title:
           type: string
         description:
@@ -631,15 +603,25 @@ components:
         status:
           $ref: '#/components/schemas/TaskStatus'
         user_id:
-          type: integer
-          format: int64
+          $ref: '#/components/schemas/ID'
         created_at:
           type: string
           format: date-time
         updated_at:
           type: string
           format: date-time
-    TaskCreateInput:
+    TaskPage:
+      type: object
+      required: [data]
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Task'
+        next_cursor:
+          type: string
+          description: Present when another page exists.
+    TaskCreate:
       type: object
       required: [title, description]
       additionalProperties: false
@@ -647,24 +629,27 @@ components:
         title:
           type: string
           minLength: 1
+          maxLength: 200
         description:
           type: string
           minLength: 1
         status:
           $ref: '#/components/schemas/TaskStatus'
         user_id:
-          type: integer
-          format: int64
-          minimum: 1
-    TaskUpdateInput:
+          $ref: '#/components/schemas/ID'
+    TaskUpdate:
       type: object
       additionalProperties: false
+      minProperties: 1
       properties:
         title:
           type: string
           minLength: 1
+          maxLength: 200
         description:
           type: string
           minLength: 1
         status:
           $ref: '#/components/schemas/TaskStatus'
+    # scaffold:tasks:schemas:end
+    # scaffold:schemas

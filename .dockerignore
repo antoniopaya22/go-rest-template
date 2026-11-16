@@ -1,11 +1,13 @@
 .git
 .github
-.agents
+.devcontainer
 bin
 data
 dist
+site
+docs
+overrides
+deployments
 coverage.out
-old
 *.log
-*.tmp
 .env
