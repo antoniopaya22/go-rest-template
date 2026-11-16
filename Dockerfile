@@ -1,6 +1,8 @@
 # syntax=docker/dockerfile:1
 
-FROM golang:1.27@sha256:fe517acaa580cc7915457080f850c37e618b3c1e750f98b58fc6429b605147a1 AS build
+# The build stage runs on the build machine and cross-compiles, so multi-arch
+# images do not need emulation.
+FROM --platform=$BUILDPLATFORM golang:1.27@sha256:fe517acaa580cc7915457080f850c37e618b3c1e750f98b58fc6429b605147a1 AS build
 
 WORKDIR /src
 
@@ -13,9 +15,11 @@ COPY . ./
 ARG VERSION=dev
 ARG COMMIT=unknown
 ARG DATE=unknown
+ARG TARGETOS
+ARG TARGETARCH
 
-# Both database drivers are pure Go, so the binaries are fully static.
-RUN CGO_ENABLED=0 go build -trimpath \
+# The database drivers are pure Go, so the binaries are fully static.
+RUN CGO_ENABLED=0 GOOS=${TARGETOS} GOARCH=${TARGETARCH} go build -trimpath \
       -ldflags="-s -w \
         -X github.com/antoniopaya22/go-rest-template/internal/platform/version.Version=${VERSION} \
         -X github.com/antoniopaya22/go-rest-template/internal/platform/version.Commit=${COMMIT} \
