@@ -15,11 +15,10 @@ This template follows the common Go application layout patterns that are useful 
 - `build/package/`: container packaging assets.
 - `docs/`: design and repository documentation beyond package docs.
 - `test/`: external integration tests.
-- `old/`: preserved legacy implementation for migration reference.
 
 ## Intentional Exceptions
 
-- `.github/workflows/ci.yml` stays where GitHub expects it; `build/ci/` is used for supporting CI assets and documentation.
+- `.github/workflows/ci.yml` stays where GitHub expects it; CI has no supporting assets of its own.
 - `Makefile` remains at the repository root because it is still the conventional entrypoint for developer tasks, but its commands delegate to `scripts/`.
 - `migrations/` stays top-level because both runtime code and operators interact with it directly as a deployment artifact.
 

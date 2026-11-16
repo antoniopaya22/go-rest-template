@@ -2,7 +2,7 @@
 
 ## Supported versions
 
-Only the latest release (`2.x`, the `master` branch) receives security fixes. The legacy `1.0.0` implementation is kept for reference only.
+Only the latest release (`2.x`, the `main` branch) receives security fixes. The legacy `1.0.0` implementation is kept for reference only.
 
 ## Reporting a vulnerability
 
