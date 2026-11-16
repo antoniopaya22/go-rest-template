@@ -183,3 +183,42 @@ func TestIfMatch(t *testing.T) {
 		t.Errorf("ETag = %q", got)
 	}
 }
+
+// FuzzParsePage checks that no query string can make pagination panic or
+// produce a request outside its limits.
+func FuzzParsePage(f *testing.F) {
+	for _, seed := range []string{"", "limit=10", "cursor=MTE", "limit=0&cursor=%00", "limit=9999999999999999999", "cursor=LTE"} {
+		f.Add(seed)
+	}
+
+	f.Fuzz(func(t *testing.T, query string) {
+		request := httptest.NewRequest(http.MethodGet, "/", nil)
+		request.URL.RawQuery = query
+
+		page, err := ParsePage(request)
+		if err != nil {
+			return
+		}
+		if page.Limit < 1 || page.Limit > MaxPageSize || page.After < 0 {
+			t.Fatalf("query %q produced an out-of-range page: %+v", query, page)
+		}
+	})
+}
+
+// FuzzDecodeJSON checks that no body can make decoding panic and that every
+// failure is reported as invalid input.
+func FuzzDecodeJSON(f *testing.F) {
+	for _, seed := range []string{`{"name":"a"}`, `{`, `[]`, `null`, `{"name":1}`, "\x00", `{"name":"a"} x`} {
+		f.Add(seed)
+	}
+
+	f.Fuzz(func(t *testing.T, body string) {
+		var dst struct {
+			Name string `json:"name"`
+		}
+		err := DecodeJSON(httptest.NewRequest(http.MethodPost, "/", strings.NewReader(body)), &dst)
+		if err != nil && !errs.Is(err, errs.CodeInvalidArgument) {
+			t.Fatalf("body %q: error code = %q, want invalid_argument", body, errs.CodeOf(err))
+		}
+	})
+}

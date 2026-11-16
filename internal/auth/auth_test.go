@@ -258,3 +258,29 @@ func TestMiddleware(t *testing.T) {
 		}
 	}
 }
+
+// FuzzVerify checks that no input can make token verification panic or be
+// accepted without a valid signature.
+func FuzzVerify(f *testing.F) {
+	signer, err := NewSigner(config.Auth{Algorithm: config.AlgorithmHS256, Secret: "fuzz-secret", Issuer: "test", AccessTokenTTL: time.Minute})
+	if err != nil {
+		f.Fatalf("NewSigner: %v", err)
+	}
+	valid, err := signer.Issue(Identity{UserID: 1}, time.Now())
+	if err != nil {
+		f.Fatalf("Issue: %v", err)
+	}
+
+	for _, seed := range []string{"", "a.b.c", valid[:len(valid)-2], "eyJhbGciOiJub25lIn0.e30.", strings.Repeat(".", 10)} {
+		f.Add(seed)
+	}
+
+	f.Fuzz(func(t *testing.T, raw string) {
+		if raw == valid {
+			return
+		}
+		if userID, err := signer.Verify(raw); err == nil {
+			t.Fatalf("token %q was accepted for user %d", raw, userID)
+		}
+	})
+}
