@@ -22,7 +22,7 @@ func TestWriteError(t *testing.T) {
 		wantDetail string
 	}{
 		{"validation", errs.InvalidField("title", "is required"), http.StatusBadRequest, errs.CodeInvalidArgument, "request validation failed"},
-		{"not found", errs.NotFound("task not found"), http.StatusNotFound, errs.CodeNotFound, "task not found"},
+		{"not found", errs.NotFound("user not found"), http.StatusNotFound, errs.CodeNotFound, "user not found"},
 		{"precondition", errs.New(errs.CodePreconditionFailed, "changed"), http.StatusPreconditionFailed, errs.CodePreconditionFailed, "changed"},
 		{"rate limited", errs.New(errs.CodeRateLimited, "slow down"), http.StatusTooManyRequests, errs.CodeRateLimited, "slow down"},
 		{"unavailable", errs.New(errs.CodeUnavailable, "database not ready"), http.StatusServiceUnavailable, errs.CodeUnavailable, "database not ready"},

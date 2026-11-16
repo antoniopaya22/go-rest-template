@@ -1,14 +1,16 @@
 # Local stack: the API and PostgreSQL.
 #
 #   make compose-up      API + PostgreSQL
-#   make obs-up          the same plus Prometheus, Grafana and Tempo
+#   make obs-up          the same plus Prometheus, Grafana and Tempo # init:observability
 #   make compose-down    stop and remove everything
 #
+# init:observability:begin
 # The observability services live behind the "observability" profile. To send
 # traces to Tempo, start the stack with tracing switched on:
 #
 #   OTEL_ENABLED=true docker compose -f deployments/compose.yaml --profile observability up --build -d
 #
+# init:observability:end
 # Every value below can be overridden from the shell or from a .env file placed
 # next to this file. The defaults are for local use only.
 name: go-rest-template
@@ -54,11 +56,13 @@ services:
       BOOTSTRAP_ADMIN_PASSWORD: ${BOOTSTRAP_ADMIN_PASSWORD:-change-me-now-123}
       LOG_LEVEL: ${LOG_LEVEL:-INFO}
       LOG_FORMAT: ${LOG_FORMAT:-json}
-      METRICS_ENABLED: ${METRICS_ENABLED:-true}
+      METRICS_ENABLED: ${METRICS_ENABLED:-true} # init:metrics
+      # init:otel:begin
       # Tracing is off unless OTEL_ENABLED=true is set when starting the stack.
       OTEL_ENABLED: ${OTEL_ENABLED:-false}
       OTEL_EXPORTER_OTLP_ENDPOINT: ${OTEL_EXPORTER_OTLP_ENDPOINT:-http://tempo:4318}
       OTEL_SERVICE_NAME: ${OTEL_SERVICE_NAME:-go-rest-template}
+      # init:otel:end
     ports:
       - "${API_PORT:-8080}:8080"
       - "${ADMIN_PORT:-9090}:9090"
@@ -70,6 +74,7 @@ services:
       start_period: 5s
     restart: unless-stopped
 
+  # init:observability:begin
   prometheus:
     profiles: [observability]
     image: prom/prometheus:v3.16.0
@@ -110,8 +115,9 @@ services:
     depends_on:
       - prometheus
       - tempo
+  # init:observability:end
 
 volumes:
   postgres_data:
-  prometheus_data:
-  tempo_data:
+  prometheus_data: # init:observability
+  tempo_data: # init:observability

@@ -10,22 +10,25 @@ package apptest
 import (
 	"bytes"
 	"context"
-	"database/sql"
+	"database/sql" // init:postgres
 	"encoding/json"
-	"fmt"
+	"fmt" // init:postgres
 	"io"
 	"log/slog"
 	"maps"
 	"net/http"
 	"net/http/httptest"
-	"net/url"
-	"os"
-	"path/filepath"
+	"net/url"       // init:postgres
+	"os"            // init:postgres
+	"path/filepath" // init:sqlite
 	"strings"
 	"testing"
 	"time"
 
-	_ "github.com/jackc/pgx/v5/stdlib" // init:postgres
+	// init:postgres:begin
+	// Registers the pgx driver, used to create one schema per test.
+	_ "github.com/jackc/pgx/v5/stdlib"
+	// init:postgres:end
 
 	"github.com/antoniopaya22/go-rest-template/internal/app"
 	"github.com/antoniopaya22/go-rest-template/internal/auth"
@@ -50,10 +53,15 @@ type Env struct {
 func Each(t *testing.T, fn func(t *testing.T, env *Env), settings ...map[string]string) {
 	t.Helper()
 
-	for _, backend := range Backends() {
+	backends := Backends()
+	if len(backends) == 0 {
+		t.Skip("no database backend available; set TEST_POSTGRES_DSN")
+	}
+
+	for _, backend := range backends {
 		t.Run(backend, func(t *testing.T) {
 			t.Parallel()
-			fn(t, New(t, backend, settings...))
+			fn(t, start(t, backend, settings...))
 		})
 	}
 }
@@ -70,8 +78,20 @@ func Backends() []string {
 	return backends
 }
 
-// New starts the application on the given backend.
-func New(t *testing.T, backend string, settings ...map[string]string) *Env {
+// New starts the application on the first available backend. The test is
+// skipped when there is none, which happens in a PostgreSQL-only project when
+// TEST_POSTGRES_DSN is not set.
+func New(t *testing.T, settings ...map[string]string) *Env {
+	t.Helper()
+
+	backends := Backends()
+	if len(backends) == 0 {
+		t.Skip("no database backend available; set TEST_POSTGRES_DSN")
+	}
+	return start(t, backends[0], settings...)
+}
+
+func start(t *testing.T, backend string, settings ...map[string]string) *Env {
 	t.Helper()
 
 	values := map[string]string{

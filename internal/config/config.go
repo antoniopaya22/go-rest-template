@@ -251,12 +251,19 @@ func load(l *loader) Config {
 	}
 
 	l.section("Database")
-	defaultDriver := DriverSQLite
+	// Development prefers the first driver and production the last one, so
+	// with both compiled in SQLite is the local default and PostgreSQL the
+	// production one.
+	drivers := []string{
+		DriverSQLite,   // init:sqlite
+		DriverPostgres, // init:postgres
+	}
+	defaultDriver := drivers[0]
 	if production {
-		defaultDriver = DriverPostgres
+		defaultDriver = drivers[len(drivers)-1]
 	}
 	cfg.Database = Database{
-		Driver:          l.enum("DATABASE_DRIVER", defaultDriver, []string{DriverSQLite, DriverPostgres}, "Database backend. Defaults to sqlite in development and postgres in production."),
+		Driver:          l.enum("DATABASE_DRIVER", defaultDriver, drivers, "Database backend."),
 		URL:             l.str("DATABASE_URL", "", "PostgreSQL connection string. Required when DATABASE_DRIVER=postgres."),
 		SQLitePath:      l.str("SQLITE_PATH", "data/app.db", "SQLite database file. Used when DATABASE_DRIVER=sqlite."),
 		AutoMigrate:     l.boolean("DATABASE_AUTO_MIGRATE", true, "Apply pending migrations at startup."),

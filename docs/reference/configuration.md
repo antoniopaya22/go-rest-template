@@ -52,7 +52,7 @@ Invalid values are reported together and the process exits before serving traffi
 
 | Variable | Default | Description |
 |---|---|---|
-| `DATABASE_DRIVER` | `sqlite` | Database backend. Defaults to sqlite in development and postgres in production. One of: sqlite, postgres. |
+| `DATABASE_DRIVER` | `sqlite` | Database backend. One of: sqlite, postgres. |
 | `DATABASE_URL` | — | PostgreSQL connection string. Required when DATABASE_DRIVER=postgres. |
 | `SQLITE_PATH` | `data/app.db` | SQLite database file. Used when DATABASE_DRIVER=sqlite. |
 | `DATABASE_AUTO_MIGRATE` | `true` | Apply pending migrations at startup. |

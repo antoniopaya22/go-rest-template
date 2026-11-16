@@ -18,7 +18,7 @@ LDFLAGS := -s -w \
 	-X $(MODULE)/internal/platform/version.Date=$(DATE)
 
 IMAGE   ?= go-rest-template:dev
-COMPOSE := docker compose -f deployments/compose.yaml
+COMPOSE := docker compose -f deployments/compose.yaml # init:compose
 
 .DEFAULT_GOAL := help
 
@@ -107,6 +107,7 @@ migrate-status: ## Show which migrations are applied
 docker-build: ## Build the container image
 	docker build --build-arg VERSION=$(VERSION) --build-arg COMMIT=$(COMMIT) --build-arg DATE=$(DATE) -t $(IMAGE) .
 
+# init:compose:begin
 .PHONY: compose-up
 compose-up: ## Start the API with PostgreSQL
 	$(COMPOSE) up --build -d
@@ -119,7 +120,8 @@ obs-up: ## Start the API with PostgreSQL, Prometheus, Grafana and Tempo
 
 .PHONY: compose-down
 compose-down: ## Stop and remove the compose stack
-	$(COMPOSE) --profile observability down --remove-orphans
+	$(COMPOSE) --profile "*" down --remove-orphans
+# init:compose:end
 
 # init:template:begin
 ##@ Template

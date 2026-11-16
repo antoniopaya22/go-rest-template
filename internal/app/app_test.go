@@ -47,7 +47,7 @@ func TestOperationalEndpoints(t *testing.T) {
 func TestRoutesMatchContract(t *testing.T) {
 	t.Parallel()
 
-	env := apptest.New(t, apptest.Backends()[0])
+	env := apptest.New(t)
 
 	spec := env.App.ContractOperations()
 
@@ -145,7 +145,7 @@ func TestDeletedUserLosesAccessImmediately(t *testing.T) {
 func TestRequestValidation(t *testing.T) {
 	t.Parallel()
 
-	env := apptest.New(t, apptest.Backends()[0])
+	env := apptest.New(t)
 	login := "/api/v1/auth/login"
 
 	tests := []struct {
@@ -175,7 +175,7 @@ func TestRequestValidation(t *testing.T) {
 func TestLoginIsRateLimited(t *testing.T) {
 	t.Parallel()
 
-	env := apptest.New(t, apptest.Backends()[0], map[string]string{
+	env := apptest.New(t, map[string]string{
 		"RATE_LIMIT_ENABLED":        "true",
 		"RATE_LIMIT_LOGIN_REQUESTS": "2",
 	})
@@ -199,7 +199,7 @@ func TestLoginIsRateLimited(t *testing.T) {
 func TestAdminServer(t *testing.T) {
 	t.Parallel()
 
-	env := apptest.New(t, apptest.Backends()[0], map[string]string{"ADMIN_PORT": "19191", "ADMIN_PPROF_ENABLED": "true"})
+	env := apptest.New(t, map[string]string{"ADMIN_PORT": "19191", "ADMIN_PPROF_ENABLED": "true"})
 	env.Do(http.StatusOK, apptest.Request{Method: http.MethodGet, Path: "/health/live"})
 
 	admin := httptest.NewServer(env.App.AdminHandler())

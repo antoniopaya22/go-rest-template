@@ -134,7 +134,7 @@ func TestUsers(t *testing.T) {
 func TestRegistrationDisabled(t *testing.T) {
 	t.Parallel()
 
-	env := apptest.New(t, apptest.Backends()[0], map[string]string{"AUTH_REGISTRATION_ENABLED": "false"})
+	env := apptest.New(t, map[string]string{"AUTH_REGISTRATION_ENABLED": "false"})
 	body := map[string]string{"username": "carol", "first_name": "C", "last_name": "D", "password": "user-password-123", "role": "admin"}
 
 	env.Do(http.StatusUnauthorized, apptest.Request{Method: http.MethodPost, Path: "/api/v1/users", Body: body})
