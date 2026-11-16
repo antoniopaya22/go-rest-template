@@ -15,7 +15,7 @@ the project, the conventions the repository follows and how changes get merged.
 
 Requirements:
 
-- Go 1.27 or newer
+- Go 1.26 or newer
 - Docker with the Compose plugin (only for the container targets and for running
   the test suite against PostgreSQL)
 - `make`

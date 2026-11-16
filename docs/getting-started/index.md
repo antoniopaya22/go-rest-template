@@ -8,7 +8,7 @@ project with a tool that renames it and deletes the parts you do not want.
 
 | Tool | Used for | Required |
 |---|---|---|
-| Go 1.27 | Building and running everything | Yes |
+| Go 1.26 or newer | Building and running everything | Yes |
 | `make` | The developer commands | Yes |
 | Docker | The container image, the Compose stack, PostgreSQL for tests | No |
 | Python 3 | Building this documentation site | No |

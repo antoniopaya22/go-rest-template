@@ -249,7 +249,7 @@ The code moved from layers to feature packages.
 
 Other changes that affect how you build and run it:
 
-- Go 1.27 is required.
+- Go 1.26 or newer is required.
 - The container image contains only the two binaries; `api/` and `migrations/` are no
   longer copied into it.
 - `cmd/migrate` takes a subcommand: `up`, `down` or `status`.
