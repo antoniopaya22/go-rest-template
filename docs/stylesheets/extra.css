@@ -1,0 +1,311 @@
+/* ==========================================================================
+   Shared theme for MkDocs Material: Montserrat, neutral palette, one accent
+   set per project in brand.css.
+   ========================================================================== */
+
+:root {
+  --lp-radius: 12px;
+  --lp-radius-sm: 8px;
+  --lp-max: 62rem;
+  --lp-spa: #d97706;
+  --lp-deny: #dc2626;
+}
+
+/* ---- Palette ------------------------------------------------------------ */
+
+[data-md-color-scheme="default"] {
+  --lp-bg: #ffffff;
+  --lp-bg-soft: #f6f8fb;
+  --lp-surface: #ffffff;
+  --lp-line: #e3e8ef;
+  --lp-line-strong: #cfd7e3;
+  --lp-ink: #0f1b2d;
+  --lp-text: #334155;
+  --lp-muted: #64748b;
+  --lp-accent: #3b5bff;
+  --lp-accent-hover: #2f4cf0;
+  --lp-accent-soft: #eef1ff;
+  --lp-on-accent: #ffffff;
+  --lp-shadow: 0 1px 2px #0f1b2d0d, 0 8px 24px -12px #0f1b2d26;
+
+  --md-default-bg-color: var(--lp-bg);
+  --md-default-fg-color: #0f1b2de6;
+  --md-default-fg-color--light: #0f1b2da3;
+  --md-typeset-color: var(--lp-text);
+  --md-typeset-a-color: var(--lp-accent);
+  --md-code-bg-color: #f3f6f9;
+  --md-code-fg-color: #1e293b;
+}
+
+[data-md-color-scheme="slate"] {
+  --md-hue: 216;
+  --lp-bg: #0b1220;
+  --lp-bg-soft: #0f182a;
+  --lp-surface: #111b2e;
+  --lp-line: #1e2a40;
+  --lp-line-strong: #2b3a55;
+  --lp-ink: #e8eef7;
+  --lp-text: #c4cedc;
+  --lp-muted: #8a98ad;
+  --lp-accent: #8fa0ff;
+  --lp-accent-hover: #b4c0ff;
+  --lp-accent-soft: #1a2150;
+  --lp-on-accent: #0a0d17;
+  --lp-shadow: 0 1px 2px #0000004d, 0 10px 30px -14px #00000099;
+
+  --md-default-bg-color: var(--lp-bg);
+  --md-default-fg-color: #e8eef7e6;
+  --md-default-fg-color--light: #e8eef7a3;
+  --md-typeset-color: var(--lp-text);
+  --md-typeset-a-color: var(--lp-accent);
+  --md-code-bg-color: #0f182a;
+}
+
+[data-md-color-primary="custom"] {
+  --md-primary-fg-color: var(--brand-header-bg, #0a0d17);
+  --md-primary-fg-color--light: #1e2d44;
+  --md-primary-fg-color--dark: #08111d;
+  --md-primary-bg-color: #ffffff;
+  --md-primary-bg-color--light: #ffffffb3;
+}
+
+[data-md-color-accent="custom"] {
+  --md-accent-fg-color: var(--lp-accent);
+  --md-accent-fg-color--transparent: #3b5bff1a;
+  --md-accent-bg-color: #ffffff;
+}
+
+/* ---- Documentation pages ------------------------------------------------ */
+
+.md-typeset {
+  font-size: 0.82rem;
+  line-height: 1.7;
+}
+
+.md-typeset h1,
+.md-typeset h2,
+.md-typeset h3,
+.md-typeset h4 {
+  color: var(--lp-ink);
+  letter-spacing: -0.015em;
+}
+
+.md-typeset h1 { font-weight: 700; font-size: 2.1em; margin-bottom: 0.8em; }
+.md-typeset h1 code, .md-typeset h2 code { padding: 0 0.15em; background: none; font-size: 0.85em; color: var(--lp-accent); }
+
+/* wider layout: fewer clipped code blocks, aligned with header and landing */
+.md-grid { max-width: 62rem; }
+.md-typeset h2 { font-weight: 700; font-size: 1.45em; margin-top: 2.2em; }
+.md-typeset h3 { font-weight: 600; font-size: 1.15em; }
+
+.md-header__title { font-weight: 700; }
+.md-header { box-shadow: 0 1px 0 #ffffff14; }
+
+.md-tabs__link { font-weight: 500; opacity: 0.8; }
+.md-tabs__link--active, .md-tabs__item--active .md-tabs__link { opacity: 1; color: #fff; }
+
+.md-nav__link--active { color: var(--lp-accent) !important; font-weight: 600; }
+.md-footer { background: var(--brand-header-bg, #0a0d17); }
+
+.md-typeset table:not([class]) {
+  border: 1px solid var(--lp-line);
+  border-radius: var(--lp-radius-sm);
+  overflow: hidden;
+  font-size: 0.74rem;
+}
+
+.md-typeset table:not([class]) th {
+  background: var(--lp-bg-soft);
+  color: var(--lp-ink);
+  font-weight: 600;
+}
+
+.md-typeset .admonition,
+.md-typeset details {
+  border-radius: var(--lp-radius-sm);
+  border-width: 1px;
+  box-shadow: none;
+  font-size: 0.78rem;
+}
+
+.md-typeset pre > code,
+.md-typeset .highlight pre { border-radius: var(--lp-radius-sm); }
+
+.md-typeset .md-button {
+  border-radius: var(--lp-radius-sm);
+  font-weight: 600;
+}
+
+.md-typeset .md-button--primary {
+  background: var(--lp-accent);
+  border-color: var(--lp-accent);
+  color: var(--lp-on-accent);
+}
+
+.md-typeset .md-button--primary:hover {
+  background: var(--lp-accent-hover);
+  border-color: var(--lp-accent-hover);
+  color: var(--lp-on-accent);
+}
+
+/* Material grid cards */
+.md-typeset .grid.cards > ul > li,
+.md-typeset .grid > .card {
+  border: 1px solid var(--lp-line);
+  border-radius: var(--lp-radius);
+  background: var(--lp-surface);
+  box-shadow: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.md-typeset .grid.cards > ul > li:hover,
+.md-typeset .grid > .card:hover {
+  border-color: var(--lp-line-strong);
+  box-shadow: var(--lp-shadow);
+}
+
+/* Research timeline (research-line page) */
+[dir] .md-typeset ol.sdp-timeline {
+  position: relative;
+  display: block;
+  margin: 2rem 0;
+  padding: 0 0 0 1.6rem;
+  list-style: none;
+}
+
+.md-typeset ol.sdp-timeline::before {
+  content: "";
+  position: absolute;
+  left: 0.35rem;
+  top: 0.5rem;
+  bottom: 0.5rem;
+  width: 2px;
+  background: var(--lp-line-strong);
+}
+
+[dir] .md-typeset ol.sdp-timeline > li {
+  position: relative;
+  margin: 0 0 1rem;
+  padding: 1rem 1.2rem;
+  border: 1px solid var(--lp-line);
+  border-radius: var(--lp-radius);
+  background: var(--lp-surface);
+}
+
+.md-typeset ol.sdp-timeline > li::before {
+  content: "";
+  position: absolute;
+  left: calc(-1.6rem + 0.35rem + 1px - 0.35rem);
+  top: 1.25rem;
+  width: 0.7rem;
+  height: 0.7rem;
+  border-radius: 50%;
+  background: var(--lp-bg);
+  border: 2px solid var(--lp-accent);
+}
+
+.md-typeset .sdp-timeline__year {
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--lp-accent);
+}
+
+.md-typeset .sdp-timeline__title {
+  display: block;
+  margin: 0.2rem 0 0.35rem;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--lp-ink);
+}
+
+.md-typeset ol.sdp-timeline > li p { margin: 0.3rem 0; font-size: 0.76rem; }
+
+.md-typeset .sdp-timeline__links { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.6rem; }
+
+.md-typeset .sdp-timeline__links a {
+  padding: 0.15rem 0.6rem;
+  border: 1px solid var(--lp-line-strong);
+  border-radius: 999px;
+  font-size: 0.66rem;
+  font-weight: 600;
+}
+
+/* ==========================================================================
+   Product header (overrides/partials/header.html)
+   ========================================================================== */
+
+.sdp-header { background: var(--brand-header-bg, #0a0d17); box-shadow: 0 1px 0 #ffffff14; }
+.sdp-header .md-header__inner { gap: 0.2rem; }
+
+.sdp-brand.md-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-right: 0.6rem;
+  color: #fff;
+  text-decoration: none;
+}
+
+.sdp-brand__name {
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+}
+
+.sdp-nav {
+  display: flex;
+  align-items: center;
+  gap: 0.2rem;
+  margin: 0 0 0 0.6rem;
+  padding: 0;
+  list-style: none;
+}
+
+.sdp-nav li { margin: 0; }
+
+.sdp-nav__link {
+  display: block;
+  padding: 0.35rem 0.6rem;
+  border-radius: 6px;
+  color: #c9d3e1 !important;
+  font-size: 0.7rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: color 0.15s ease, background 0.15s ease;
+}
+
+.sdp-nav__link:hover { color: #fff !important; background: #ffffff14; }
+.sdp-nav__link.is-active { color: #fff !important; box-shadow: inset 0 -2px 0 var(--brand-header-accent, #f5a524); border-radius: 0; }
+
+.sdp-header__spacer { flex: 1; }
+
+.sdp-header__repo { color: #c9d3e1; }
+.sdp-header__repo:hover { color: #fff; }
+
+.sdp-header__cta {
+  margin-left: 0.4rem;
+  padding: 0.4rem 0.85rem;
+  border-radius: 8px;
+  background: var(--brand-header-accent, #3b5bff);
+  color: var(--brand-header-on-accent, #fff) !important;
+  font-size: 0.68rem;
+  font-weight: 700;
+  white-space: nowrap;
+  text-decoration: none;
+  transition: background 0.15s ease;
+}
+
+.sdp-header__cta:hover { filter: brightness(1.08); }
+
+@media screen and (max-width: 59.9844em) {
+  .sdp-nav, .sdp-header__cta { display: none; }
+  .sdp-header .md-header__inner > label[for="__drawer"] { order: 10; }
+}
+
+@media screen and (min-width: 76.25em) {
+  /* the drawer button is not needed when the sidebar is visible */
+  .sdp-header label[for="__drawer"] { display: none; }
+}

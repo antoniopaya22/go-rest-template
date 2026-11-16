@@ -1,0 +1,456 @@
+{#- Landing page. Design system shared with my other project sites:
+    docs/stylesheets/landing.css + docs/javascripts/home.js (only loaded here). -#}
+{% extends "main.html" %}
+
+{% block extrahead %}
+{{ super() }}
+<link rel="stylesheet" href="{{ 'stylesheets/landing.css' | url }}">
+{% endblock %}
+
+{% block header %}
+<header class="lp-nav" id="lp-nav" data-md-component="header">
+  <div class="lp-wrap lp-nav__in">
+    <a class="lp-brand" href="{{ '.' | url }}">
+      <img src="{{ 'assets/logo.svg' | url }}" alt="" width="26" height="26">
+      <span>go-rest-template</span>
+    </a>
+    <nav class="lp-nav__links" aria-label="Main">
+      <a href="#how">How it is organised</a>
+      <a href="#yours">Make it yours</a>
+      <a href="{{ 'getting-started/' | url }}">Docs</a>
+      <a href="{{ 'reference/api/' | url }}">API</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+    <div class="lp-nav__cta">
+      <a class="lp-btn lp-btn--line lp-hide-sm" href="{{ config.repo_url }}">{% include ".icons/fontawesome/brands/github.svg" %} GitHub</a>
+      <a class="lp-btn lp-btn--primary" href="{{ 'getting-started/' | url }}">Get started</a>
+    </div>
+  </div>
+</header>
+{% endblock %}
+
+{% block site_nav %}{% endblock %}
+{% block container %}{% endblock %}
+
+{% block tabs %}
+<div class="lp" id="lp">
+
+  <nav class="lp-dots" aria-label="Sections">
+    <a href="#top" data-dot="top" aria-label="Top"></a>
+    <a href="#problem" data-dot="problem" aria-label="The problem"></a>
+    <a href="#how" data-dot="how" aria-label="How it is organised"></a>
+    <a href="#yours" data-dot="yours" aria-label="Make it yours"></a>
+    <a href="#run" data-dot="run" aria-label="Run it"></a>
+    <a href="#box" data-dot="box" aria-label="What is in the box"></a>
+    <a href="#faq" data-dot="faq" aria-label="FAQ"></a>
+  </nav>
+
+  <!-- =========================================================== HERO -->
+  <section class="lp-sec lp-dark lp-hero" id="top">
+    <div class="lp-wrap lp-hero__grid">
+      <div>
+        <p class="lp-eyebrow">Go REST API template</p>
+        <h1 class="lp-display">Start from a service, <br>not a skeleton<i>.</i></h1>
+        <p class="lp-lead">A working Go API with an enforced OpenAPI contract, token authentication and
+        two databases, plus a tool that renames it and removes the parts you do not want.</p>
+        <div class="lp-row">
+          <a class="lp-btn lp-btn--primary lp-btn--lg" href="{{ 'getting-started/' | url }}">Get started</a>
+          <a class="lp-btn lp-btn--line lp-btn--lg" href="{{ config.repo_url }}">View on GitHub ↗</a>
+        </div>
+        <ul class="lp-facts">
+          <li><b>Go 1.27</b> chi router, <code>log/slog</code>, <code>database/sql</code>; no framework</li>
+          <li><b>OpenAPI 3.1</b> embedded in the binary and checked on every request</li>
+          <li><b>PostgreSQL and SQLite</b> served by one repository implementation</li>
+          <li><b>MIT</b> licensed</li>
+        </ul>
+      </div>
+
+      <figure class="lp-card lp-hero__viz" aria-label="Animation of one request crossing the service: the global middleware, the checks of the versioned API, then handler, service, repository and database, and the response travelling back the same way.">
+        <div class="lp-card__head"><span class="lp-live"></span>One request<span class="lp-card__tag">Order taken from internal/app/routes.go</span></div>
+        <svg class="lp-diagram" data-flow="pipeline" viewBox="0 0 640 348" role="img" aria-label="Request pipeline diagram">
+          <rect x="14" y="22" width="612" height="98" rx="12" class="lp-d-zone"/>
+          <text x="24" y="38" class="lp-d-zone-label">every request</text>
+          <rect x="14" y="130" width="612" height="66" rx="12" class="lp-d-zone"/>
+          <text x="24" y="146" class="lp-d-zone-label">/api/v1</text>
+          <rect x="14" y="206" width="612" height="66" rx="12" class="lp-d-zone"/>
+          <text x="24" y="222" class="lp-d-zone-label">feature package</text>
+          <polyline class="lp-d-path" points="80,60 200,60 320,60 440,60 560,60 560,96 440,96 320,96 200,96 80,96 80,171 118,171 320,171 522,171 546.5,171 546.5,247 395.5,247 244.5,247 93.5,247"/>
+          <g class="lp-d-stage" data-stage="0" data-cx="80" data-cy="60"><rect x="24" y="46" width="112" height="28" rx="8"/><text x="80" y="64" text-anchor="middle">request ID</text></g>
+          <g class="lp-d-stage" data-stage="1" data-cx="200" data-cy="60"><rect x="144" y="46" width="112" height="28" rx="8"/><text x="200" y="64" text-anchor="middle">client IP</text></g>
+          <g class="lp-d-stage lp-d-stage--opt" data-stage="2" data-cx="320" data-cy="60"><rect x="264" y="46" width="112" height="28" rx="8"/><text x="320" y="64" text-anchor="middle">tracing</text></g>
+          <g class="lp-d-stage" data-stage="3" data-cx="440" data-cy="60"><rect x="384" y="46" width="112" height="28" rx="8"/><text x="440" y="64" text-anchor="middle">logger</text></g>
+          <g class="lp-d-stage" data-stage="4" data-cx="560" data-cy="60"><rect x="504" y="46" width="112" height="28" rx="8"/><text x="560" y="64" text-anchor="middle">recover</text></g>
+          <g class="lp-d-stage lp-d-stage--opt" data-stage="5" data-cx="560" data-cy="96"><rect x="504" y="82" width="112" height="28" rx="8"/><text x="560" y="100" text-anchor="middle">metrics</text></g>
+          <g class="lp-d-stage" data-stage="6" data-cx="440" data-cy="96"><rect x="384" y="82" width="112" height="28" rx="8"/><text x="440" y="100" text-anchor="middle">security headers</text></g>
+          <g class="lp-d-stage" data-stage="7" data-cx="320" data-cy="96"><rect x="264" y="82" width="112" height="28" rx="8"/><text x="320" y="100" text-anchor="middle">CORS</text></g>
+          <g class="lp-d-stage" data-stage="8" data-cx="200" data-cy="96"><rect x="144" y="82" width="112" height="28" rx="8"/><text x="200" y="100" text-anchor="middle">body limit</text></g>
+          <g class="lp-d-stage" data-stage="9" data-cx="80" data-cy="96"><rect x="24" y="82" width="112" height="28" rx="8"/><text x="80" y="100" text-anchor="middle">timeout</text></g>
+          <g class="lp-d-stage lp-d-stage--opt" data-stage="10" data-cx="118" data-cy="171"><rect x="24" y="156" width="188" height="30" rx="8"/><text x="118" y="175" text-anchor="middle">rate limit</text></g>
+          <g class="lp-d-stage" data-stage="11" data-cx="320" data-cy="171"><rect x="226" y="156" width="188" height="30" rx="8"/><text x="320" y="175" text-anchor="middle">contract validation</text></g>
+          <g class="lp-d-stage" data-stage="12" data-cx="522" data-cy="171"><rect x="428" y="156" width="188" height="30" rx="8"/><text x="522" y="175" text-anchor="middle">authentication</text></g>
+          <g class="lp-d-stage" data-stage="13" data-cx="546.5" data-cy="247"><rect x="477" y="232" width="139" height="30" rx="8"/><text x="546.5" y="251" text-anchor="middle">handler</text></g>
+          <g class="lp-d-stage" data-stage="14" data-cx="395.5" data-cy="247"><rect x="326" y="232" width="139" height="30" rx="8"/><text x="395.5" y="251" text-anchor="middle">service</text></g>
+          <g class="lp-d-stage" data-stage="15" data-cx="244.5" data-cy="247"><rect x="175" y="232" width="139" height="30" rx="8"/><text x="244.5" y="251" text-anchor="middle">repository</text></g>
+          <g class="lp-d-stage" data-stage="16" data-cx="93.5" data-cy="247"><rect x="24" y="232" width="139" height="30" rx="8"/><text x="93.5" y="251" text-anchor="middle">database</text></g>
+          <rect x="24" y="288" width="22" height="12" rx="4" class="lp-d-legend-box"/>
+          <text x="54" y="298" class="lp-d-legend">optional module, removable when you create your project</text>
+          <circle id="lp-p-req" r="7" cx="80" cy="60" class="lp-d-pkt lp-d-pkt--req" opacity="0"/>
+          <text id="lp-status" x="24" y="334" class="lp-d-status">GET /api/v1/tasks/7</text>
+        </svg>
+        <div class="lp-flow__bar">
+          <ol class="lp-flow__steps" aria-label="Steps">
+            <li><button type="button" data-step="0" data-from="0" data-to="9" aria-current="step" data-status="GET /api/v1/tasks/7 · request ID assigned" data-caption="Every request gets an ID and a logger that carries it, runs inside panic recovery and is bounded in size and time before any application code sees it.">1 Arrive</button></li>
+            <li><button type="button" data-step="1" data-from="10" data-to="12" data-status="rate limit · contract · bearer token" data-caption="The versioned API is rate limited per client IP, validated against the OpenAPI contract and authenticated. The caller is reloaded from the database on every request.">2 Guard</button></li>
+            <li><button type="button" data-step="2" data-from="13" data-to="16" data-status="SELECT … FROM tasks WHERE id = ?" data-caption="The handler authorizes the caller, the service applies the rules and the repository runs SQL written once for both databases.">3 Handle</button></li>
+            <li><button type="button" data-step="3" data-back="1" data-status='200 OK · ETag: "3" · X-Request-ID' data-caption="The response travels back: checked against the contract in development, counted and timed, then logged in one record.">4 Respond</button></li>
+          </ol>
+          <div class="lp-flow__ctl">
+            <button type="button" data-flow="toggle" aria-label="Pause animation">❚❚</button>
+            <button type="button" data-flow="restart" aria-label="Restart animation">↺</button>
+          </div>
+        </div>
+        <p class="lp-flow__caption" id="lp-flow-caption" aria-live="polite">Every request gets an ID and a logger that carries it, runs inside panic recovery and is bounded in size and time before any application code sees it.</p>
+      </figure>
+    </div>
+    <div class="lp-wrap">
+      <div class="lp-strip">
+        <div><span>What you get</span><b>A service that already runs</b></div>
+        <div><span>What you choose</span><b>Database, modules, deployment</b></div>
+        <div><span>What you keep</span><b>Only the code you chose</b></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================================================== PROBLEM -->
+  <section class="lp-sec lp-light" id="problem">
+    <div class="lp-wrap">
+      <div class="lp-split">
+        <div>
+          <p class="lp-eyebrow">The problem</p>
+          <h2 class="lp-h2">The same decisions, <br>every new service<i>.</i></h2>
+        </div>
+        <p class="lp-text">Before a new API does anything useful it needs an error format, pagination,
+        authentication, migrations, configuration, logging, tests and a way to ship. A template
+        answers those once. A template you cannot trim leaves code in your repository that you
+        did not choose and have to maintain.</p>
+      </div>
+      <div class="lp-cols">
+        <div><h3>Decided, not implied</h3><p>Errors, lists, concurrent updates and tokens each follow one documented convention, used by every endpoint.</p></div>
+        <div><h3>Removable by design</h3><p>Optional code is delimited by marker comments. Turning a module off deletes it together with its dependencies.</p></div>
+        <div><h3>Checked, not promised</h3><p>CI generates projects with different options and builds, vets and tests each one.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ HOW -->
+  <section class="lp-sec lp-dark" id="how">
+    <div class="lp-wrap">
+      <div class="lp-split">
+        <div>
+          <p class="lp-eyebrow">How it is organised</p>
+          <h2 class="lp-h2">Features on top, <br>platform below<i>.</i></h2>
+        </div>
+        <p class="lp-text">A feature package owns its model, rules, storage and HTTP endpoints. The
+        platform layer holds what features share. One file, the composition root, knows about
+        all of them.</p>
+      </div>
+      <div class="lp-cols lp-cols--dark">
+        <div><span class="lp-num">01</span><h3>Feature packages</h3><p><code>internal/users</code> and <code>internal/tasks</code> each hold a model, a service, a repository and a handler. Features do not import each other.</p></div>
+        <div><span class="lp-num">02</span><h3>The contract decides</h3><p><code>api/openapi.yaml</code> is embedded in the binary. Requests that do not match it are rejected, and a test fails when a route and the document disagree.</p></div>
+        <div><span class="lp-num">03</span><h3>One composition root</h3><p><code>internal/app</code> constructs every component and mounts every route. Adding a feature touches two files there and nothing else.</p></div>
+      </div>
+      <div class="lp-code lp-code--wide">
+        <div class="lp-win">
+          <div class="lp-win__bar"><i></i><i></i><i></i><span>project layout</span></div>
+<pre class="lp-win__body lp-win__body--auto"><code>api/openapi.yaml        <span class="c"># the contract, embedded and enforced</span>
+cmd/api                 <span class="c"># the server</span>
+cmd/migrate             <span class="c"># up, down, status</span>
+internal/
+  app/                  <span class="c"># composition root: wiring and routes</span>
+  auth/                 <span class="c"># tokens, passwords, authentication middleware</span>
+  users/                <span class="c"># a feature: model, service, repository, handler</span>
+  tasks/                <span class="c"># the example feature, source of the generator</span>
+  config/               <span class="c"># every variable declared once</span>
+  platform/             <span class="c"># database, httpx, middleware, contract, tracing</span>
+migrations/             <span class="c"># SQL per driver, embedded</span>
+tools/init              <span class="c"># turns the template into your project</span>
+tools/scaffold          <span class="c"># generates a resource</span></code></pre>
+        </div>
+      </div>
+      <p class="lp-note"><a href="{{ 'architecture/' | url }}">Packages and dependency rules →</a></p>
+    </div>
+  </section>
+
+  <!-- ========================================================== YOURS -->
+  <section class="lp-sec lp-light" id="yours">
+    <div class="lp-wrap">
+      <div class="lp-split">
+        <div>
+          <p class="lp-eyebrow">Make it yours</p>
+          <h2 class="lp-h2">Keep what you need, <br>delete the rest<i>.</i></h2>
+        </div>
+        <p class="lp-text">The init tool renames the module and the application, removes the options
+        you turn off, deletes what belongs to the template itself, runs <code>go mod tidy</code> and
+        regenerates the example environment file. It asks questions, or takes flags.</p>
+      </div>
+      <div class="lp-code">
+        <div class="lp-win">
+          <div class="lp-win__bar"><i></i><i></i><i></i><span>terminal</span><button type="button" data-copy="go run ./tools/init -yes -module github.com/acme/billing -db postgres -tracing=false">Copy</button></div>
+<pre class="lp-win__body lp-term" aria-label="Output of the init tool, shortened"><span class="ln cmd"><span class="p">$</span> go run ./tools/init -yes \
+    -module github.com/acme/billing -db postgres -tracing=false
+</span><span class="ln"><span class="ok">billing is ready.</span>
+</span><span class="ln">
+  module   github.com/acme/billing
+  kept     dev container, example resource, helm chart,
+           metrics, postgres, rate limiting
+  removed  observability stack, sqlite, tracing
+</span><span class="ln cmd"><span class="p">$</span> make check
+</span></pre>
+        </div>
+        <div class="lp-win">
+          <div class="lp-win__bar"><i></i><i></i><i></i><span>internal/app/routes.go</span></div>
+<pre class="lp-win__body"><code>r.Use(middleware.Logger(a.logger))
+r.Use(middleware.Recover)
+<span class="c">// init:metrics:begin</span>
+<span class="k">if</span> a.cfg.Metrics.Enabled {
+    r.Use(middleware.Metrics(a.registry))
+}
+<span class="c">// init:metrics:end</span>
+r.Use(middleware.SecurityHeaders)
+
+a.users.Routes(r, a.authn)
+a.tasks.Routes(r, a.authn) <span class="c">// init:example</span></code></pre>
+        </div>
+      </div>
+      <div class="lp-table lp-table--opts">
+        <div class="lp-table__row lp-table__head"><span>Flag</span><span>Default</span><span>What it controls</span></div>
+        <div class="lp-table__row"><code>-module</code><span>required</span><span>Go module path of the new project</span></div>
+        <div class="lp-table__row"><code>-name</code><span>last path element</span><span>Application name: service name, image and chart</span></div>
+        <div class="lp-table__row"><code>-db</code><span>both</span><span><code>both</code>, <code>postgres</code> or <code>sqlite</code>; the other driver and its migrations are deleted</span></div>
+        <div class="lp-table__row"><code>-example</code><span>true</span><span>The tasks resource and the resource generator</span></div>
+        <div class="lp-table__row"><code>-metrics</code><span>true</span><span>Prometheus metrics</span></div>
+        <div class="lp-table__row"><code>-tracing</code><span>true</span><span>OpenTelemetry tracing</span></div>
+        <div class="lp-table__row"><code>-ratelimit</code><span>true</span><span>Rate limiting per client IP</span></div>
+        <div class="lp-table__row"><code>-observability</code><span>true</span><span>Prometheus, Grafana and Tempo compose profile; needs postgres, metrics and tracing</span></div>
+        <div class="lp-table__row"><code>-helm</code><span>true</span><span>The Helm chart; needs postgres</span></div>
+        <div class="lp-table__row"><code>-devcontainer</code><span>true</span><span>The dev container</span></div>
+      </div>
+      <p class="lp-note"><code>make test-init</code>, which CI runs, generates nine projects with different options. Each one must be free of
+      template leftovers, pass <code>gofmt</code>, build, pass <code>go vet</code> and pass its tests; projects that keep the
+      example also generate a resource and test it. Linting the generated projects is opt-in with <code>INIT_LINT=1</code>.
+      <a href="{{ 'getting-started/create-your-project/' | url }}">Create your project →</a></p>
+
+      <div class="lp-code" style="margin-top: clamp(2.5rem, 5vw, 3.5rem)">
+        <div class="lp-win">
+          <div class="lp-win__bar"><i></i><i></i><i></i><span>terminal</span><button type="button" data-copy="make resource name=project">Copy</button></div>
+<pre class="lp-win__body lp-term" aria-label="Output of the resource generator, recorded from a run"><span class="ln cmd"><span class="p">$</span> make resource name=project
+</span><span class="ln"><span class="ok">Created the projects resource:</span>
+</span><span class="ln">  internal/projects/api_test.go
+  internal/projects/handler.go
+  internal/projects/repository.go
+  internal/projects/service.go
+  internal/projects/project.go
+  migrations/postgres/00003_projects.sql
+  migrations/sqlite/00003_projects.sql
+</span><span class="ln">
+Updated api/openapi.yaml, internal/app/app.go
+and internal/app/routes.go.
+</span></pre>
+        </div>
+        <div>
+          <p class="lp-text" style="margin-top: 0">The generator clones the tasks example under a new name: feature package, one migration
+          per driver, the paths and schemas in the OpenAPI document, and the wiring. The result builds, passes
+          its own end-to-end tests and serves a working CRUD API. From there you change the fields and the rules.</p>
+          <p class="lp-note">Names are a single lowercase word; pass <code>plural=</code> when adding an s is not right.
+          <a href="{{ 'guides/add-a-resource/' | url }}">Add a resource →</a></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ RUN -->
+  <section class="lp-sec lp-light" id="run">
+    <div class="lp-wrap">
+      <div class="lp-split">
+        <div>
+          <p class="lp-eyebrow">Run it</p>
+          <h2 class="lp-h2">From clone <br>to first request<i>.</i></h2>
+        </div>
+        <p class="lp-text">In development the service uses a SQLite file, so Go is the only
+        requirement. The same binary runs against PostgreSQL in Compose, in the container image
+        and in the Helm chart.</p>
+      </div>
+      <div class="lp-tabs" id="lp-run-tabs">
+        <div class="lp-tabs__bar" role="tablist" aria-label="Ways to run it">
+          <button type="button" role="tab" aria-selected="true" data-tab="local">Local</button>
+          <button type="button" role="tab" aria-selected="false" data-tab="compose">Compose</button>
+          <button type="button" role="tab" aria-selected="false" data-tab="docker">Docker</button>
+        </div>
+        <div class="lp-tabs__panel" data-panel="local">
+          <div class="lp-win">
+            <div class="lp-win__bar"><i></i><i></i><i></i><span>terminal</span></div>
+<pre class="lp-win__body lp-win__body--auto"><code><span class="c"># SQLite file under data/, API on :8080, metrics on :9090</span>
+BOOTSTRAP_ADMIN_ENABLED=true BOOTSTRAP_ADMIN_USERNAME=admin \
+BOOTSTRAP_ADMIN_FIRST_NAME=Ada BOOTSTRAP_ADMIN_LAST_NAME=Lovelace \
+BOOTSTRAP_ADMIN_PASSWORD=change-me-now-123 make run</code></pre>
+          </div>
+        </div>
+        <div class="lp-tabs__panel" data-panel="compose" hidden>
+          <div class="lp-win">
+            <div class="lp-win__bar"><i></i><i></i><i></i><span>terminal</span></div>
+<pre class="lp-win__body lp-win__body--auto"><code><span class="c"># the API with PostgreSQL; creates admin / change-me-now-123</span>
+make compose-up
+
+<span class="c"># the same plus Prometheus, Grafana and Tempo</span>
+make obs-up</code></pre>
+          </div>
+        </div>
+        <div class="lp-tabs__panel" data-panel="docker" hidden>
+          <div class="lp-win">
+            <div class="lp-win__bar"><i></i><i></i><i></i><span>terminal</span></div>
+<pre class="lp-win__body lp-win__body--auto"><code>make docker-build
+docker run --rm -p 8080:8080 -p 9090:9090 \
+  -e APP_ENV=development -e DATABASE_DRIVER=sqlite -e SQLITE_PATH=/tmp/app.db \
+  -e BOOTSTRAP_ADMIN_ENABLED=true -e BOOTSTRAP_ADMIN_USERNAME=admin \
+  -e BOOTSTRAP_ADMIN_FIRST_NAME=Ada -e BOOTSTRAP_ADMIN_LAST_NAME=Lovelace \
+  -e BOOTSTRAP_ADMIN_PASSWORD=change-me-now-123 go-rest-template:dev</code></pre>
+          </div>
+        </div>
+      </div>
+      <div class="lp-code lp-code--wide">
+        <div class="lp-win">
+          <div class="lp-win__bar"><i></i><i></i><i></i><span>terminal</span></div>
+<pre class="lp-win__body lp-term" aria-label="A curl session against the running API"><span class="ln cmd"><span class="p">$</span> curl -s localhost:8080/api/v1/auth/login -H 'Content-Type: application/json' \
+    -d '{"username":"admin","password":"change-me-now-123"}'
+</span><span class="ln">{"access_token":"eyJhbGciOi…","refresh_token":"…","token_type":"Bearer","expires_in":900}
+</span><span class="ln cmd"><span class="p">$</span> curl -si localhost:8080/api/v1/tasks -H "Authorization: Bearer $TOKEN" \
+    -H 'Content-Type: application/json' -d '{"title":"Write docs","description":"All of them"}'
+</span><span class="ln"><span class="ok">HTTP/1.1 201 Created</span>
+Etag: "1"
+{"id":1,"title":"Write docs","description":"All of them","status":"pending","user_id":1,…}
+</span><span class="ln cmd"><span class="p">$</span> curl -s localhost:8080/api/v1/tasks -H "Authorization: Bearer $TOKEN" \
+    -H 'Content-Type: application/json' -d '{"title":"","description":"x"}'
+</span><span class="ln">{"type":"about:blank","title":"Bad Request","status":400,"detail":"request validation failed",
+ "code":"invalid_argument","request_id":"…","errors":[{"field":"title","message":"minimum string length is 1"}]}
+</span></pre>
+        </div>
+      </div>
+      <p class="lp-note">Responses shortened. <a href="{{ 'getting-started/quickstart/' | url }}">Full quickstart →</a></p>
+    </div>
+  </section>
+
+  <!-- ============================================================ BOX -->
+  <section class="lp-sec lp-dark" id="box">
+    <div class="lp-wrap">
+      <div class="lp-split">
+        <div>
+          <p class="lp-eyebrow">What is in the box</p>
+          <h2 class="lp-h2">The parts you would <br>write anyway<i>.</i></h2>
+        </div>
+        <p class="lp-text">Each item is implemented, tested and documented. The ones marked optional
+        can be removed when you create your project.</p>
+      </div>
+      <div class="lp-box">
+        <a href="{{ 'architecture/errors/' | url }}"><h3>Problem responses</h3><p>RFC 9457 errors with a stable <code>code</code>, the request ID and per-field details. Internal causes are logged, never sent.</p></a>
+        <a href="{{ 'guides/api-conventions/' | url }}"><h3>Cursor pagination</h3><p>Lists return <code>{data, next_cursor}</code> with an opaque cursor, 20 items by default and 100 at most.</p></a>
+        <a href="{{ 'guides/api-conventions/' | url }}"><h3>ETag and If-Match</h3><p>Every row has a version. A stale <code>If-Match</code> gets 412 and a concurrent write gets 409.</p></a>
+        <a href="{{ 'guides/authentication/' | url }}"><h3>Rotating refresh tokens</h3><p>Each refresh token works once. Presenting it twice revokes every token issued from that login.</p></a>
+        <a href="{{ 'guides/authentication/' | url }}"><h3>HS256 or EdDSA</h3><p>With EdDSA the public key is published at <code>/.well-known/jwks.json</code>.</p></a>
+        <a href="{{ 'guides/database/' | url }}"><h3>Migrations</h3><p>Embedded SQL run by goose, with down migrations and an advisory lock on PostgreSQL.</p></a>
+        <a href="{{ 'guides/observability/' | url }}"><h3>Admin port</h3><p>Metrics and pprof listen on a separate port, away from the public API.</p></a>
+        <a href="{{ 'guides/observability/' | url }}"><h3>Prometheus metrics</h3><p>Request count, latency histogram and in-flight gauge, labelled by route template. Optional.</p></a>
+        <a href="{{ 'guides/observability/' | url }}"><h3>OpenTelemetry</h3><p>Server spans exported over OTLP/HTTP when <code>OTEL_ENABLED=true</code>. Optional.</p></a>
+        <a href="{{ 'architecture/request-lifecycle/' | url }}"><h3>Rate limiting</h3><p>Per client IP, with a tighter budget for the authentication endpoints. Counters are per process. Optional.</p></a>
+        <a href="{{ 'deployment/kubernetes/' | url }}"><h3>Helm chart</h3><p>Probes, restricted security context, and optional ingress, autoscaling, disruption budget and network policy.</p></a>
+        <a href="{{ 'reference/make-targets/' | url }}"><h3>Release automation</h3><p>release-please cuts versions; binaries ship with an SBOM and the image is signed with cosign.</p></a>
+      </div>
+      <div class="lp-row"><a class="lp-btn lp-btn--line" href="{{ 'guides/' | url }}">Guides →</a> <a class="lp-btn lp-btn--line" href="{{ 'reference/configuration/' | url }}">Configuration reference →</a></div>
+    </div>
+  </section>
+
+  <!-- ============================================================ FAQ -->
+  <section class="lp-sec lp-light" id="faq">
+    <div class="lp-wrap lp-faq">
+      <h2 class="lp-h2">Questions<i>.</i></h2>
+      <div class="lp-faq__list">
+        <details open><summary>Why chi and not a framework?</summary>
+          <p>chi is a router built on <code>net/http</code>: handlers are standard
+          <code>http.HandlerFunc</code> values and middleware is <code>func(http.Handler) http.Handler</code>.
+          Nothing in the feature packages depends on a framework type, so the router is the only part you
+          would have to replace.</p></details>
+        <details><summary>Why hand-written SQL instead of an ORM or a generator?</summary>
+          <p>The template supports two databases with one repository per resource. Queries are written once
+          with <code>?</code> placeholders and rewritten for PostgreSQL at run time, which keeps the SQL visible
+          and the generator simple. If you keep a single database, adding a query generator is a local change
+          inside each repository.</p></details>
+        <details><summary>Why two binaries?</summary>
+          <p><code>cmd/api</code> serves and <code>cmd/migrate</code> changes the schema. Keeping them apart lets
+          you run migrations as a separate step with different credentials. Both are in the container image,
+          and the server can also migrate at startup with <code>DATABASE_AUTO_MIGRATE</code>.</p></details>
+        <details><summary>Is SQLite supported in production?</summary>
+          <p>It works, with limits: the pool is one connection because SQLite has a single writer, and the
+          Compose file and the Helm chart assume PostgreSQL. SQLite is meant for development, tests and small
+          single-instance deployments. PostgreSQL is the production default.</p></details>
+        <details><summary>How do I pick up later changes of the template?</summary>
+          <p>There is no automatic sync. A generated project is independent: the init tool deletes itself and
+          the markers, and from then on the code is yours. To adopt a later change, read the
+          <a href="{{ 'project/changelog/' | url }}">changelog</a> and port what you want.</p></details>
+        <details><summary>What does the init tool do with the license?</summary>
+          <p>It keeps <code>LICENSE</code>, which is the MIT license of the template. Add your own copyright
+          line or replace the file with the license of your project.</p></details>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ CTA -->
+  <section class="lp-sec lp-cta">
+    <div class="lp-wrap">
+      <h2 class="lp-display lp-display--md">Create your <br>project<i>.</i></h2>
+      <p class="lp-lead">Clone it, answer a few questions and run the tests of what is left.</p>
+      <div class="lp-install">
+        <span>$</span><code>git clone https://github.com/antoniopaya22/go-rest-template billing && cd billing && make init</code>
+        <button type="button" data-copy="git clone https://github.com/antoniopaya22/go-rest-template billing && cd billing && make init">Copy</button>
+      </div>
+      <div class="lp-row">
+        <a class="lp-btn lp-btn--dark lp-btn--lg" href="{{ 'getting-started/create-your-project/' | url }}">Create your project</a>
+        <a class="lp-btn lp-btn--onblue lp-btn--lg" href="{{ config.repo_url }}">Star on GitHub ↗</a>
+      </div>
+      <div class="lp-watermark" aria-hidden="true">go rest</div>
+    </div>
+  </section>
+</div>
+{% endblock %}
+
+{% block footer %}
+<footer class="lp-foot">
+  <div class="lp-wrap lp-foot__grid">
+    <div>
+      <a class="lp-brand" href="{{ '.' | url }}"><img src="{{ 'assets/logo.svg' | url }}" alt="" width="22" height="22"><span>go-rest-template</span></a>
+      <p>Go REST API template with an enforced OpenAPI contract and a tool that trims it down to your project.</p>
+    </div>
+    <div><h4>Documentation</h4>
+      <a href="{{ 'getting-started/' | url }}">Getting started</a>
+      <a href="{{ 'architecture/' | url }}">Architecture</a>
+      <a href="{{ 'guides/' | url }}">Guides</a>
+      <a href="{{ 'deployment/' | url }}">Deployment</a></div>
+    <div><h4>Reference</h4>
+      <a href="{{ 'reference/configuration/' | url }}">Configuration</a>
+      <a href="{{ 'reference/api/' | url }}">HTTP API</a>
+      <a href="{{ 'reference/make-targets/' | url }}">Make targets</a>
+      <a href="{{ 'project/migrating-from-2/' | url }}">Migrating from 2.x</a></div>
+    <div><h4>Project</h4>
+      <a href="{{ config.repo_url }}">GitHub</a>
+      <a href="{{ 'project/changelog/' | url }}">Changelog</a>
+      <a href="{{ 'project/contributing/' | url }}">Contributing</a>
+      <a href="{{ 'project/license/' | url }}">MIT license</a></div>
+  </div>
+  <div class="lp-wrap lp-foot__base">© Antonio Payá González and contributors</div>
+</footer>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/ScrollTrigger.min.js"></script>
+<script src="{{ 'javascripts/home.js' | url }}"></script>
+{% endblock %}
