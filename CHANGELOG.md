@@ -4,6 +4,30 @@ All notable changes to this project are documented in this file. From 3.0.0
 onwards it is maintained by [release-please](https://github.com/googleapis/release-please)
 from [Conventional Commits](https://www.conventionalcommits.org/).
 
+## [3.0.0](https://github.com/antoniopaya22/go-rest-template/compare/2.0.1...v3.0.0) (2026-11-16)
+
+
+### ⚠ BREAKING CHANGES
+
+* the HTTP API, the configuration variables and the database schema are not compatible with 2.x. See the migration guide.
+
+### Features
+
+* add the init tool and the resource generator ([122950b](https://github.com/antoniopaya22/go-rest-template/commit/122950b5bdc0fd6d91046eff68686228fbddaac9))
+* rewrite the core around feature packages ([4247ac9](https://github.com/antoniopaya22/go-rest-template/commit/4247ac902b601918f446a293a019359f803fc6b4))
+
+
+### Bug Fixes
+
+* repair the Docker build and harden CI ([#12](https://github.com/antoniopaya22/go-rest-template/issues/12)) ([f06c837](https://github.com/antoniopaya22/go-rest-template/commit/f06c8378298dfb31f440b00a537a53d9bc850efe))
+* return timestamps in UTC on every database driver ([b586f75](https://github.com/antoniopaya22/go-rest-template/commit/b586f752f82a04ac194f29101c549879178cbcca))
+
+
+### Documentation
+
+* add the project website ([0979ef7](https://github.com/antoniopaya22/go-rest-template/commit/0979ef7303b2a7a07ef1f093b19f4a8d72546300))
+* rewrite the README for v3 and seed the changelog ([2fe3065](https://github.com/antoniopaya22/go-rest-template/commit/2fe306587f868f400f5a24dc7ca9e489fad741f8))
+
 ## 2.0.1 (2026-10-13)
 
 Security release.
