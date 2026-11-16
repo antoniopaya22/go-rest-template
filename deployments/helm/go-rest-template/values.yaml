@@ -18,10 +18,10 @@ config:
   LOG_LEVEL: INFO
   LOG_FORMAT: json
   DATABASE_DRIVER: postgres
-  # The image ships only the API server, so there is no separate migration job:
-  # the server applies pending migrations at startup. Migrations take a database
-  # lock, so several replicas starting at once is safe. Set this to "false" to
-  # run `migrate up` yourself as part of your delivery pipeline instead.
+  # The server applies pending migrations at startup. Migrations take a
+  # PostgreSQL advisory lock, so several replicas starting at once is safe. Set
+  # this to "false" to run `/app/migrate up`, which the image also ships, as a
+  # step of your delivery pipeline instead.
   DATABASE_AUTO_MIGRATE: "true"
   METRICS_ENABLED: "true"
   OTEL_ENABLED: "false"

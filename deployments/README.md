@@ -99,11 +99,12 @@ secrets:
 
 ### Migrations
 
-The image contains only the API server, so the chart has no migration job. The
-server applies pending migrations at startup (`config.DATABASE_AUTO_MIGRATE`,
-on by default). To run them as a separate step of your pipeline instead, set it
-to `"false"` and run the `migrate up` command from a release binary or from
-source against the same database before rolling out.
+The server applies pending migrations at startup (`config.DATABASE_AUTO_MIGRATE`,
+on by default), holding a PostgreSQL advisory lock so replicas that start
+together do not race. The chart has no migration job. To run migrations as a
+separate step of your pipeline instead, set the value to `"false"` and run
+`/app/migrate up`, which the image ships next to the server, against the same
+database before rolling out.
 
 ### Configuration
 

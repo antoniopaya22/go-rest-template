@@ -36,7 +36,7 @@ pprof) is on port 9090.
 
 | Command | What it does |
 |---|---|
-| `make check` | Everything CI runs locally: format, vet, lint, tests |
+| `make check` | What CI runs on the code: tidy, vet, lint and tests with the race detector |
 | `make test` | Unit and integration tests against SQLite |
 | `make test-race` | The same with the race detector |
 | `make cover` | Tests with coverage, written to `coverage.out` |
