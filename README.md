@@ -1,173 +1,148 @@
+<div align="center">
+
 # go-rest-template
 
+**A Go REST API template you can cut down to what you need.**
+
 [![CI](https://github.com/antoniopaya22/go-rest-template/actions/workflows/ci.yml/badge.svg)](https://github.com/antoniopaya22/go-rest-template/actions/workflows/ci.yml)
+[![Release](https://img.shields.io/github/v/release/antoniopaya22/go-rest-template?sort=semver)](https://github.com/antoniopaya22/go-rest-template/releases)
 [![Go](https://img.shields.io/github/go-mod/go-version/antoniopaya22/go-rest-template?logo=go&logoColor=white&color=00ADD8)](go.mod)
+[![codecov](https://codecov.io/gh/antoniopaya22/go-rest-template/graph/badge.svg)](https://codecov.io/gh/antoniopaya22/go-rest-template)
 [![CodeQL](https://github.com/antoniopaya22/go-rest-template/actions/workflows/codeql.yml/badge.svg)](https://github.com/antoniopaya22/go-rest-template/actions/workflows/codeql.yml)
 [![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/antoniopaya22/go-rest-template/badge)](https://scorecard.dev/viewer/?uri=github.com/antoniopaya22/go-rest-template)
 [![License: MIT](https://img.shields.io/github/license/antoniopaya22/go-rest-template)](LICENSE)
-[![Stars](https://img.shields.io/github/stars/antoniopaya22/go-rest-template?style=flat&logo=github)](https://github.com/antoniopaya22/go-rest-template/stargazers)
 
-Modern Go 1.26 REST API template with a small but production-oriented foundation:
+[Documentation](https://antoniopaya22.github.io/go-rest-template/) ·
+[Quickstart](https://antoniopaya22.github.io/go-rest-template/getting-started/quickstart/) ·
+[Changelog](CHANGELOG.md)
 
-- Standard-library-first bootstrap with graceful shutdown.
-- `chi` HTTP router with request IDs, timeouts, structured logging and CORS.
-- `slog` logging.
-- JWT auth with `golang-jwt/jwt/v5`.
-- OpenAPI 3.1 contract with request and response validation.
-- PostgreSQL-first persistence for production with SQLite retained for local development.
-- First-admin bootstrap flow for clean environment provisioning.
-- Service and repository layers with explicit `context.Context` propagation.
-- Health endpoints, Prometheus metrics and optional pprof.
-- Table-driven tests, `go vet`, `golangci-lint` and GitHub Actions CI.
+</div>
 
-The legacy Gin-based implementation (v1) is available in the [`1.0.0` tag](https://github.com/antoniopaya22/go-rest-template/tree/1.0.0).
+A working service, not a skeleton: authentication, users and an example
+resource on PostgreSQL or SQLite, described by an OpenAPI 3.1 contract that is
+enforced at runtime. An init tool renames it and removes the parts you do not
+want, and CI checks that every combination of options still builds and passes
+its tests.
 
-## Quick start
+## Start a project
 
-1. Export the variables you want to override in your shell; [configs/env.example](configs/env.example) lists every one with its default. The application reads the process environment only, it does not load `.env` files.
-2. Ensure Go 1.26 is installed and available in your terminal.
-3. Run the application:
+Create a repository with **Use this template** (or clone this one), then:
 
 ```sh
-go mod tidy
-go run ./cmd/api
+make init
 ```
 
-The API starts on `http://localhost:8080` by default.
+It asks for your module path and what to keep. The same without questions:
 
-Documentation is available at `http://localhost:8080/docs`, and the raw contract at `http://localhost:8080/openapi/openapi.yaml`.
+```sh
+go run ./tools/init -yes -module github.com/acme/billing -db postgres -example=false
+```
 
-## Main endpoints
+| Option | Default | Removes when turned off |
+|---|---|---|
+| `-db both\|postgres\|sqlite` | `both` | The other driver, its migrations and its dependency |
+| `-example` | on | The `tasks` resource and the resource generator |
+| `-metrics` | on | Prometheus metrics |
+| `-tracing` | on | OpenTelemetry tracing and its dependencies |
+| `-ratelimit` | on | Per-IP rate limiting |
+| `-observability` | on | The Prometheus, Grafana and Tempo compose profile |
+| `-helm` | on | The Helm chart |
+| `-devcontainer` | on | The dev container |
 
-- `GET /health/live`
-- `GET /health/ready`
-- `GET /metrics`
-- `POST /api/v1/auth/login`
-- `POST /api/v1/users`
-- `GET /api/v1/users/me`
-- `GET /api/v1/users/{userID}`
-- `PATCH /api/v1/users/{userID}`
-- `DELETE /api/v1/users/{userID}`
-- `GET /api/v1/tasks`
-- `POST /api/v1/tasks`
-- `GET /api/v1/tasks/{taskID}`
-- `PATCH /api/v1/tasks/{taskID}`
-- `DELETE /api/v1/tasks/{taskID}`
+The website, the changelog and the init tool itself belong to the template and
+are always removed. What is left is your project.
 
-## Project layout
+## Run it
+
+```sh
+make run
+```
+
+The API listens on <http://localhost:8080> with a SQLite file under `data/`.
+The interactive reference is at `/docs`. To have an account to sign in with,
+create the first administrator at startup:
+
+```sh
+BOOTSTRAP_ADMIN_ENABLED=true BOOTSTRAP_ADMIN_USERNAME=admin \
+BOOTSTRAP_ADMIN_FIRST_NAME=Ada BOOTSTRAP_ADMIN_LAST_NAME=Lovelace \
+BOOTSTRAP_ADMIN_PASSWORD=change-me-now-123 make run
+```
+
+```sh
+curl -s localhost:8080/api/v1/auth/login \
+  -H 'Content-Type: application/json' \
+  -d '{"username":"admin","password":"change-me-now-123"}'
+```
+
+`make compose-up` runs it with PostgreSQL instead, and `make obs-up` adds
+Prometheus, Grafana and Tempo.
+
+## What is in it
+
+**API**
+
+- OpenAPI 3.1 contract embedded in the binary. Requests that do not match it are rejected before reaching a handler; a test fails when a route and the contract disagree.
+- Errors as RFC 9457 problem responses with a stable `code`, per-field details and the request ID.
+- Cursor pagination, and optimistic concurrency with `ETag` and `If-Match`.
+
+**Authentication**
+
+- Short-lived access tokens and rotating refresh tokens. Reusing a refresh token revokes every token of that login.
+- HS256, or EdDSA with the public key published as a JWKS.
+- The caller is reloaded on every request, so deleting a user or changing a role takes effect immediately.
+
+**Data**
+
+- One repository implementation for PostgreSQL and SQLite, written in plain SQL.
+- Embedded migrations run by goose, with down migrations and an advisory lock so replicas do not race.
+- Transactions that repositories join through the context.
+
+**Operations**
+
+- Health and readiness probes, build information, graceful shutdown that fails readiness first.
+- Prometheus metrics and pprof on a separate admin port; optional OpenTelemetry tracing.
+- Structured logs with `slog`, security headers, configurable CORS, rate limiting.
+- Static distroless image with its own health check, a Helm chart and a compose stack.
+
+**Project**
+
+- Configuration declared once: it validates everything at startup, reads `.env` files and generates its own reference.
+- A generator for new resources: `make resource name=project`.
+- End-to-end tests against both databases, linting, vulnerability scanning, and releases with signed images, SBOMs and build provenance.
+
+## Layout
 
 ```text
-api/
-  openapi.yaml # OpenAPI contract and source of truth for the HTTP surface
-build/
-  package/     # Container packaging assets
-configs/
-  env.example  # Environment template for local/dev/prod configuration
-cmd/
-  api/         # HTTP server entrypoint
-  migrate/     # migration command
-deployments/
-  docker-compose.yml # Local PostgreSQL + API stack
-internal/
-  app/         # application runtime wiring
-    api/       # API-specific auth, contract, transport, domain and storage packages
-  pkg/         # shared internal support packages such as config and error model
-migrations/    # backend-specific versioned SQL migrations
-scripts/       # Operational helper scripts used by Makefile and local workflows
-test/          # external integration tests and fixtures
+api/                OpenAPI contract
+cmd/api             the server
+cmd/migrate         schema migrations: up, down, status
+internal/app        composition root: wiring and routes
+internal/auth       tokens, passwords, authentication middleware
+internal/users      the users feature: model, rules, storage, endpoints
+internal/tasks      the example feature
+internal/platform   database, HTTP conventions, middleware, tracing
+internal/config     environment configuration
+migrations/         SQL migrations per driver
+deployments/        compose stack, observability and Helm chart
+tools/              init and the resource generator
 ```
 
-This repo intentionally uses the community Go layout patterns that make sense for an application template: `cmd`, `internal`, `api`, `configs`, `scripts`, `deployments`, `build/package`, `docs` and `test`.
+A feature owns everything about itself, depends only on `platform` and `auth`,
+and is mounted in one place. Removing one is deleting its directory and two
+lines in `internal/app`.
 
-## Configuration
-
-The template reads its configuration from environment variables.
-
-- `APP_ENV`: `development` or `production`
-- `HTTP_HOST`: default `0.0.0.0`
-- `HTTP_PORT`: default `8080`
-- `AUTH_SECRET`: JWT signing key
-- `AUTH_TOKEN_TTL`: token lifetime, default `24h`
-- `AUTH_BCRYPT_COST`: bcrypt cost, default `12`
-- `DATABASE_DRIVER`: `sqlite` or `postgres`
-- `DATABASE_URL`: PostgreSQL DSN when `DATABASE_DRIVER=postgres`
-- `DATABASE_MIGRATIONS_DIR`: optional custom path for migration files
-- `SQLITE_PATH`: SQLite database path when `DATABASE_DRIVER=sqlite`
-- `DATABASE_MAX_OPEN_CONNS`, `DATABASE_MAX_IDLE_CONNS`, `DATABASE_CONN_MAX_IDLE_TIME`, `DATABASE_CONN_MAX_LIFETIME`: pool settings for PostgreSQL
-- `AUTO_MIGRATE`: applies migrations on startup when `true`
-- `BOOTSTRAP_ADMIN_*`: creates the first admin automatically when enabled
-- `OPENAPI_SPEC_PATH`: path to the OpenAPI document, default `api/openapi.yaml`
-- `OPENAPI_VALIDATE_REQUESTS`, `OPENAPI_VALIDATE_RESPONSES`: toggle contract enforcement
-- `OPENAPI_SERVE_DOCUMENTATION`: enables `/docs`
-- `LOG_LEVEL`: `DEBUG`, `INFO`, `WARN`, `ERROR`
-- `ENABLE_PPROF`: exposes `/debug` when `true`
-
-## Development workflow
+## Development
 
 ```sh
-go mod tidy
-go fmt ./...
-go vet ./...
-go run github.com/golangci/golangci-lint/v2/cmd/golangci-lint@latest run
-go test -race ./...
+make help     # every target
+make check    # tidy, vet, lint and tests with the race detector
+make dev      # run with hot reload
 ```
 
-Makefile targets are also available:
-
-```sh
-make tidy
-make fmt
-make vet
-make lint
-make integration
-make test-race
-make build
-make compose-up
-make compose-down
-```
-
-The Makefile delegates to the scripts in [scripts](scripts).
-
-## Docker
-
-```sh
-docker build -f build/package/Dockerfile -t go-rest-template .
-docker run -p 8080:8080 -e AUTH_SECRET=super-secret -e DATABASE_URL=postgres://postgres:postgres@host.docker.internal:5432/go_rest_template?sslmode=disable go-rest-template
-```
-
-## Local stack
-
-For a local PostgreSQL-backed stack with the API and database together:
-
-```sh
-make compose-up
-```
-
-To stop and remove that stack:
-
-```sh
-make compose-down
-```
-
-The compose definition lives in [deployments/docker-compose.yml](deployments/docker-compose.yml) and uses [build/package/Dockerfile](build/package/Dockerfile) for the API container.
-
-## Migration strategy
-
-Migrations are plain SQL files split by backend under [migrations](migrations). They run automatically at startup when `AUTO_MIGRATE=true`, or manually with:
-
-```sh
-go run ./cmd/migrate
-```
-
-## Integration coverage
-
-`go test ./...` exercises the API end-to-end with SQLite by default. When `TEST_POSTGRES_DSN` is set, the same integration flow is executed against PostgreSQL as well, which is how CI validates both persistence backends.
-
-## Future work
-
-- Split auth, users and tasks into versioned modules if the API grows.
-- Add domain events and an outbox if asynchronous workflows appear.
-- Add stricter authorization policies if the permission model becomes more complex.
+See [CONTRIBUTING.md](CONTRIBUTING.md). The earlier versions are available as
+the [`2.0.1`](https://github.com/antoniopaya22/go-rest-template/tree/2.0.1) and
+[`1.0.0`](https://github.com/antoniopaya22/go-rest-template/tree/1.0.0) tags;
+the documentation covers [migrating from 2.x](https://antoniopaya22.github.io/go-rest-template/project/migrating/).
 
 ## License
 
