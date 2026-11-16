@@ -24,11 +24,11 @@ The legacy Gin-based implementation (v1) is available in the [`1.0.0` tag](https
 
 ## Quick start
 
-1. Copy [configs/env.example](configs/env.example) to `.env` or export the variables in your shell.
+1. Export the variables you want to override in your shell; [configs/env.example](configs/env.example) lists every one with its default. The application reads the process environment only, it does not load `.env` files.
 2. Ensure Go 1.26 is installed and available in your terminal.
 3. Run the application:
 
-```powershell
+```sh
 go mod tidy
 go run ./cmd/api
 ```
@@ -58,26 +58,26 @@ Documentation is available at `http://localhost:8080/docs`, and the raw contract
 
 ```text
 api/
-	openapi.yaml # OpenAPI contract and source of truth for the HTTP surface
+  openapi.yaml # OpenAPI contract and source of truth for the HTTP surface
 build/
-	package/     # Container packaging assets
+  package/     # Container packaging assets
 configs/
-	env.example  # Environment template for local/dev/prod configuration
+  env.example  # Environment template for local/dev/prod configuration
 cmd/
-	api/         # HTTP server entrypoint
-	migrate/     # migration command
+  api/         # HTTP server entrypoint
+  migrate/     # migration command
 deployments/
-	docker-compose.yml # Local PostgreSQL + API stack
+  docker-compose.yml # Local PostgreSQL + API stack
 internal/
-	app/         # application runtime wiring
-		api/       # API-specific auth, contract, transport, domain and storage packages
-	pkg/         # shared internal support packages such as config and error model
+  app/         # application runtime wiring
+    api/       # API-specific auth, contract, transport, domain and storage packages
+  pkg/         # shared internal support packages such as config and error model
 migrations/    # backend-specific versioned SQL migrations
 scripts/       # Operational helper scripts used by Makefile and local workflows
 test/          # external integration tests and fixtures
 ```
 
-This repo intentionally uses the community Go layout patterns that make sense for an application template: `cmd`, `internal`, `api`, `configs`, `scripts`, `deployments`, `build/package`, `docs` and `test`. Some ecosystem tools still require fixed locations, so GitHub Actions remains in `.github/workflows` even though CI assets conceptually belong under `build/ci`.
+This repo intentionally uses the community Go layout patterns that make sense for an application template: `cmd`, `internal`, `api`, `configs`, `scripts`, `deployments`, `build/package`, `docs` and `test`.
 
 ## Configuration
 
@@ -104,7 +104,7 @@ The template reads its configuration from environment variables.
 
 ## Development workflow
 
-```powershell
+```sh
 go mod tidy
 go fmt ./...
 go vet ./...
@@ -114,7 +114,7 @@ go test -race ./...
 
 Makefile targets are also available:
 
-```powershell
+```sh
 make tidy
 make fmt
 make vet
@@ -126,11 +126,11 @@ make compose-up
 make compose-down
 ```
 
-The Makefile now delegates to the scripts in [scripts](scripts), so the root Makefile stays small while the operational commands live in their own layout-appropriate directory.
+The Makefile delegates to the scripts in [scripts](scripts).
 
 ## Docker
 
-```powershell
+```sh
 docker build -f build/package/Dockerfile -t go-rest-template .
 docker run -p 8080:8080 -e AUTH_SECRET=super-secret -e DATABASE_URL=postgres://postgres:postgres@host.docker.internal:5432/go_rest_template?sslmode=disable go-rest-template
 ```
@@ -139,13 +139,13 @@ docker run -p 8080:8080 -e AUTH_SECRET=super-secret -e DATABASE_URL=postgres://p
 
 For a local PostgreSQL-backed stack with the API and database together:
 
-```powershell
+```sh
 make compose-up
 ```
 
 To stop and remove that stack:
 
-```powershell
+```sh
 make compose-down
 ```
 
@@ -155,13 +155,13 @@ The compose definition lives in [deployments/docker-compose.yml](deployments/doc
 
 Migrations are plain SQL files split by backend under [migrations](migrations). They run automatically at startup when `AUTO_MIGRATE=true`, or manually with:
 
-```powershell
+```sh
 go run ./cmd/migrate
 ```
 
 ## Integration coverage
 
-`go test ./...` now exercises the API end-to-end with SQLite by default. When `TEST_POSTGRES_DSN` is set, the same integration flow is executed against PostgreSQL as well, which is how CI validates both persistence backends.
+`go test ./...` exercises the API end-to-end with SQLite by default. When `TEST_POSTGRES_DSN` is set, the same integration flow is executed against PostgreSQL as well, which is how CI validates both persistence backends.
 
 ## Future work
 
