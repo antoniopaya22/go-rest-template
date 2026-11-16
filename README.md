@@ -139,10 +139,13 @@ make check    # tidy, vet, lint and tests with the race detector
 make dev      # run with hot reload
 ```
 
+The website lives in `docs/`: `pip install -r requirements-docs.txt`, then
+`make docs-serve`.
+
 See [CONTRIBUTING.md](CONTRIBUTING.md). The earlier versions are available as
 the [`2.0.1`](https://github.com/antoniopaya22/go-rest-template/tree/2.0.1) and
 [`1.0.0`](https://github.com/antoniopaya22/go-rest-template/tree/1.0.0) tags;
-the documentation covers [migrating from 2.x](https://antoniopaya22.github.io/go-rest-template/project/migrating/).
+the documentation covers [migrating from 2.x](https://antoniopaya22.github.io/go-rest-template/project/migrating-from-2/).
 
 ## License
 
