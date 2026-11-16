@@ -3,16 +3,18 @@ package tasks_test
 import (
 	"fmt"
 	"net/http"
+	"strings"
 	"testing"
 
 	"github.com/antoniopaya22/go-rest-template/internal/app/apptest"
 )
 
 type taskJSON struct {
-	ID     int64  `json:"id"`
-	Title  string `json:"title"`
-	Status string `json:"status"`
-	UserID int64  `json:"user_id"`
+	ID        int64  `json:"id"`
+	CreatedAt string `json:"created_at"`
+	Title     string `json:"title"`
+	Status    string `json:"status"`
+	UserID    int64  `json:"user_id"`
 }
 
 type taskPage struct {
@@ -40,6 +42,9 @@ func TestTasksAPI(t *testing.T) {
 		task, created := create(alice, map[string]any{"title": " Write docs ", "description": "All of them"}, http.StatusCreated)
 		if task.Title != "Write docs" || task.Status != "pending" || task.UserID != aliceID {
 			t.Fatalf("created task = %+v", task)
+		}
+		if !strings.HasSuffix(task.CreatedAt, "Z") {
+			t.Errorf("created_at = %q, want a UTC timestamp", task.CreatedAt)
 		}
 		path := fmt.Sprintf("/api/v1/tasks/%d", task.ID)
 

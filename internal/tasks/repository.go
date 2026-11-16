@@ -103,6 +103,8 @@ func scan(row interface{ Scan(dest ...any) error }) (Task, error) {
 	var task Task
 	err := row.Scan(&task.ID, &task.Title, &task.Description, &task.Status, &task.UserID,
 		&task.Version, &task.CreatedAt, &task.UpdatedAt)
+	// Drivers return times in different locations; the API always speaks UTC.
+	task.CreatedAt, task.UpdatedAt = task.CreatedAt.UTC(), task.UpdatedAt.UTC()
 	return task, err
 }
 

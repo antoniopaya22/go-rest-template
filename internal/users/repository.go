@@ -110,6 +110,8 @@ func scan(row interface{ Scan(dest ...any) error }) (User, error) {
 	var user User
 	err := row.Scan(&user.ID, &user.Username, &user.FirstName, &user.LastName, &user.PasswordHash,
 		&user.Role, &user.Version, &user.CreatedAt, &user.UpdatedAt)
+	// Drivers return times in different locations; the API always speaks UTC.
+	user.CreatedAt, user.UpdatedAt = user.CreatedAt.UTC(), user.UpdatedAt.UTC()
 	return user, err
 }
 

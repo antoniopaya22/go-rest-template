@@ -275,7 +275,7 @@ func run(o options, out io.Writer) error {
 	}
 
 	say(out, "%s is ready.\n\n  module   %s\n  kept     %s\n  removed  %s\n\n", o.name, o.module, list(keep, true), list(keep, false))
-	say(out, "Deleted %d files and directories that belong to the template.\n", len(removed))
+	say(out, "Deleted %d files and directories (template machinery and the options turned off).\n", len(removed))
 	say(out, "%s", `
 Next:
   1. make check          build, lint and test what was generated
