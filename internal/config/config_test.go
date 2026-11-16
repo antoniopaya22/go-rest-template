@@ -10,14 +10,11 @@ import (
 func TestDefaults(t *testing.T) {
 	t.Parallel()
 
-	cfg, err := FromMap(nil)
+	cfg, err := FromMap(map[string]string{"DATABASE_URL": "postgres://localhost/app"})
 	if err != nil {
 		t.Fatalf("defaults must be valid: %v", err)
 	}
 
-	if cfg.Database.Driver != DriverSQLite {
-		t.Errorf("development driver = %q, want sqlite", cfg.Database.Driver)
-	}
 	if !cfg.OpenAPI.ValidateResponses {
 		t.Error("responses must be validated by default in development")
 	}
@@ -32,6 +29,22 @@ func TestDefaults(t *testing.T) {
 	}
 }
 
+// init:sqlite:begin
+
+func TestDevelopmentDefaultsToSQLite(t *testing.T) {
+	t.Parallel()
+
+	cfg, err := FromMap(nil)
+	if err != nil {
+		t.Fatalf("defaults must be valid: %v", err)
+	}
+	if cfg.Database.Driver != DriverSQLite {
+		t.Errorf("development driver = %q, want sqlite", cfg.Database.Driver)
+	}
+}
+
+// init:sqlite:end
+
 func TestProductionDefaults(t *testing.T) {
 	t.Parallel()
 
@@ -44,9 +57,11 @@ func TestProductionDefaults(t *testing.T) {
 		t.Fatalf("FromMap: %v", err)
 	}
 
+	// init:postgres:begin
 	if cfg.Database.Driver != DriverPostgres {
 		t.Errorf("production driver = %q, want postgres", cfg.Database.Driver)
 	}
+	// init:postgres:end
 	if cfg.OpenAPI.ValidateResponses {
 		t.Error("responses must not be validated by default in production")
 	}
@@ -64,6 +79,7 @@ func TestOverrides(t *testing.T) {
 		"HTTP_CORS_ALLOWED_ORIGINS": "https://a.example, https://b.example",
 		"LOG_LEVEL":                 "debug",
 		"ADMIN_PORT":                "0",
+		"DATABASE_URL":              "postgres://localhost/app",
 	})
 	if err != nil {
 		t.Fatalf("FromMap: %v", err)
@@ -95,7 +111,7 @@ func TestInvalidConfiguration(t *testing.T) {
 		{"unknown enum value", map[string]string{"APP_ENV": "staging"}, "APP_ENV"},
 		{"unknown log level", map[string]string{"LOG_LEVEL": "loud"}, "LOG_LEVEL"},
 		{"same ports", map[string]string{"ADMIN_PORT": "8080"}, "ADMIN_PORT"},
-		{"postgres without URL", map[string]string{"DATABASE_DRIVER": "postgres"}, "DATABASE_URL"},
+		{"postgres without URL", map[string]string{"DATABASE_DRIVER": "postgres"}, "DATABASE_URL"}, // init:postgres
 		{"weak bcrypt cost", map[string]string{"AUTH_BCRYPT_COST": "4"}, "AUTH_BCRYPT_COST"},
 		{"refresh shorter than access", map[string]string{"AUTH_REFRESH_TOKEN_TTL": "1m"}, "AUTH_REFRESH_TOKEN_TTL"},
 		{"EdDSA without key", map[string]string{"AUTH_ALGORITHM": "EdDSA"}, "AUTH_PRIVATE_KEY_FILE"},

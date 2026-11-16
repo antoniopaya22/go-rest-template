@@ -1,7 +1,11 @@
-// Package tasks is the example resource of the template: a model owned by a
-// user, with its business rules, storage and HTTP endpoints. Use it as the
-// reference when adding your own resources, or generate a copy with
+// Package tasks manages tasks: the model, its business rules, its storage and
+// its HTTP endpoints.
+// scaffold:omit:begin
+//
+// It is the example resource of the template. Use it as the reference when
+// adding your own resources, or generate a copy with
 // `make resource name=<singular>`.
+// scaffold:omit:end
 package tasks
 
 import "time"

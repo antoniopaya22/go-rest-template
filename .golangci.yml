@@ -36,7 +36,7 @@ linters:
         - performance
       disabled-checks:
         - hugeParam
-        # The `init:` and `scaffold:` marker comments look like code to this check.
+        # Marker comments such as the ones the resource generator uses look like code to it.
         - commentedOutCode
     revive:
       rules:

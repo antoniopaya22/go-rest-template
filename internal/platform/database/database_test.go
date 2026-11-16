@@ -2,12 +2,12 @@ package database
 
 import (
 	"context"
-	"errors"
-	"path/filepath"
+	"errors"        // init:sqlite
+	"path/filepath" // init:sqlite
 	"testing"
 
 	"github.com/antoniopaya22/go-rest-template/internal/config"
-	"github.com/antoniopaya22/go-rest-template/internal/platform/errs"
+	"github.com/antoniopaya22/go-rest-template/internal/platform/errs" // init:sqlite
 )
 
 func TestRebind(t *testing.T) {

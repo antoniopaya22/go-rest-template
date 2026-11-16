@@ -107,6 +107,7 @@ jobs:
       - name: Vulnerability check
         run: make vuln
 
+  # init:template:begin
   init:
     runs-on: ubuntu-24.04
     steps:
@@ -123,6 +124,7 @@ jobs:
 
       - name: Generate and test projects from the template
         run: make test-init
+  # init:template:end
 
   image:
     runs-on: ubuntu-24.04
@@ -135,6 +137,7 @@ jobs:
       - name: Build image
         run: docker build -t go-rest-template:ci .
 
+      # init:sqlite:begin
       - name: Smoke test
         run: |
           docker run -d --name api -p 8080:8080 \
@@ -150,6 +153,7 @@ jobs:
           done
           docker logs api
           exit 1
+      # init:sqlite:end
 
   meta:
     runs-on: ubuntu-24.04
@@ -165,6 +169,7 @@ jobs:
       - name: Lint Dockerfile
         run: docker run --rm -i hadolint/hadolint:v2.15.1 < Dockerfile
 
+      # init:helm:begin
       - name: Lint Helm chart
         run: |
           helm lint deployments/helm/go-rest-template
@@ -173,3 +178,4 @@ jobs:
             --set ingress.enabled=true --set autoscaling.enabled=true \
             --set podDisruptionBudget.enabled=true --set networkPolicy.enabled=true \
             --set serviceMonitor.enabled=true > /dev/null
+      # init:helm:end

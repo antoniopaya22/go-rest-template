@@ -37,6 +37,7 @@ type App struct {
 	auth     *auth.Handler
 	users    *users.Handler
 	tasks    *tasks.Handler // init:example
+	// scaffold:fields
 
 	registry *prometheus.Registry // init:metrics
 
@@ -93,6 +94,7 @@ func New(ctx context.Context, cfg config.Config, logger *slog.Logger) (_ *App, e
 	a.authn = auth.NewMiddleware(signer, userService)
 	a.auth = auth.NewHandler(auth.NewService(a.db, userService, signer, cfg.Auth.RefreshTokenTTL), signer)
 	a.tasks = tasks.NewHandler(tasks.NewService(tasks.NewRepository(a.db))) // init:example
+	// scaffold:wiring
 
 	if cfg.Bootstrap.AdminEnabled {
 		created, err := userService.EnsureAdmin(ctx, users.CreateInput{

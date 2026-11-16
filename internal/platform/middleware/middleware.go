@@ -51,7 +51,7 @@ func levelFor(status int) slog.Level {
 	}
 }
 
-// RoutePattern returns the matched route template, such as /api/v1/tasks/{taskID}.
+// RoutePattern returns the matched route template, such as /api/v1/users/{userID}.
 // It is only complete after the request has been routed.
 func RoutePattern(r *http.Request) string {
 	if routeContext := chi.RouteContext(r.Context()); routeContext != nil {
