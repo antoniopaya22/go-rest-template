@@ -8,7 +8,7 @@ package auth
 import (
 	"context"
 
-	"github.com/antoniopaya22/go-rest-template/internal/platform/errs"
+	"github.com/antoniopaya22/go-rest-template/v3/internal/platform/errs"
 )
 
 // Role identifies the authorization role of a user.

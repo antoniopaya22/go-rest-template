@@ -17,9 +17,9 @@ import (
 	"github.com/getkin/kin-openapi/routers"
 	"github.com/getkin/kin-openapi/routers/legacy"
 
-	"github.com/antoniopaya22/go-rest-template/internal/platform/errs"
-	"github.com/antoniopaya22/go-rest-template/internal/platform/httpx"
-	"github.com/antoniopaya22/go-rest-template/internal/platform/logging"
+	"github.com/antoniopaya22/go-rest-template/v3/internal/platform/errs"
+	"github.com/antoniopaya22/go-rest-template/v3/internal/platform/httpx"
+	"github.com/antoniopaya22/go-rest-template/v3/internal/platform/logging"
 )
 
 // Options selects which directions of traffic are validated.

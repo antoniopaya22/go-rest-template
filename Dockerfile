@@ -21,9 +21,9 @@ ARG TARGETARCH
 # The database drivers are pure Go, so the binaries are fully static.
 RUN CGO_ENABLED=0 GOOS=${TARGETOS} GOARCH=${TARGETARCH} go build -trimpath \
       -ldflags="-s -w \
-        -X github.com/antoniopaya22/go-rest-template/internal/platform/version.Version=${VERSION} \
-        -X github.com/antoniopaya22/go-rest-template/internal/platform/version.Commit=${COMMIT} \
-        -X github.com/antoniopaya22/go-rest-template/internal/platform/version.Date=${DATE}" \
+        -X github.com/antoniopaya22/go-rest-template/v3/internal/platform/version.Version=${VERSION} \
+        -X github.com/antoniopaya22/go-rest-template/v3/internal/platform/version.Commit=${COMMIT} \
+        -X github.com/antoniopaya22/go-rest-template/v3/internal/platform/version.Date=${DATE}" \
       -o /out/ ./cmd/api ./cmd/migrate
 
 FROM gcr.io/distroless/static-debian12:nonroot@sha256:afa5c872c891853ca7fcf1f12c3edb23f7eeef36189728842dd51042ff57f7ab

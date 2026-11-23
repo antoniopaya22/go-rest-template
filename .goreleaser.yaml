@@ -17,9 +17,9 @@ builds:
       - -trimpath
     ldflags: &ldflags
       - -s -w
-      - -X github.com/antoniopaya22/go-rest-template/internal/platform/version.Version={{ .Version }}
-      - -X github.com/antoniopaya22/go-rest-template/internal/platform/version.Commit={{ .Commit }}
-      - -X github.com/antoniopaya22/go-rest-template/internal/platform/version.Date={{ .Date }}
+      - -X github.com/antoniopaya22/go-rest-template/v3/internal/platform/version.Version={{ .Version }}
+      - -X github.com/antoniopaya22/go-rest-template/v3/internal/platform/version.Commit={{ .Commit }}
+      - -X github.com/antoniopaya22/go-rest-template/v3/internal/platform/version.Date={{ .Date }}
     goos: &goos
       - linux
       - darwin

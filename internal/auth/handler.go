@@ -5,7 +5,7 @@ import (
 
 	"github.com/go-chi/chi/v5"
 
-	"github.com/antoniopaya22/go-rest-template/internal/platform/httpx"
+	"github.com/antoniopaya22/go-rest-template/v3/internal/platform/httpx"
 )
 
 // Handler exposes the authentication endpoints.

@@ -13,7 +13,7 @@ import (
 	"modernc.org/sqlite"
 	sqlite3 "modernc.org/sqlite/lib"
 
-	"github.com/antoniopaya22/go-rest-template/internal/config"
+	"github.com/antoniopaya22/go-rest-template/v3/internal/config"
 )
 
 func init() {

@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/antoniopaya22/go-rest-template/internal/app/apptest"
+	"github.com/antoniopaya22/go-rest-template/v3/internal/app/apptest"
 )
 
 type taskJSON struct {

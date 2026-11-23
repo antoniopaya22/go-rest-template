@@ -8,8 +8,8 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/antoniopaya22/go-rest-template/internal/platform/database"
-	"github.com/antoniopaya22/go-rest-template/internal/platform/errs"
+	"github.com/antoniopaya22/go-rest-template/v3/internal/platform/database"
+	"github.com/antoniopaya22/go-rest-template/v3/internal/platform/errs"
 )
 
 // TokenPair is the response of a successful login or refresh.

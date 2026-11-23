@@ -6,7 +6,7 @@ import (
 
 	"golang.org/x/crypto/bcrypt"
 
-	"github.com/antoniopaya22/go-rest-template/internal/platform/errs"
+	"github.com/antoniopaya22/go-rest-template/v3/internal/platform/errs"
 )
 
 // Password length limits. bcrypt ignores everything after 72 bytes, so longer

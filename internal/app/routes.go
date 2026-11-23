@@ -11,11 +11,11 @@ import (
 	"github.com/go-chi/cors"
 	"github.com/prometheus/client_golang/prometheus/promhttp" // init:metrics
 
-	"github.com/antoniopaya22/go-rest-template/internal/platform/errs"
-	"github.com/antoniopaya22/go-rest-template/internal/platform/httpx"
-	"github.com/antoniopaya22/go-rest-template/internal/platform/middleware"
-	"github.com/antoniopaya22/go-rest-template/internal/platform/tracing" // init:otel
-	"github.com/antoniopaya22/go-rest-template/internal/platform/version"
+	"github.com/antoniopaya22/go-rest-template/v3/internal/platform/errs"
+	"github.com/antoniopaya22/go-rest-template/v3/internal/platform/httpx"
+	"github.com/antoniopaya22/go-rest-template/v3/internal/platform/middleware"
+	"github.com/antoniopaya22/go-rest-template/v3/internal/platform/tracing" // init:otel
+	"github.com/antoniopaya22/go-rest-template/v3/internal/platform/version"
 )
 
 // routes builds the public API: global middleware, operational endpoints and

@@ -8,8 +8,8 @@ import (
 
 	chimiddleware "github.com/go-chi/chi/v5/middleware"
 
-	"github.com/antoniopaya22/go-rest-template/internal/platform/errs"
-	"github.com/antoniopaya22/go-rest-template/internal/platform/logging"
+	"github.com/antoniopaya22/go-rest-template/v3/internal/platform/errs"
+	"github.com/antoniopaya22/go-rest-template/v3/internal/platform/logging"
 )
 
 // ProblemContentType is the media type of error responses (RFC 9457).

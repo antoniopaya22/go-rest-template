@@ -16,14 +16,14 @@ import (
 	"github.com/prometheus/client_golang/prometheus"            // init:metrics
 	"github.com/prometheus/client_golang/prometheus/collectors" // init:metrics
 
-	"github.com/antoniopaya22/go-rest-template/api"
-	"github.com/antoniopaya22/go-rest-template/internal/auth"
-	"github.com/antoniopaya22/go-rest-template/internal/config"
-	"github.com/antoniopaya22/go-rest-template/internal/platform/contract"
-	"github.com/antoniopaya22/go-rest-template/internal/platform/database"
-	"github.com/antoniopaya22/go-rest-template/internal/platform/tracing" // init:otel
-	"github.com/antoniopaya22/go-rest-template/internal/tasks"            // init:example
-	"github.com/antoniopaya22/go-rest-template/internal/users"
+	"github.com/antoniopaya22/go-rest-template/v3/api"
+	"github.com/antoniopaya22/go-rest-template/v3/internal/auth"
+	"github.com/antoniopaya22/go-rest-template/v3/internal/config"
+	"github.com/antoniopaya22/go-rest-template/v3/internal/platform/contract"
+	"github.com/antoniopaya22/go-rest-template/v3/internal/platform/database"
+	"github.com/antoniopaya22/go-rest-template/v3/internal/platform/tracing" // init:otel
+	"github.com/antoniopaya22/go-rest-template/v3/internal/tasks"            // init:example
+	"github.com/antoniopaya22/go-rest-template/v3/internal/users"
 )
 
 // App is a fully wired service.

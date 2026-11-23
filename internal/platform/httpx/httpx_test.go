@@ -8,7 +8,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/antoniopaya22/go-rest-template/internal/platform/errs"
+	"github.com/antoniopaya22/go-rest-template/v3/internal/platform/errs"
 )
 
 func TestWriteError(t *testing.T) {
