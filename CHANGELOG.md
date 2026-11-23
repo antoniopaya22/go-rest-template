@@ -4,6 +4,13 @@ All notable changes to this project are documented in this file. From 3.0.0
 onwards it is maintained by [release-please](https://github.com/googleapis/release-please)
 from [Conventional Commits](https://www.conventionalcommits.org/).
 
+## [3.0.2](https://github.com/antoniopaya22/go-rest-template/compare/v3.0.1...v3.0.2) (2026-11-23)
+
+
+### Documentation
+
+* add pkg.go.dev badge and pin the coverage badge to main ([#18](https://github.com/antoniopaya22/go-rest-template/issues/18)) ([4fb0722](https://github.com/antoniopaya22/go-rest-template/commit/4fb07225dd71f446728fa6c51529963eb834a3b8))
+
 ## [3.0.1](https://github.com/antoniopaya22/go-rest-template/compare/v3.0.0...v3.0.1) (2026-11-23)
 
 
