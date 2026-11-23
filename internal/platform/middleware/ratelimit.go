@@ -7,8 +7,8 @@ import (
 	chimiddleware "github.com/go-chi/chi/v5/middleware"
 	"github.com/go-chi/httprate"
 
-	"github.com/antoniopaya22/go-rest-template/internal/platform/errs"
-	"github.com/antoniopaya22/go-rest-template/internal/platform/httpx"
+	"github.com/antoniopaya22/go-rest-template/v3/internal/platform/errs"
+	"github.com/antoniopaya22/go-rest-template/v3/internal/platform/httpx"
 )
 
 // RateLimit allows a number of requests per client IP in each window. The

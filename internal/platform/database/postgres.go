@@ -10,7 +10,7 @@ import (
 	"github.com/pressly/goose/v3"
 	"github.com/pressly/goose/v3/lock"
 
-	"github.com/antoniopaya22/go-rest-template/internal/config"
+	"github.com/antoniopaya22/go-rest-template/v3/internal/config"
 )
 
 func init() {

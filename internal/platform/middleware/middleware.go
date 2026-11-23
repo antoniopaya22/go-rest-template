@@ -11,9 +11,9 @@ import (
 	"github.com/go-chi/chi/v5"
 	chimiddleware "github.com/go-chi/chi/v5/middleware"
 
-	"github.com/antoniopaya22/go-rest-template/internal/platform/errs"
-	"github.com/antoniopaya22/go-rest-template/internal/platform/httpx"
-	"github.com/antoniopaya22/go-rest-template/internal/platform/logging"
+	"github.com/antoniopaya22/go-rest-template/v3/internal/platform/errs"
+	"github.com/antoniopaya22/go-rest-template/v3/internal/platform/httpx"
+	"github.com/antoniopaya22/go-rest-template/v3/internal/platform/logging"
 )
 
 // Logger attaches a request-scoped logger to the context and logs one record

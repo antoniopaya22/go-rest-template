@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/antoniopaya22/go-rest-template/internal/auth"
-	"github.com/antoniopaya22/go-rest-template/internal/platform/errs"
-	"github.com/antoniopaya22/go-rest-template/internal/platform/httpx"
+	"github.com/antoniopaya22/go-rest-template/v3/internal/auth"
+	"github.com/antoniopaya22/go-rest-template/v3/internal/platform/errs"
+	"github.com/antoniopaya22/go-rest-template/v3/internal/platform/httpx"
 )
 
 // Store is the persistence the service needs. Repository implements it.

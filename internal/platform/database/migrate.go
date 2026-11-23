@@ -8,7 +8,7 @@ import (
 
 	"github.com/pressly/goose/v3"
 
-	"github.com/antoniopaya22/go-rest-template/migrations"
+	"github.com/antoniopaya22/go-rest-template/v3/migrations"
 )
 
 // MigrationStatus describes one migration and whether it has been applied.

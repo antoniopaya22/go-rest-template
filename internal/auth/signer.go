@@ -15,8 +15,8 @@ import (
 
 	"github.com/golang-jwt/jwt/v5"
 
-	"github.com/antoniopaya22/go-rest-template/internal/config"
-	"github.com/antoniopaya22/go-rest-template/internal/platform/errs"
+	"github.com/antoniopaya22/go-rest-template/v3/internal/config"
+	"github.com/antoniopaya22/go-rest-template/v3/internal/platform/errs"
 )
 
 // claims is the payload of an access token. The role is informational: the

@@ -5,7 +5,7 @@ package users
 import (
 	"time"
 
-	"github.com/antoniopaya22/go-rest-template/internal/auth"
+	"github.com/antoniopaya22/go-rest-template/v3/internal/auth"
 )
 
 // User is a user account.

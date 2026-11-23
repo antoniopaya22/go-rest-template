@@ -74,7 +74,7 @@ formatters:
   settings:
     goimports:
       local-prefixes:
-        - github.com/antoniopaya22/go-rest-template
+        - github.com/antoniopaya22/go-rest-template/v3
   exclusions:
     generated: lax
 

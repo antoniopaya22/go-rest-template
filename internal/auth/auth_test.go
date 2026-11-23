@@ -15,8 +15,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/antoniopaya22/go-rest-template/internal/config"
-	"github.com/antoniopaya22/go-rest-template/internal/platform/errs"
+	"github.com/antoniopaya22/go-rest-template/v3/internal/config"
+	"github.com/antoniopaya22/go-rest-template/v3/internal/platform/errs"
 )
 
 func TestHasher(t *testing.T) {

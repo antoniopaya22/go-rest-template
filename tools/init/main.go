@@ -38,7 +38,7 @@ import (
 )
 
 const (
-	templateModule = "github.com/antoniopaya22/go-rest-template"
+	templateModule = "github.com/antoniopaya22/go-rest-template/v3"
 	templateRepo   = "antoniopaya22/go-rest-template"
 	templateName   = "go-rest-template"
 	templateSnake  = "go_rest_template"

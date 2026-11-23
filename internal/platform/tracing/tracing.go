@@ -14,7 +14,7 @@ import (
 	sdktrace "go.opentelemetry.io/otel/sdk/trace"
 	semconv "go.opentelemetry.io/otel/semconv/v1.43.0"
 
-	"github.com/antoniopaya22/go-rest-template/internal/platform/version"
+	"github.com/antoniopaya22/go-rest-template/v3/internal/platform/version"
 )
 
 // Setup installs a global tracer provider that exports spans over OTLP/HTTP.

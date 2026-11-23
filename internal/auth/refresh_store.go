@@ -5,7 +5,7 @@ import (
 	"database/sql"
 	"time"
 
-	"github.com/antoniopaya22/go-rest-template/internal/platform/database"
+	"github.com/antoniopaya22/go-rest-template/v3/internal/platform/database"
 )
 
 // refreshToken is a stored refresh token. Only the hash of the secret is kept.

@@ -6,8 +6,8 @@ import (
 	"path/filepath" // init:sqlite
 	"testing"
 
-	"github.com/antoniopaya22/go-rest-template/internal/config"
-	"github.com/antoniopaya22/go-rest-template/internal/platform/errs" // init:sqlite
+	"github.com/antoniopaya22/go-rest-template/v3/internal/config"
+	"github.com/antoniopaya22/go-rest-template/v3/internal/platform/errs" // init:sqlite
 )
 
 func TestRebind(t *testing.T) {

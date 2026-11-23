@@ -30,9 +30,9 @@ import (
 	_ "github.com/jackc/pgx/v5/stdlib"
 	// init:postgres:end
 
-	"github.com/antoniopaya22/go-rest-template/internal/app"
-	"github.com/antoniopaya22/go-rest-template/internal/auth"
-	"github.com/antoniopaya22/go-rest-template/internal/config"
+	"github.com/antoniopaya22/go-rest-template/v3/internal/app"
+	"github.com/antoniopaya22/go-rest-template/v3/internal/auth"
+	"github.com/antoniopaya22/go-rest-template/v3/internal/config"
 )
 
 // Credentials of the administrator every environment starts with.

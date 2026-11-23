@@ -13,10 +13,10 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/antoniopaya22/go-rest-template/internal/app"
-	"github.com/antoniopaya22/go-rest-template/internal/config"
-	"github.com/antoniopaya22/go-rest-template/internal/platform/logging"
-	"github.com/antoniopaya22/go-rest-template/internal/platform/version"
+	"github.com/antoniopaya22/go-rest-template/v3/internal/app"
+	"github.com/antoniopaya22/go-rest-template/v3/internal/config"
+	"github.com/antoniopaya22/go-rest-template/v3/internal/platform/logging"
+	"github.com/antoniopaya22/go-rest-template/v3/internal/platform/version"
 )
 
 func main() {

@@ -10,8 +10,8 @@ import (
 
 	"github.com/go-chi/chi/v5"
 
-	"github.com/antoniopaya22/go-rest-template/internal/app/apptest"
-	"github.com/antoniopaya22/go-rest-template/internal/auth"
+	"github.com/antoniopaya22/go-rest-template/v3/internal/app/apptest"
+	"github.com/antoniopaya22/go-rest-template/v3/internal/auth"
 )
 
 func TestOperationalEndpoints(t *testing.T) {

@@ -5,9 +5,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/antoniopaya22/go-rest-template/internal/platform/database"
-	"github.com/antoniopaya22/go-rest-template/internal/platform/errs"
-	"github.com/antoniopaya22/go-rest-template/internal/platform/httpx"
+	"github.com/antoniopaya22/go-rest-template/v3/internal/platform/database"
+	"github.com/antoniopaya22/go-rest-template/v3/internal/platform/errs"
+	"github.com/antoniopaya22/go-rest-template/v3/internal/platform/httpx"
 )
 
 const columns = `id, username, first_name, last_name, password_hash, role, version, created_at, updated_at`
