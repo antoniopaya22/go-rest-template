@@ -4,6 +4,13 @@ All notable changes to this project are documented in this file. From 3.0.0
 onwards it is maintained by [release-please](https://github.com/googleapis/release-please)
 from [Conventional Commits](https://www.conventionalcommits.org/).
 
+## [3.0.1](https://github.com/antoniopaya22/go-rest-template/compare/v3.0.0...v3.0.1) (2026-11-23)
+
+
+### Bug Fixes
+
+* add the /v3 suffix to the module path ([#16](https://github.com/antoniopaya22/go-rest-template/issues/16)) ([b4bec0f](https://github.com/antoniopaya22/go-rest-template/commit/b4bec0f7272271f62091df778146ec12b6692428))
+
 ## [3.0.0](https://github.com/antoniopaya22/go-rest-template/compare/2.0.1...v3.0.0) (2026-11-16)
 
 
